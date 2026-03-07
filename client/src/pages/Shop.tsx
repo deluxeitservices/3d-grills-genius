@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, X, ChevronUp } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import product1 from "@/assets/product_1.png";
 import product2 from "@/assets/product_2.png";
 import product3 from "@/assets/product_3.png";
@@ -27,8 +28,12 @@ const RECENTLY_VIEWED = [
 ];
 
 export default function Shop() {
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [availabilityOpen, setAvailabilityOpen] = useState(true);
+  const [priceOpen, setPriceOpen] = useState(true);
+
   return (
-    <div className="bg-black text-white min-h-screen pt-12 pb-20">
+    <div className="bg-black text-white min-h-screen pt-12 pb-20 relative">
       {/* Breadcrumb & Title Banner */}
       <div className="relative mb-16 py-24 md:py-32 overflow-hidden border-y border-white/10">
         <div className="absolute inset-0">
@@ -54,7 +59,10 @@ export default function Shop() {
         
         {/* Filters Bar */}
         <div className="flex items-center gap-6 mb-8 border-b border-white/10 pb-4 relative z-20">
-          <button className="flex items-center gap-2 text-sm font-bold text-white hover:text-primary transition-colors uppercase tracking-widest">
+          <button 
+            onClick={() => setIsFilterOpen(true)}
+            className="flex items-center gap-2 text-sm font-bold text-white hover:text-primary transition-colors uppercase tracking-widest"
+          >
             Filter <ChevronDown className="w-3 h-3" />
           </button>
           
@@ -155,6 +163,117 @@ export default function Shop() {
         </div>
 
       </div>
+      {/* Filter Sidebar Overlay */}
+      {isFilterOpen && (
+        <div className="fixed inset-0 z-50 flex">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm" 
+            onClick={() => setIsFilterOpen(false)}
+          />
+          
+          {/* Sidebar */}
+          <div className="relative w-[320px] md:w-[400px] h-full bg-black border-r border-white/10 flex flex-col p-6 animate-in slide-in-from-left duration-300">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-3xl font-heading font-bold tracking-wider">Filters</h2>
+              <button 
+                onClick={() => setIsFilterOpen(false)}
+                className="text-white hover:text-primary transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto pr-2 space-y-8">
+              {/* Availability Filter */}
+              <div>
+                <button 
+                  onClick={() => setAvailabilityOpen(!availabilityOpen)}
+                  className="w-full flex items-center justify-between py-2 text-left group"
+                >
+                  <span className="text-xl font-heading font-bold tracking-wider group-hover:text-primary transition-colors">Availability</span>
+                  {availabilityOpen ? <ChevronUp className="w-4 h-4 text-white" /> : <ChevronDown className="w-4 h-4 text-white" />}
+                </button>
+                
+                {availabilityOpen && (
+                  <div className="mt-4 space-y-4">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <div className="w-5 h-5 border border-white/20 bg-transparent flex items-center justify-center group-hover:border-white transition-colors">
+                        {/* Checkbox checkmark would go here when active */}
+                      </div>
+                      <span className="text-sm font-bold font-heading tracking-wide">In stock (81)</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <div className="w-5 h-5 border border-white/20 bg-transparent flex items-center justify-center group-hover:border-white transition-colors"></div>
+                      <span className="text-sm font-bold font-heading tracking-wide">Out of stock (7)</span>
+                    </label>
+                  </div>
+                )}
+              </div>
+
+              {/* Price Filter */}
+              <div>
+                <button 
+                  onClick={() => setPriceOpen(!priceOpen)}
+                  className="w-full flex items-center justify-between py-2 text-left group"
+                >
+                  <span className="text-xl font-heading font-bold tracking-wider group-hover:text-primary transition-colors">Price</span>
+                  {priceOpen ? <ChevronUp className="w-4 h-4 text-white" /> : <ChevronDown className="w-4 h-4 text-white" />}
+                </button>
+                
+                {priceOpen && (
+                  <div className="mt-8">
+                    {/* Fake slider UI */}
+                    <div className="relative h-[2px] bg-white/20 mb-8 mx-2">
+                      <div className="absolute left-0 right-0 h-full bg-white"></div>
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow cursor-grab"></div>
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow cursor-grab"></div>
+                    </div>
+                    
+                    {/* Price Inputs */}
+                    <div className="flex items-center gap-4">
+                      <div className="flex-1 relative border border-white/20 flex items-center px-3 h-12 bg-[#1a1a1a]">
+                        <span className="text-white/80 font-bold text-sm">£</span>
+                        <input 
+                          type="number" 
+                          defaultValue="0" 
+                          className="w-full bg-transparent border-none text-right text-white font-bold font-heading text-sm focus:outline-none"
+                        />
+                      </div>
+                      <span className="text-sm font-bold font-heading">To</span>
+                      <div className="flex-1 relative border border-white/20 flex items-center px-3 h-12 bg-[#1a1a1a]">
+                        <span className="text-white/80 font-bold text-sm">£</span>
+                        <input 
+                          type="number" 
+                          defaultValue="2608" 
+                          className="w-full bg-transparent border-none text-right text-white font-bold font-heading text-sm focus:outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Sale Banner Mockup */}
+              <div className="mt-8 p-6 bg-[#2a2a2a] text-center relative overflow-hidden group cursor-pointer h-[280px] flex flex-col items-center justify-center">
+                <div className="relative z-10 w-full flex flex-col items-center">
+                  <p className="text-[13px] font-heading font-bold tracking-wide mb-2">Online Exclusive</p>
+                  <h3 className="text-[40px] font-heading font-bold uppercase leading-[1.1] mb-1 text-white">SALE UP TO</h3>
+                  <h3 className="text-[46px] font-heading font-bold uppercase leading-none mb-6 text-white">25% OFF</h3>
+                  <button className="bg-[#d4af37] text-black font-heading font-bold uppercase tracking-wider text-[13px] px-8 py-3 hover:bg-white transition-colors">
+                    SHOP THE SALE
+                  </button>
+                </div>
+                {/* Abstract background elements */}
+                <div className="absolute inset-0 opacity-[0.03] group-hover:scale-105 transition-transform duration-700 pointer-events-none border-[10px] border-white m-4 rounded-[40px]">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
