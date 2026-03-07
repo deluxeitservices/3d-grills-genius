@@ -41,7 +41,6 @@ export default function Header() {
         <nav className="hidden lg:flex items-center gap-6 xl:gap-10 text-[13px] font-bold tracking-widest uppercase font-heading">
           <Link href="/"><a className="hover:text-primary transition-colors">Home</a></Link>
           <Link href="/shop"><a className="hover:text-primary transition-colors flex items-center gap-1">Shop <span className="text-[8px]">▼</span></a></Link>
-          <Link href="/shop"><a className="hover:text-primary transition-colors">Watches</a></Link>
           <Link href="/about"><a className="hover:text-primary transition-colors">How it works</a></Link>
           <Link href="/about"><a className="hover:text-primary transition-colors">How to use mould kit</a></Link>
           <Link href="/faq"><a className="hover:text-primary transition-colors">FAQs</a></Link>
