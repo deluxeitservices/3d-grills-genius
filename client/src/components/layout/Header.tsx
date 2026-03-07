@@ -30,8 +30,8 @@ export default function Header() {
               <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center font-bold text-xl">
                 <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
               </div>
-              <div className="hidden md:block">
-                <span className="text-xl font-heading font-bold tracking-widest leading-none block">GRILLZ SHOP</span>
+              <div>
+                <span className="text-lg md:text-xl font-heading font-bold tracking-widest leading-none block">GRILLZ SHOP</span>
               </div>
             </a>
           </Link>
