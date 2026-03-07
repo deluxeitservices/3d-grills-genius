@@ -6,78 +6,82 @@ import { Button } from "@/components/ui/button";
 export default function Footer() {
   return (
     <footer className="bg-black text-white pt-20 pb-10 border-t border-white/10">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Brand */}
-          <div>
-            <Link href="/">
-              <a className="text-2xl font-serif tracking-widest text-white mb-6 block">
-                AURA
-              </a>
-            </Link>
-            <p className="text-white/60 text-sm leading-relaxed mb-6">
-              Crafting exceptional bespoke jewelry and premium grillz. Redefining luxury with every piece we create.
-            </p>
-            <div className="flex items-center gap-4">
-              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:border-white hover:text-black transition-all">
-                <Instagram className="h-4 w-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:border-white hover:text-black transition-all">
-                <Twitter className="h-4 w-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:border-white hover:text-black transition-all">
-                <Facebook className="h-4 w-4" />
-              </a>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider mb-6">Shop</h4>
-            <ul className="space-y-4">
-              <li><Link href="/shop"><a className="text-white/60 hover:text-white transition-colors text-sm">All Products</a></Link></li>
-              <li><Link href="/shop"><a className="text-white/60 hover:text-white transition-colors text-sm">Custom Grillz</a></Link></li>
-              <li><Link href="/shop"><a className="text-white/60 hover:text-white transition-colors text-sm">Chains & Pendants</a></Link></li>
-              <li><Link href="/shop"><a className="text-white/60 hover:text-white transition-colors text-sm">Rings</a></Link></li>
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider mb-6">Support</h4>
-            <ul className="space-y-4">
-              <li><Link href="/faq"><a className="text-white/60 hover:text-white transition-colors text-sm">FAQ</a></Link></li>
-              <li><Link href="/contact"><a className="text-white/60 hover:text-white transition-colors text-sm">Contact Us</a></Link></li>
-              <li><a href="#" className="text-white/60 hover:text-white transition-colors text-sm">Shipping & Returns</a></li>
-              <li><a href="#" className="text-white/60 hover:text-white transition-colors text-sm">Size Guide</a></li>
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider mb-6">Newsletter</h4>
-            <p className="text-white/60 text-sm mb-4">Subscribe to receive updates, access to exclusive deals, and more.</p>
-            <div className="flex items-center">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
+          
+          {/* Newsletter (Left side large column) */}
+          <div className="lg:col-span-4">
+            <h4 className="text-2xl font-heading font-bold uppercase tracking-wide mb-2 text-primary">LET'S GET IN TOUCH</h4>
+            <p className="text-white text-sm font-bold mb-6">Sign up for our newsletter and receive 10% off your first order</p>
+            <div className="flex flex-col gap-4">
               <Input 
                 type="email" 
                 placeholder="Enter your email" 
-                className="bg-transparent border-white/20 text-white rounded-none focus-visible:ring-white focus-visible:border-white rounded-l-md"
+                className="bg-white border-0 text-black rounded-none h-12 px-4 focus-visible:ring-0"
               />
-              <Button className="rounded-none rounded-r-md bg-white text-black hover:bg-zinc-200 border border-white hover:border-zinc-200 w-12 px-0">
-                <ArrowRight className="h-4 w-4" />
+              <Button className="rounded-none bg-primary text-black hover:bg-white font-bold uppercase tracking-widest h-12 w-32">
+                Subscribe Now
               </Button>
             </div>
           </div>
-        </div>
 
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/40 text-xs">
-            &copy; {new Date().getFullYear()} Aura Jewellery. All rights reserved.
-          </p>
-          <div className="flex gap-4">
-            <span className="text-white/40 text-xs">Terms of Service</span>
-            <span className="text-white/40 text-xs">Privacy Policy</span>
+          {/* Spacer */}
+          <div className="hidden lg:block lg:col-span-1"></div>
+
+          {/* Shop Links */}
+          <div className="lg:col-span-2">
+            <h4 className="text-sm font-bold uppercase tracking-wider mb-6 text-primary">Shop</h4>
+            <ul className="space-y-4">
+              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">All Grillz</a></Link></li>
+              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Single Grillz</a></Link></li>
+              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Curves & Colour</a></Link></li>
+              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Diamond Grillz</a></Link></li>
+              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Set Of Gold Grillz</a></Link></li>
+              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Tooth Gems</a></Link></li>
+              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Extras</a></Link></li>
+            </ul>
           </div>
+
+          {/* Helpful Links */}
+          <div className="lg:col-span-2">
+            <h4 className="text-sm font-bold uppercase tracking-wider mb-6 text-primary">Helpful</h4>
+            <ul className="space-y-4">
+              <li><Link href="/faq"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">FAQs</a></Link></li>
+              <li><Link href="/contact"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Contact Us</a></Link></li>
+              <li><Link href="/about"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">How It Works</a></Link></li>
+              <li><a href="#" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">How To Use Mould Kit</a></li>
+              <li><a href="#" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Return & Exchanges</a></li>
+              <li><a href="#" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Privacy Policy</a></li>
+              <li><a href="#" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Terms Of Service</a></li>
+            </ul>
+          </div>
+
+          {/* Social */}
+          <div className="lg:col-span-3">
+            <h4 className="text-sm font-bold uppercase tracking-wider mb-6 text-primary">Follow Us</h4>
+            <div className="flex flex-wrap items-center gap-3">
+              <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black hover:bg-primary transition-all">
+                <Facebook className="h-5 w-5" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black hover:bg-primary transition-all">
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black hover:bg-primary transition-all">
+                <Youtube className="h-5 w-5" />
+              </a>
+            </div>
+            
+            {/* Scroll to top button */}
+            <div className="mt-12 flex justify-end">
+              <button 
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-black hover:bg-white transition-all"
+              >
+                ↑
+              </button>
+            </div>
+          </div>
+          
         </div>
       </div>
     </footer>

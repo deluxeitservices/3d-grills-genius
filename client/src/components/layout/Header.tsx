@@ -7,13 +7,13 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/80 border-b border-white/10 text-white">
+    <header className="sticky top-0 z-50 w-full bg-black border-b border-white/10 text-white">
       {/* Announcement Bar */}
-      <div className="bg-white text-black px-4 py-2 text-xs text-center font-medium uppercase tracking-wider">
+      <div className="bg-muted text-black px-4 py-2 text-[10px] md:text-xs text-center font-bold uppercase tracking-widest">
         Free Worldwide Shipping on Orders Over £500
       </div>
 
-      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+      <div className="px-4 md:px-8 h-20 md:h-24 flex items-center justify-between">
         {/* Mobile Menu Toggle */}
         <button 
           className="md:hidden p-2 -ml-2"
@@ -22,31 +22,38 @@ export default function Header() {
           {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
 
-        {/* Navigation - Desktop */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide uppercase">
-          <Link href="/shop"><a className="hover:text-zinc-400 transition-colors">Grillz</a></Link>
-          <Link href="/shop"><a className="hover:text-zinc-400 transition-colors">Chains</a></Link>
-          <Link href="/shop"><a className="hover:text-zinc-400 transition-colors">Rings</a></Link>
-          <Link href="/about"><a className="hover:text-zinc-400 transition-colors">Bespoke</a></Link>
-        </nav>
-
-        {/* Logo */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 mt-4">
+        {/* Logo - Left */}
+        <div className="flex-shrink-0">
           <Link href="/">
-            <a className="text-2xl md:text-3xl font-serif tracking-widest text-white">
-              AURA
+            <a className="flex items-center gap-2">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-full flex items-center justify-center text-black font-bold text-xl">
+                {/* Placeholder for red lips logo */}
+                ZA
+              </div>
+              <div className="hidden md:block">
+                <span className="text-xl font-heading font-bold tracking-widest leading-none block">ZA JEWELLERS</span>
+              </div>
             </a>
           </Link>
         </div>
 
+        {/* Navigation - Desktop (Center) */}
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-10 text-[13px] font-bold tracking-widest uppercase font-heading">
+          <Link href="/"><a className="hover:text-primary transition-colors">Home</a></Link>
+          <Link href="/shop"><a className="hover:text-primary transition-colors flex items-center gap-1">Shop <span className="text-[8px]">▼</span></a></Link>
+          <Link href="/shop"><a className="hover:text-primary transition-colors">Watches</a></Link>
+          <Link href="/about"><a className="hover:text-primary transition-colors">How it works</a></Link>
+          <Link href="/about"><a className="hover:text-primary transition-colors">How to use mould kit</a></Link>
+          <Link href="/faq"><a className="hover:text-primary transition-colors">FAQs</a></Link>
+        </nav>
+
         {/* Right Icons */}
-        <div className="flex items-center gap-4 md:gap-6">
-          <button className="hidden md:block hover:text-zinc-400 transition-colors"><Search className="h-5 w-5" /></button>
-          <button className="hidden md:block hover:text-zinc-400 transition-colors"><User className="h-5 w-5" /></button>
-          <button className="hidden md:block hover:text-zinc-400 transition-colors"><Heart className="h-5 w-5" /></button>
-          <button className="hover:text-zinc-400 transition-colors flex items-center gap-2">
-            <ShoppingBag className="h-5 w-5" />
-            <span className="hidden md:block text-xs font-medium bg-white text-black rounded-full h-4 w-4 flex items-center justify-center">0</span>
+        <div className="flex items-center gap-4 md:gap-6 flex-shrink-0">
+          <button className="hover:text-primary transition-colors"><Search className="h-5 w-5 md:h-6 md:w-6" /></button>
+          <button className="hidden sm:block hover:text-primary transition-colors"><User className="h-5 w-5 md:h-6 md:w-6" /></button>
+          <button className="hover:text-primary transition-colors flex items-center gap-2 relative">
+            <ShoppingBag className="h-5 w-5 md:h-6 md:w-6" />
+            <span className="absolute -top-1 -right-2 text-[10px] font-bold bg-primary text-black rounded-full h-4 w-4 flex items-center justify-center">0</span>
           </button>
         </div>
       </div>
