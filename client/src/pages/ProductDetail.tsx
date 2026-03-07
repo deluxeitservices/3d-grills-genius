@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ChevronRight, Shield, Truck, RotateCcw, Heart } from "lucide-react";
-import product1 from "@/assets/product_1.jpg";
-import product2 from "@/assets/product_2.jpg";
-import product3 from "@/assets/product_3.jpg";
+import product1 from "@/assets/product_1.png";
+import product2 from "@/assets/product_2.png";
+import product3 from "@/assets/product_3.png";
 
 export default function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(product1);

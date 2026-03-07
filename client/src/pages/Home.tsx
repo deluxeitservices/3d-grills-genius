@@ -1,13 +1,13 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import heroImg from "@/assets/hero.png";
-import catGrillz from "@/assets/cat-grillz.jpg";
-import catChains from "@/assets/cat-chains.jpg";
-import catRings from "@/assets/cat-rings.jpg";
-import catBracelets from "@/assets/cat-bracelets.jpg";
-import product1 from "@/assets/product_1.jpg";
-import product2 from "@/assets/product_2.jpg";
-import product3 from "@/assets/product_3.jpg";
+import catGrillz from "@/assets/cat-grillz.png";
+import catChains from "@/assets/cat-chains.png";
+import catRings from "@/assets/cat-rings.png";
+import catBracelets from "@/assets/cat-bracelets.png";
+import product1 from "@/assets/product_1.png";
+import product2 from "@/assets/product_2.png";
+import product3 from "@/assets/product_3.png";
 import { ShieldCheck, Truck, Gem, Star } from "lucide-react";
 
 export default function Home() {

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import product1 from "@/assets/product_1.jpg";
+import product1 from "@/assets/product_1.png";
 
 export default function Cart() {
   return (

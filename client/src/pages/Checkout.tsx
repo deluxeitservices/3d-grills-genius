@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "wouter";
 import { ChevronLeft } from "lucide-react";
-import product1 from "@/assets/product_1.jpg";
+import product1 from "@/assets/product_1.png";
 
 export default function Checkout() {
   return (

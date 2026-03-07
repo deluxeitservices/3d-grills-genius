@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { SlidersHorizontal, ChevronDown } from "lucide-react";
-import product1 from "@/assets/product_1.jpg";
-import product2 from "@/assets/product_2.jpg";
-import product3 from "@/assets/product_3.jpg";
-import catGrillz from "@/assets/cat-grillz.jpg";
-import catChains from "@/assets/cat-chains.jpg";
-import catRings from "@/assets/cat-rings.jpg";
+import product1 from "@/assets/product_1.png";
+import product2 from "@/assets/product_2.png";
+import product3 from "@/assets/product_3.png";
+import catGrillz from "@/assets/cat-grillz.png";
+import catChains from "@/assets/cat-chains.png";
+import catRings from "@/assets/cat-rings.png";
 
 const MOCK_PRODUCTS = [
   { id: 1, name: "VVS Diamond Cuban Link 14mm", price: "£2,450", image: product1, category: "chains", tag: "Best Seller" },
