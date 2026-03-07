@@ -15,21 +15,17 @@ export default function Home() {
   return (
     <div className="flex flex-col bg-black text-white">
       
-      {/* Hero Section (Video Banner) */}
-      <section className="relative h-[60vh] md:h-[85vh] w-full flex flex-col justify-end items-center pb-16 md:pb-24 overflow-hidden">
+      {/* Hero Section (Big Image without overlay text as per screenshot) */}
+      <section className="relative h-[60vh] md:h-[85vh] w-full flex flex-col justify-end items-center pb-16 md:pb-24">
         <div className="absolute inset-0">
-          <video 
-            src={heroVideo} 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
+          <img 
+            src={heroImg} 
+            alt="Hero Grillz" 
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/30"></div> {/* Dark overlay to make button pop */}
         </div>
         <div className="relative z-10">
-          <Button size="lg" className="bg-white text-black hover:bg-primary hover:text-black px-8 py-5 md:py-7 text-sm md:text-[15px] font-bold uppercase tracking-[0.2em] rounded-none transition-colors duration-300">
+          <Button size="lg" className="bg-white text-black hover:bg-zinc-200 px-8 py-5 md:py-7 text-sm md:text-[15px] font-bold uppercase tracking-[0.2em] rounded-none">
             Shop Grillz Now
           </Button>
         </div>
