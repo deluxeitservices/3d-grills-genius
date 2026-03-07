@@ -53,13 +53,38 @@ export default function Shop() {
       <div className="container mx-auto px-4 lg:px-8">
         
         {/* Filters Bar */}
-        <div className="flex items-center gap-6 mb-8 border-b border-white/10 pb-4">
+        <div className="flex items-center gap-6 mb-8 border-b border-white/10 pb-4 relative z-20">
           <button className="flex items-center gap-2 text-sm font-bold text-white hover:text-primary transition-colors uppercase tracking-widest">
             Filter <ChevronDown className="w-3 h-3" />
           </button>
-          <button className="flex items-center gap-2 text-sm font-bold text-white hover:text-primary transition-colors uppercase tracking-widest">
-            Alphabetically, A-Z <ChevronDown className="w-3 h-3" />
-          </button>
+          
+          <div className="relative group">
+            <button className="flex items-center gap-2 text-sm font-bold text-white hover:text-primary transition-colors uppercase tracking-widest">
+              Alphabetically, A-Z <ChevronDown className="w-3 h-3 group-hover:rotate-180 transition-transform duration-200" />
+            </button>
+            
+            {/* Dropdown Menu */}
+            <div className="absolute top-full left-0 mt-4 w-60 bg-black border border-white/10 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-4">
+              <ul className="flex flex-col gap-1">
+                {[
+                  "Featured",
+                  "Best selling",
+                  "Alphabetically, A-Z",
+                  "Alphabetically, Z-A",
+                  "Price, low to high",
+                  "Price, high to low",
+                  "Date, old to new",
+                  "Date, new to old"
+                ].map((option) => (
+                  <li key={option}>
+                    <button className={`w-full text-left px-6 py-1.5 text-lg font-heading font-bold transition-colors ${option === "Alphabetically, A-Z" ? "text-white" : "text-white/60 hover:text-white"}`}>
+                      {option}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
 
         {/* Product Grid - 4 Columns */}
