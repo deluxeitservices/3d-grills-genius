@@ -22,7 +22,7 @@ export default function ProductDetail() {
   return (
     <div className="bg-black text-white min-h-screen pt-24 pb-20">
       {/* Breadcrumbs */}
-      <div className="container mx-auto px-4 py-4 text-[10px] font-bold text-white/50 uppercase tracking-widest flex items-center gap-2 mb-8">
+      <div className="container mx-auto px-4 md:px-16 lg:px-32 py-4 text-[10px] font-bold text-white/50 uppercase tracking-widest flex items-center gap-2 mb-8">
         <Link href="/"><a className="hover:text-white transition-colors">Home</a></Link>
         <ChevronRight className="w-3 h-3" />
         <Link href="/shop"><a className="hover:text-white transition-colors">All Grillz</a></Link>
@@ -30,8 +30,8 @@ export default function ProductDetail() {
         <span className="text-white">Top two window diamond tip + bottom diamond bar set</span>
       </div>
 
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+      <div className="container mx-auto px-4 md:px-16 lg:px-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           
           {/* Product Gallery */}
           <div className="flex flex-col gap-4">
@@ -146,7 +146,7 @@ export default function ProductDetail() {
       </div>
       
       {/* You Might Also Like Section */}
-      <div className="container mx-auto px-4 pt-10 border-t border-white/10 mb-16">
+      <div className="container mx-auto px-4 md:px-16 lg:px-32 pt-10 border-t border-white/10 mb-16">
         <h2 className="text-2xl md:text-3xl font-heading font-bold mb-10 tracking-wide text-center">You Might Also Like</h2>
         
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-6">
@@ -181,7 +181,7 @@ export default function ProductDetail() {
       </div>
 
       {/* Recently Viewed Products */}
-      <div className="container mx-auto px-4 pt-10 border-t border-white/10 mb-20">
+      <div className="container mx-auto px-4 md:px-16 lg:px-32 pt-10 border-t border-white/10 mb-20">
         <h2 className="text-2xl md:text-3xl font-heading font-bold mb-10 tracking-wide text-center">Recently Viewed Products</h2>
         
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-6">
