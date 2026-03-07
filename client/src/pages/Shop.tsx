@@ -29,18 +29,26 @@ const RECENTLY_VIEWED = [
 export default function Shop() {
   return (
     <div className="bg-black text-white min-h-screen pt-12 pb-20">
-      <div className="container mx-auto px-4 lg:px-8">
-        
-        {/* Breadcrumb & Title */}
-        <div className="flex flex-col items-center justify-center mb-16 space-y-6">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/70">
+      {/* Breadcrumb & Title Banner */}
+      <div className="relative mb-16 py-20 overflow-hidden bg-zinc-900 border-y border-white/10">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-800/50 via-black to-black opacity-80"></div>
+        <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center space-y-6">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/50">
             <Link href="/"><a className="hover:text-primary transition-colors">Home</a></Link>
             <ChevronRight className="w-3 h-3" />
             <span className="text-white">Products</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-heading font-bold text-primary tracking-wide">Products</h1>
+          <h1 className="text-5xl md:text-7xl font-heading font-bold text-white tracking-wider text-center">
+            OUR <span className="text-primary italic font-serif lowercase tracking-normal">Collection</span>
+          </h1>
+          <p className="text-white/60 text-center max-w-2xl text-sm md:text-base font-light">
+            Discover our meticulously crafted pieces. From subtle gold accents to bold diamond statements.
+          </p>
         </div>
+      </div>
 
+      <div className="container mx-auto px-4 lg:px-8">
+        
         {/* Filters Bar */}
         <div className="flex items-center gap-6 mb-8 border-b border-white/10 pb-4">
           <button className="flex items-center gap-2 text-sm font-bold text-white hover:text-primary transition-colors uppercase tracking-widest">
