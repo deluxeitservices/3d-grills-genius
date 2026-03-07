@@ -109,7 +109,7 @@ export default function Home() {
         <div className="relative z-10 max-w-xl">
           <h2 className="text-5xl md:text-7xl font-heading font-bold text-white mb-4 uppercase">Made For You</h2>
           <p className="text-xl text-white mb-8 font-medium">Jewellery as unique as your style.</p>
-          <Button size="lg" className="bg-white text-black hover:bg-primary hover:text-black px-10 py-6 text-sm font-bold uppercase tracking-widest rounded-none transition-colors">
+          <Button size="lg" className="bg-white text-black hover:bg-zinc-200 px-10 py-6 text-sm font-bold uppercase tracking-widest rounded-none transition-colors">
             Shop Now
           </Button>
         </div>
@@ -159,7 +159,7 @@ export default function Home() {
               <p className="text-white/80 font-light leading-relaxed mb-10 text-sm md:text-base">
                 There's a reason we choose to stand out—because we believe in our uniqueness. Grillz Shop's grillz are for those who don't just follow trends, but define them. Each piece is crafted for comfort, designed for those who know that a confident smile speaks louder than words. Whether it's the subtle elegance of gold or the boldness of diamond details, our grillz empower you to show the world exactly who you are.
               </p>
-              <Button size="lg" className="bg-primary text-black hover:bg-white px-10 py-6 text-sm font-bold uppercase tracking-widest rounded-none">
+              <Button size="lg" className="bg-white text-black hover:bg-zinc-200 px-10 py-6 text-sm font-bold uppercase tracking-widest rounded-none">
                 Shop Now
               </Button>
             </div>
