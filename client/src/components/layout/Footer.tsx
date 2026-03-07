@@ -19,7 +19,7 @@ export default function Footer() {
                 placeholder="Enter your email" 
                 className="bg-white border-0 text-black rounded-none h-12 px-4 focus-visible:ring-0"
               />
-              <Button className="rounded-none bg-white text-black hover:bg-zinc-200 font-bold uppercase tracking-widest h-12 w-32">
+              <Button className="rounded-none bg-white text-black hover:bg-zinc-200 font-bold uppercase tracking-widest h-12 px-8 w-fit transition-colors">
                 Subscribe Now
               </Button>
             </div>
