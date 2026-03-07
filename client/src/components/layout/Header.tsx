@@ -40,10 +40,32 @@ export default function Header() {
         {/* Navigation - Desktop (Center) */}
         <nav className="hidden lg:flex items-center gap-6 xl:gap-10 text-[13px] font-bold tracking-widest uppercase font-heading">
           <Link href="/"><a className="hover:text-primary transition-colors">Home</a></Link>
-          <Link href="/shop"><a className="hover:text-primary transition-colors flex items-center gap-1">Shop <span className="text-[8px]">▼</span></a></Link>
-          <Link href="/about"><a className="hover:text-primary transition-colors">How it works</a></Link>
-          <Link href="/about"><a className="hover:text-primary transition-colors">How to use mould kit</a></Link>
-          <Link href="/faq"><a className="hover:text-primary transition-colors">FAQs</a></Link>
+          
+          {/* Shop Dropdown */}
+          <div className="relative group py-6">
+            <Link href="/shop">
+              <a className="text-white flex items-center gap-1 group-hover:border-b-2 group-hover:border-white pb-1">
+                SHOP <span className="text-[8px] group-hover:rotate-180 transition-transform duration-200">^</span>
+              </a>
+            </Link>
+            
+            {/* Dropdown Menu */}
+            <div className="absolute top-full left-0 w-64 bg-black opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pt-2 pb-6">
+              <ul className="flex flex-col space-y-5 px-4">
+                <li><Link href="/shop"><a className="block text-[15px] font-heading font-normal tracking-wide text-white/70 hover:text-white transition-colors">All Grillz</a></Link></li>
+                <li><Link href="/shop"><a className="block text-[15px] font-heading font-normal tracking-wide text-white/70 hover:text-white transition-colors">Single Grillz</a></Link></li>
+                <li><Link href="/shop"><a className="block text-[15px] font-heading font-normal tracking-wide text-white/70 hover:text-white transition-colors">Set Of Gold Grillz</a></Link></li>
+                <li><Link href="/shop"><a className="block text-[15px] font-heading font-normal tracking-wide text-white/70 hover:text-white transition-colors">Curves & Colour</a></Link></li>
+                <li><Link href="/shop"><a className="block text-[15px] font-heading font-normal tracking-wide text-white/70 hover:text-white transition-colors">Diamond Grillz</a></Link></li>
+                <li><Link href="/shop"><a className="block text-[15px] font-heading font-normal tracking-wide text-white/70 hover:text-white transition-colors">Custom Jewellery</a></Link></li>
+                <li><Link href="/shop"><a className="block text-[15px] font-heading font-normal tracking-wide text-white/70 hover:text-white transition-colors">Extras</a></Link></li>
+              </ul>
+            </div>
+          </div>
+
+          <Link href="/about"><a className="hover:text-primary transition-colors">HOW IT WORKS</a></Link>
+          <Link href="/about"><a className="hover:text-primary transition-colors">HOW TO USE MOULD KIT</a></Link>
+          <Link href="/faq"><a className="hover:text-primary transition-colors">FAQS</a></Link>
         </nav>
 
         {/* Right Icons */}
