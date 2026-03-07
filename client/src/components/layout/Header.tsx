@@ -31,7 +31,7 @@ export default function Header() {
                 ZA
               </div>
               <div className="hidden md:block">
-                <span className="text-xl font-heading font-bold tracking-widest leading-none block">ZA JEWELLERS</span>
+                <span className="text-xl font-heading font-bold tracking-widest leading-none block">GRILLZ SHOP</span>
               </div>
             </a>
           </Link>

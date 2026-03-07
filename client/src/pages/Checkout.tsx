@@ -12,7 +12,7 @@ export default function Checkout() {
         <div className="container mx-auto px-4 max-w-6xl flex justify-between items-center">
           <Link href="/">
             <a className="text-2xl font-serif tracking-widest text-black">
-              AURA<span className="text-[#D4AF37]">.</span>
+              GRILLZ SHOP
             </a>
           </Link>
           <Link href="/cart">

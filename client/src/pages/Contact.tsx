@@ -55,8 +55,8 @@ export default function Contact() {
               <div>
                 <h3 className="text-lg uppercase tracking-wider mb-2">Email</h3>
                 <p className="text-white/60 font-light leading-relaxed">
-                  info@aurajewellery.com<br />
-                  bespoke@aurajewellery.com
+                  info@grillzshop.com<br />
+                  bespoke@grillzshop.com
                 </p>
               </div>
             </div>
