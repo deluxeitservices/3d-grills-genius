@@ -39,19 +39,19 @@
   --card-foreground: 0 0% 4%;
   --popover: 0 0% 100%;
   --popover-foreground: 0 0% 4%;
-  --primary: 46 65% 52%; /* Gold #D4AF37 */
+  --primary: 0 0% 0%; /* Black */
   --primary-foreground: 0 0% 100%;
   --secondary: 0 0% 96%;
   --secondary-foreground: 0 0% 4%;
   --muted: 0 0% 96%;
   --muted-foreground: 0 0% 45%;
-  --accent: 46 65% 52%;
+  --accent: 0 0% 0%;
   --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
   --border: 0 0% 90%;
   --input: 0 0% 90%;
-  --ring: 46 65% 52%;
+  --ring: 0 0% 0%;
   --radius: 0rem; /* Sharp edges for luxury feel */
 }
 
@@ -62,19 +62,19 @@
   --card-foreground: 0 0% 100%;
   --popover: 0 0% 4%;
   --popover-foreground: 0 0% 100%;
-  --primary: 46 65% 52%;
-  --primary-foreground: 0 0% 100%;
+  --primary: 0 0% 100%; /* White */
+  --primary-foreground: 0 0% 0%;
   --secondary: 0 0% 15%;
   --secondary-foreground: 0 0% 100%;
   --muted: 0 0% 15%;
   --muted-foreground: 0 0% 64%;
-  --accent: 46 65% 52%;
-  --accent-foreground: 0 0% 100%;
+  --accent: 0 0% 100%;
+  --accent-foreground: 0 0% 0%;
   --destructive: 0 63% 31%;
   --destructive-foreground: 0 0% 100%;
   --border: 0 0% 15%;
   --input: 0 0% 15%;
-  --ring: 46 65% 52%;
+  --ring: 0 0% 100%;
 }
 
 @layer base {

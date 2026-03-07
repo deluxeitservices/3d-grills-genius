@@ -25,15 +25,15 @@ export default function Home() {
         </div>
         
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-7xl font-serif text-white mb-6 tracking-tight animate-in fade-in slide-in-from-bottom-8 duration-1000">
-            Redefining <span className="text-primary italic">Luxury</span>
+          <h1 className="text-5xl md:text-7xl font-serif text-white mb-6 tracking-tight animate-in fade-in slide-in-from-bottom-8 duration-1000 uppercase">
+            Redefining Luxury
           </h1>
-          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 font-light tracking-wide animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-150">
+          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 font-light tracking-wide animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-150 uppercase">
             Bespoke jewelry and custom grillz crafted to perfection. Express your unique aura with our exclusive collections.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
             <Link href="/shop">
-              <Button size="lg" className="bg-primary text-black hover:bg-white px-8 py-6 text-sm uppercase tracking-widest w-full sm:w-auto">
+              <Button size="lg" className="bg-white text-black hover:bg-zinc-200 px-8 py-6 text-sm uppercase tracking-widest w-full sm:w-auto">
                 Shop Collection
               </Button>
             </Link>
@@ -50,7 +50,7 @@ export default function Home() {
       <section className="py-24 px-4 container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-serif mb-4">Shop By Category</h2>
-          <div className="w-16 h-0.5 bg-primary mx-auto"></div>
+          <div className="w-16 h-0.5 bg-white mx-auto"></div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -70,7 +70,7 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                 <div className="absolute bottom-8 left-0 w-full text-center">
                   <h3 className="text-xl font-medium tracking-wider uppercase mb-2">{cat.name}</h3>
-                  <span className="text-primary text-sm uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0 inline-block">
+                  <span className="text-white text-sm uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0 inline-block">
                     Explore
                   </span>
                 </div>
@@ -86,10 +86,10 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div>
               <h2 className="text-3xl md:text-4xl font-serif mb-4">Featured Pieces</h2>
-              <div className="w-16 h-0.5 bg-primary"></div>
+              <div className="w-16 h-0.5 bg-white"></div>
             </div>
             <Link href="/shop">
-              <a className="text-sm uppercase tracking-widest text-white/60 hover:text-primary border-b border-transparent hover:border-primary pb-1 transition-all">
+              <a className="text-sm uppercase tracking-widest text-white/60 hover:text-white border-b border-transparent hover:border-white pb-1 transition-all">
                 View All
               </a>
             </Link>
@@ -114,11 +114,11 @@ export default function Home() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90"
                   />
                   <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/80 to-transparent">
-                    <Button className="w-full bg-white text-black hover:bg-primary">Add to Cart</Button>
+                    <Button className="w-full bg-white text-black hover:bg-zinc-200">Add to Cart</Button>
                   </div>
                 </div>
                 <div className="text-center">
-                  <h3 className="text-lg font-medium mb-2 group-hover:text-primary transition-colors">{product.name}</h3>
+                  <h3 className="text-lg font-medium mb-2 group-hover:text-white/80 transition-colors">{product.name}</h3>
                   <p className="text-white/60 tracking-wider">{product.price}</p>
                 </div>
               </div>
@@ -137,7 +137,7 @@ export default function Home() {
           <p className="text-lg text-white/70 mb-10 font-light">
             Book an appointment for a custom mold, or order a home molding kit. We craft custom-fitted gold and diamond grillz to perfectly match your aesthetic.
           </p>
-          <Button size="lg" className="bg-primary text-black hover:bg-white px-8 py-6 text-sm uppercase tracking-widest">
+          <Button size="lg" className="bg-white text-black hover:bg-zinc-200 px-8 py-6 text-sm uppercase tracking-widest">
             Book Consultation
           </Button>
         </div>
@@ -148,7 +148,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
             <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-zinc-900 flex items-center justify-center mb-6 text-primary">
+              <div className="w-16 h-16 rounded-full bg-zinc-900 flex items-center justify-center mb-6 text-white border border-white/20">
                 <Gem className="w-8 h-8" />
               </div>
               <h3 className="text-lg uppercase tracking-widest font-medium mb-3">Premium Quality</h3>
@@ -157,7 +157,7 @@ export default function Home() {
               </p>
             </div>
             <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-zinc-900 flex items-center justify-center mb-6 text-primary">
+              <div className="w-16 h-16 rounded-full bg-zinc-900 flex items-center justify-center mb-6 text-white border border-white/20">
                 <ShieldCheck className="w-8 h-8" />
               </div>
               <h3 className="text-lg uppercase tracking-widest font-medium mb-3">Secure Shopping</h3>
@@ -166,7 +166,7 @@ export default function Home() {
               </p>
             </div>
             <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-zinc-900 flex items-center justify-center mb-6 text-primary">
+              <div className="w-16 h-16 rounded-full bg-zinc-900 flex items-center justify-center mb-6 text-white border border-white/20">
                 <Truck className="w-8 h-8" />
               </div>
               <h3 className="text-lg uppercase tracking-widest font-medium mb-3">Insured Delivery</h3>

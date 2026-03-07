@@ -27,7 +27,7 @@ export default function Cart() {
                   <img src={product1} alt="Product" className="w-full h-full object-cover" />
                 </div>
                 <div className="flex flex-col justify-center">
-                  <h3 className="text-lg font-medium hover:text-primary transition-colors cursor-pointer">VVS Diamond Cuban Link</h3>
+                  <h3 className="text-lg font-medium hover:text-white/80 transition-colors cursor-pointer">VVS Diamond Cuban Link</h3>
                   <p className="text-white/60 text-sm mb-2">14k Yellow Gold / 18 inch</p>
                   <p className="text-white/80 md:hidden">£2,450.00</p>
                 </div>
@@ -76,7 +76,7 @@ export default function Cart() {
             </div>
 
             <Link href="/checkout">
-              <Button className="w-full bg-primary text-black hover:bg-white rounded-none py-6 uppercase tracking-widest">
+              <Button className="w-full bg-white text-black hover:bg-zinc-200 rounded-none py-6 uppercase tracking-widest">
                 Checkout
               </Button>
             </Link>

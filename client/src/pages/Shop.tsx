@@ -59,7 +59,7 @@ export default function Shop() {
                   <li key={cat}>
                     <button 
                       onClick={() => setActiveCategory(cat)}
-                      className={`uppercase tracking-wider hover:text-primary transition-colors ${activeCategory === cat ? 'text-primary' : 'text-white/60'}`}
+                      className={`uppercase tracking-wider hover:text-white transition-colors ${activeCategory === cat ? 'text-white font-medium border-b border-white' : 'text-white/60'}`}
                     >
                       {cat}
                     </button>
@@ -105,11 +105,11 @@ export default function Shop() {
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90"
                     />
                     <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/80 to-transparent">
-                      <Button className="w-full bg-white text-black hover:bg-primary">Quick Add</Button>
+                      <Button className="w-full bg-white text-black hover:bg-zinc-200">Quick Add</Button>
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-sm md:text-base font-medium mb-1 group-hover:text-primary transition-colors line-clamp-1">{product.name}</h3>
+                    <h3 className="text-sm md:text-base font-medium mb-1 group-hover:text-white/80 transition-colors line-clamp-1">{product.name}</h3>
                     <p className="text-white/60 tracking-wider text-sm">{product.price}</p>
                   </div>
                 </a>

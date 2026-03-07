@@ -15,7 +15,7 @@ export default function About() {
         </div>
         <div className="relative z-10 text-center px-4">
           <h1 className="text-4xl md:text-6xl font-serif mb-4">Our Story</h1>
-          <p className="text-primary tracking-widest uppercase text-sm">Crafting Excellence Since 2018</p>
+          <p className="text-white/80 tracking-widest uppercase text-sm">Crafting Excellence Since 2018</p>
         </div>
       </section>
 
@@ -50,7 +50,7 @@ export default function About() {
               We specialize in bringing your unique visions to life. Our bespoke service allows you to work directly with our design team to create 1-of-1 pieces that perfectly encapsulate your personal style.
             </p>
             <div className="text-center">
-              <Button size="lg" className="bg-primary text-black hover:bg-white rounded-none px-8 uppercase tracking-widest">
+              <Button size="lg" className="bg-white text-black hover:bg-zinc-200 rounded-none px-8 uppercase tracking-widest">
                 Start a Custom Project
               </Button>
             </div>

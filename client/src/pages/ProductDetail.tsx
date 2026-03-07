@@ -17,9 +17,9 @@ export default function ProductDetail() {
     <div className="bg-black text-white min-h-screen pt-20 pb-20">
       {/* Breadcrumbs */}
       <div className="container mx-auto px-4 py-4 text-xs font-light text-white/50 uppercase tracking-widest flex items-center gap-2">
-        <Link href="/"><a className="hover:text-primary">Home</a></Link>
+        <Link href="/"><a className="hover:text-white transition-colors">Home</a></Link>
         <ChevronRight className="w-3 h-3" />
-        <Link href="/shop"><a className="hover:text-primary">Chains</a></Link>
+        <Link href="/shop"><a className="hover:text-white transition-colors">Chains</a></Link>
         <ChevronRight className="w-3 h-3" />
         <span className="text-white">VVS Diamond Cuban Link</span>
       </div>
@@ -35,7 +35,7 @@ export default function ProductDetail() {
                 <button 
                   key={idx} 
                   onClick={() => setSelectedImage(img)}
-                  className={`w-20 h-24 md:w-24 md:h-32 flex-shrink-0 bg-zinc-900 overflow-hidden border ${selectedImage === img ? 'border-primary' : 'border-transparent'}`}
+                  className={`w-20 h-24 md:w-24 md:h-32 flex-shrink-0 bg-zinc-900 overflow-hidden border ${selectedImage === img ? 'border-white' : 'border-transparent'}`}
                 >
                   <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover opacity-80 hover:opacity-100" />
                 </button>
@@ -67,7 +67,7 @@ export default function ProductDetail() {
                   <button 
                     key={mat}
                     onClick={() => setSelectedMaterial(mat)}
-                    className={`px-4 py-2 border text-sm transition-colors ${selectedMaterial === mat ? 'border-primary text-primary' : 'border-white/20 text-white/60 hover:border-white'}`}
+                    className={`px-4 py-2 border text-sm transition-colors ${selectedMaterial === mat ? 'border-white text-white' : 'border-white/20 text-white/60 hover:border-white'}`}
                   >
                     {mat}
                   </button>
@@ -78,14 +78,14 @@ export default function ProductDetail() {
             <div className="mb-8">
               <div className="flex justify-between mb-2">
                 <span className="text-sm uppercase tracking-wider">Length: <span className="text-white/60">{selectedLength}</span></span>
-                <button className="text-xs text-primary underline">Size Guide</button>
+                <button className="text-xs text-white/60 hover:text-white underline transition-colors">Size Guide</button>
               </div>
               <div className="flex flex-wrap gap-3">
                 {["18 inch", "20 inch", "22 inch", "24 inch"].map(len => (
                   <button 
                     key={len}
                     onClick={() => setSelectedLength(len)}
-                    className={`px-4 py-2 border text-sm transition-colors ${selectedLength === len ? 'border-primary text-primary' : 'border-white/20 text-white/60 hover:border-white'}`}
+                    className={`px-4 py-2 border text-sm transition-colors ${selectedLength === len ? 'border-white text-white' : 'border-white/20 text-white/60 hover:border-white'}`}
                   >
                     {len}
                   </button>
@@ -95,7 +95,7 @@ export default function ProductDetail() {
 
             {/* Actions */}
             <div className="flex gap-4 mb-10">
-              <Button size="lg" className="flex-1 bg-primary text-black hover:bg-white rounded-none py-6 uppercase tracking-widest text-sm">
+              <Button size="lg" className="flex-1 bg-white text-black hover:bg-zinc-200 rounded-none py-6 uppercase tracking-widest text-sm">
                 Add to Cart
               </Button>
               <Button size="lg" variant="outline" className="w-16 rounded-none border-white/20 hover:bg-white/10">
@@ -106,21 +106,21 @@ export default function ProductDetail() {
             {/* Accordions / Info */}
             <div className="border-t border-white/10 pt-6 space-y-6">
               <div className="flex items-start gap-4 text-sm text-white/70">
-                <Shield className="w-5 h-5 text-primary flex-shrink-0" />
+                <Shield className="w-5 h-5 text-white flex-shrink-0" />
                 <div>
                   <h4 className="text-white uppercase tracking-wider mb-1">Lifetime Warranty</h4>
                   <p className="font-light">We stand by our craftsmanship. Every piece comes with a lifetime guarantee against manufacturing defects.</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 text-sm text-white/70">
-                <Truck className="w-5 h-5 text-primary flex-shrink-0" />
+                <Truck className="w-5 h-5 text-white flex-shrink-0" />
                 <div>
                   <h4 className="text-white uppercase tracking-wider mb-1">Insured Shipping</h4>
                   <p className="font-light">Free, fully insured and tracked worldwide shipping on all orders over £500.</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 text-sm text-white/70">
-                <RotateCcw className="w-5 h-5 text-primary flex-shrink-0" />
+                <RotateCcw className="w-5 h-5 text-white flex-shrink-0" />
                 <div>
                   <h4 className="text-white uppercase tracking-wider mb-1">14-Day Returns</h4>
                   <p className="font-light">Not entirely satisfied? Return your unworn item within 14 days for a full refund (excluding bespoke items).</p>

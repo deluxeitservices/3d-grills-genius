@@ -9,7 +9,7 @@ export default function Contact() {
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-serif mb-4">Contact Us</h1>
-          <div className="w-16 h-0.5 bg-primary mx-auto mb-6"></div>
+          <div className="w-16 h-0.5 bg-white mx-auto mb-6"></div>
           <p className="text-white/60 font-light max-w-2xl mx-auto">
             Have a question about an order, need a bespoke quote, or want to book an appointment? Get in touch with our team.
           </p>
@@ -21,7 +21,7 @@ export default function Contact() {
             <h2 className="text-2xl font-serif border-b border-white/10 pb-4 mb-6">Get In Touch</h2>
             
             <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-primary flex-shrink-0">
+              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white flex-shrink-0">
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
@@ -36,7 +36,7 @@ export default function Contact() {
             </div>
 
             <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-primary flex-shrink-0">
+              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white flex-shrink-0">
                 <Phone className="w-5 h-5" />
               </div>
               <div>
@@ -49,7 +49,7 @@ export default function Contact() {
             </div>
 
             <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-primary flex-shrink-0">
+              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white flex-shrink-0">
                 <Mail className="w-5 h-5" />
               </div>
               <div>
@@ -69,22 +69,22 @@ export default function Contact() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-xs uppercase tracking-wider text-white/60">First Name</label>
-                  <Input className="bg-black border-white/20 rounded-none focus-visible:border-primary text-white" />
+                  <Input className="bg-black border-white/20 rounded-none focus-visible:border-white text-white" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs uppercase tracking-wider text-white/60">Last Name</label>
-                  <Input className="bg-black border-white/20 rounded-none focus-visible:border-primary text-white" />
+                  <Input className="bg-black border-white/20 rounded-none focus-visible:border-white text-white" />
                 </div>
               </div>
               
               <div className="space-y-2">
                 <label className="text-xs uppercase tracking-wider text-white/60">Email</label>
-                <Input type="email" className="bg-black border-white/20 rounded-none focus-visible:border-primary text-white" />
+                <Input type="email" className="bg-black border-white/20 rounded-none focus-visible:border-white text-white" />
               </div>
 
               <div className="space-y-2">
                 <label className="text-xs uppercase tracking-wider text-white/60">Subject</label>
-                <select className="w-full h-10 bg-black border border-white/20 rounded-none text-white px-3 focus:outline-none focus:border-primary">
+                <select className="w-full h-10 bg-black border border-white/20 rounded-none text-white px-3 focus:outline-none focus:border-white">
                   <option>General Enquiry</option>
                   <option>Bespoke Order</option>
                   <option>Order Status</option>
@@ -94,10 +94,10 @@ export default function Contact() {
 
               <div className="space-y-2">
                 <label className="text-xs uppercase tracking-wider text-white/60">Message</label>
-                <Textarea className="bg-black border-white/20 rounded-none focus-visible:border-primary text-white min-h-[150px]" />
+                <Textarea className="bg-black border-white/20 rounded-none focus-visible:border-white text-white min-h-[150px]" />
               </div>
 
-              <Button className="w-full bg-primary text-black hover:bg-white rounded-none py-6 uppercase tracking-widest">
+              <Button className="w-full bg-white text-black hover:bg-zinc-200 rounded-none py-6 uppercase tracking-widest">
                 Send Message
               </Button>
             </form>

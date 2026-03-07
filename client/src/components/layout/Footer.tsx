@@ -12,20 +12,20 @@ export default function Footer() {
           <div>
             <Link href="/">
               <a className="text-2xl font-serif tracking-widest text-white mb-6 block">
-                AURA<span className="text-primary">.</span>
+                AURA
               </a>
             </Link>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               Crafting exceptional bespoke jewelry and premium grillz. Redefining luxury with every piece we create.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all">
+              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:border-white hover:text-black transition-all">
                 <Instagram className="h-4 w-4" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all">
+              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:border-white hover:text-black transition-all">
                 <Twitter className="h-4 w-4" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-black transition-all">
+              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:border-white hover:text-black transition-all">
                 <Facebook className="h-4 w-4" />
               </a>
             </div>
@@ -35,10 +35,10 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider mb-6">Shop</h4>
             <ul className="space-y-4">
-              <li><Link href="/shop"><a className="text-white/60 hover:text-primary transition-colors text-sm">All Products</a></Link></li>
-              <li><Link href="/shop"><a className="text-white/60 hover:text-primary transition-colors text-sm">Custom Grillz</a></Link></li>
-              <li><Link href="/shop"><a className="text-white/60 hover:text-primary transition-colors text-sm">Chains & Pendants</a></Link></li>
-              <li><Link href="/shop"><a className="text-white/60 hover:text-primary transition-colors text-sm">Rings</a></Link></li>
+              <li><Link href="/shop"><a className="text-white/60 hover:text-white transition-colors text-sm">All Products</a></Link></li>
+              <li><Link href="/shop"><a className="text-white/60 hover:text-white transition-colors text-sm">Custom Grillz</a></Link></li>
+              <li><Link href="/shop"><a className="text-white/60 hover:text-white transition-colors text-sm">Chains & Pendants</a></Link></li>
+              <li><Link href="/shop"><a className="text-white/60 hover:text-white transition-colors text-sm">Rings</a></Link></li>
             </ul>
           </div>
 
@@ -46,10 +46,10 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider mb-6">Support</h4>
             <ul className="space-y-4">
-              <li><Link href="/faq"><a className="text-white/60 hover:text-primary transition-colors text-sm">FAQ</a></Link></li>
-              <li><Link href="/contact"><a className="text-white/60 hover:text-primary transition-colors text-sm">Contact Us</a></Link></li>
-              <li><a href="#" className="text-white/60 hover:text-primary transition-colors text-sm">Shipping & Returns</a></li>
-              <li><a href="#" className="text-white/60 hover:text-primary transition-colors text-sm">Size Guide</a></li>
+              <li><Link href="/faq"><a className="text-white/60 hover:text-white transition-colors text-sm">FAQ</a></Link></li>
+              <li><Link href="/contact"><a className="text-white/60 hover:text-white transition-colors text-sm">Contact Us</a></Link></li>
+              <li><a href="#" className="text-white/60 hover:text-white transition-colors text-sm">Shipping & Returns</a></li>
+              <li><a href="#" className="text-white/60 hover:text-white transition-colors text-sm">Size Guide</a></li>
             </ul>
           </div>
 
@@ -61,9 +61,9 @@ export default function Footer() {
               <Input 
                 type="email" 
                 placeholder="Enter your email" 
-                className="bg-transparent border-white/20 text-white rounded-none focus-visible:ring-primary focus-visible:border-primary rounded-l-md"
+                className="bg-transparent border-white/20 text-white rounded-none focus-visible:ring-white focus-visible:border-white rounded-l-md"
               />
-              <Button className="rounded-none rounded-r-md bg-white text-black hover:bg-primary border border-white hover:border-primary w-12 px-0">
+              <Button className="rounded-none rounded-r-md bg-white text-black hover:bg-zinc-200 border border-white hover:border-zinc-200 w-12 px-0">
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
