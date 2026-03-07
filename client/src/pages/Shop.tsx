@@ -30,8 +30,11 @@ export default function Shop() {
   return (
     <div className="bg-black text-white min-h-screen pt-12 pb-20">
       {/* Breadcrumb & Title Banner */}
-      <div className="relative mb-16 py-20 overflow-hidden bg-zinc-900 border-y border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-800/50 via-black to-black opacity-80"></div>
+      <div className="relative mb-16 py-24 md:py-32 overflow-hidden border-y border-white/10">
+        <div className="absolute inset-0">
+          <img src={catGrillz} alt="Grillz Background" className="w-full h-full object-cover opacity-30 grayscale" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black"></div>
+        </div>
         <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center space-y-6">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/50">
             <Link href="/"><a className="hover:text-primary transition-colors">Home</a></Link>
