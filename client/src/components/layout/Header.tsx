@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Search, User, Heart, ShoppingBag, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import logoImg from "@/assets/logo.png";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -26,9 +27,8 @@ export default function Header() {
         <div className="flex-shrink-0">
           <Link href="/">
             <a className="flex items-center gap-2">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-full flex items-center justify-center text-black font-bold text-xl">
-                {/* Placeholder for red lips logo */}
-                ZA
+              <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center font-bold text-xl">
+                <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
               </div>
               <div className="hidden md:block">
                 <span className="text-xl font-heading font-bold tracking-widest leading-none block">GRILLZ SHOP</span>

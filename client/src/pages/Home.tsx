@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import heroImg from "@/assets/hero.jpg";
+import heroImg from "@/assets/hero.png";
 import catGrillz from "@/assets/cat-grillz.jpg";
 import catChains from "@/assets/cat-chains.jpg";
 import catRings from "@/assets/cat-rings.jpg";
