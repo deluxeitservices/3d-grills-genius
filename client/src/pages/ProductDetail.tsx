@@ -36,7 +36,7 @@ export default function ProductDetail() {
           {/* Product Gallery */}
           <div className="flex flex-col gap-4">
             {/* Main Image */}
-            <div className="w-full bg-zinc-900 aspect-[4/5] overflow-hidden relative">
+            <div className="w-full bg-zinc-900 aspect-square md:aspect-[4/3] lg:aspect-[16/10] max-h-[600px] overflow-hidden relative">
               <img src={selectedImage} alt="Product" className="w-full h-full object-cover" />
             </div>
             
@@ -46,7 +46,7 @@ export default function ProductDetail() {
                 <button 
                   key={idx} 
                   onClick={() => setSelectedImage(img)}
-                  className={`w-20 h-24 md:w-24 md:h-32 flex-shrink-0 bg-zinc-900 overflow-hidden border ${selectedImage === img ? 'border-white' : 'border-transparent opacity-60 hover:opacity-100'} transition-all`}
+                  className={`w-20 h-20 md:w-24 md:h-24 flex-shrink-0 bg-zinc-900 overflow-hidden border ${selectedImage === img ? 'border-white' : 'border-transparent opacity-60 hover:opacity-100'} transition-all`}
                 >
                   <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
                 </button>
