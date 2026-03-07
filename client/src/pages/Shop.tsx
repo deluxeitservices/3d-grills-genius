@@ -33,9 +33,9 @@ export default function Shop() {
   const [priceOpen, setPriceOpen] = useState(true);
 
   return (
-    <div className="bg-black text-white min-h-screen pt-12 pb-20 relative">
+    <div className="bg-black text-white min-h-screen relative">
       {/* Breadcrumb & Title Banner */}
-      <div className="relative mb-16 py-12 md:py-16 overflow-hidden border-y border-white/10">
+      <div className="relative mb-16 py-12 md:py-16 overflow-hidden border-b border-white/10">
         <div className="absolute inset-0">
           <img src={catGrillz} alt="Grillz Background" className="w-full h-full object-cover opacity-15 grayscale" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/80 to-black"></div>
