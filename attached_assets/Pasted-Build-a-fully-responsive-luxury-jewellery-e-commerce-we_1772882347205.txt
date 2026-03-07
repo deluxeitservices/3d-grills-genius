@@ -1,0 +1,108 @@
+Build a fully responsive luxury jewellery e-commerce website inspired by the overall flow, layout style, and premium feel of zajewellers.com, but do not copy their code, branding, or exact assets. Create an original design with a similar user journey, clean structure, and modern luxury presentation.
+
+Goal:
+Create a sleek, high-converting jewellery website with a premium black / white / gold aesthetic, smooth shopping flow, and strong mobile responsiveness.
+
+Core requirements:
+1. The website must feel premium, modern, and luxury-focused.
+2. It must be fully mobile responsive and look polished on desktop, tablet, and mobile.
+3. Use a clean layout with strong spacing, elegant typography, high-quality image presentation, and a conversion-focused structure.
+4. The website should have the same type of flow as a high-end jewellery Shopify-style store:
+   - Hero banner
+   - Category highlights
+   - Featured / bestselling products
+   - Brand story or trust section
+   - Product listing grid
+   - Product detail pages
+   - Cart and checkout flow
+   - Footer with policies and contact links
+
+Pages to create:
+- Home
+- Shop / Collection page
+- Product detail page
+- About / Brand story
+- Contact page
+- FAQ page
+- Cart page
+- Checkout page structure
+- Optional: Custom order / bespoke jewellery enquiry page
+
+Homepage sections:
+1. Top announcement bar
+2. Header with logo, navigation, search, account, wishlist, and cart
+3. Large hero banner with luxury jewellery image/video, heading, short text, and CTA button
+4. Featured categories section
+5. Best sellers / featured products section
+6. Promotional banner for custom jewellery or grillz
+7. Trust section with icons such as secure payment, handcrafted quality, fast delivery
+8. Testimonials / reviews slider
+9. Instagram or social proof section
+10. Newsletter signup
+11. Premium footer with links, contact info, policies, and social icons
+
+Shop page requirements:
+- Clean product grid
+- Filter sidebar or filter drawer on mobile
+- Sort by newest, price, featured
+- Product cards with image, title, price, sale badge, hover effect
+- Pagination or load more button
+
+Product page requirements:
+- Large image gallery
+- Product title, price, finance/payment info section
+- Product options such as material, colour, size, style
+- Add to cart and buy now buttons
+- Sticky add-to-cart on mobile
+- Product description
+- Delivery / returns / authenticity info
+- Related products section
+
+Mobile responsiveness:
+- Mobile-first layout
+- Hamburger menu
+- Optimised image scaling
+- Touch-friendly buttons
+- Sticky mobile add-to-cart
+- Filter drawer for collection page
+- Proper spacing and readable font sizes on smaller screens
+
+Design direction:
+- Elegant luxury jewellery brand style
+- Colour palette: black, white, gold, soft grey
+- Minimal but premium
+- Smooth hover animations and transitions
+- Clean cards, strong banners, polished UI
+- Avoid clutter
+- Focus on premium conversion-based design
+
+Technical requirements:
+- Build using modern frontend best practices
+- Use reusable components
+- Keep code clean, structured, and scalable
+- Optimise for performance
+- Include SEO-friendly structure
+- Ensure accessibility basics are followed
+- Use responsive grids and flexible layouts
+- Make the design easy to expand later into a full ecommerce store
+
+Important:
+- Do not clone or directly copy the reference website
+- Create an original design inspired by the luxury feel and user flow only
+- Use placeholder products and placeholder content where needed
+- Prioritise clean UX and premium visual presentation
+- Make the website look production-ready
+
+Also:
+- Add polished animations where suitable
+- Make the navigation smooth and modern
+- Use high-quality placeholder jewellery imagery
+- Keep sections editable for future content updates
+
+At the end, provide:
+1. Full homepage
+2. All inner pages listed above
+3. Reusable components
+4. Responsive styling
+5. Clear folder structure
+6. Notes on where to replace logo, banners, and products
