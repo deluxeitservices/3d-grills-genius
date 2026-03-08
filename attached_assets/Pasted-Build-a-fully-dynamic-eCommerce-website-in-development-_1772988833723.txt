@@ -1,0 +1,173 @@
+Build a fully dynamic eCommerce website in development mode with both frontend and backend (admin panel). All major content must be manageable from the admin dashboard.
+
+GENERAL REQUIREMENTS
+The system must include both frontend and backend.
+All sections of the website should be dynamic and manageable from the admin panel.
+The platform must support SEO management, email notifications, order tracking, and payment integration.
+
+BANNERS
+The homepage banner must be dynamically updated from the admin panel.
+Any page that contains a banner image must allow banner management through the admin dashboard.
+
+HOMEPAGE CATEGORIES
+The homepage categories must be editable and manageable from the admin panel (add/edit/delete).
+
+Categories:
+
+* All Grillz
+* Single Grillz
+* Curves & Colour
+* Diamond Grillz
+* Set Of Gold Grillz
+* Tooth Gems
+* Extras
+
+Products should be displayed under these categories.
+SELLER & REVIEWS
+
+A seller section should be displayed on the homepage.
+The review/testimonial section must be fully manageable from the admin panel.
+
+FOOTER CMS PAGES
+All footer pages must be manageable from the admin panel. Admin should be able to create, edit, and delete pages.
+Pages include:
+* FAQs
+* Contact Us
+* How It Works
+* How To Use Mould Kit
+* Return & Exchanges
+* Privacy Policy
+* Terms Of Service
+
+PRODUCT MANAGEMENT
+Create a product management system in the admin panel.
+
+Admin should be able to:
+
+* Add products
+* Edit products
+* Delete products
+* Manage product listing
+
+Product fields should include:
+
+* Product name
+* Description
+* Images
+* Quantity management
+* Shipping charges
+* Tax settings
+* Discount price (example: original price 100, discount price 50)
+
+COUNTRY BASED PRICING
+Products must support country-based pricing.
+
+Examples:
+Europe → Pound (£)
+USA → Dollar ($)
+India → Rupees (₹)
+Pakistan -> Rupees (₹)
+
+Requirements:
+Admin must be able to set different prices for different countries.
+The frontend should automatically detect the user’s region and show the correct currency and price.
+Admin must also be able to set a default currency if the user's country cannot be detected.
+
+PRODUCT ATTRIBUTES
+Admin must be able to create and manage attributes such as Metal & Stone Type.
+Examples:
+* Silver
+* Real Diamond
+
+Metal & stone type: Silver & Real Diamond
+Silver & Real Diamond
+Silver & Cz
+Dental Yellow Gold & Cz
+Dental Yellow Gold & Real Diamonds
+Dental White Gold & Cz
+Dental White Gold & Real Diamonds
+14k Yellow Gold & Cz
+14k Yellow Gold & Real Diamonds
+14k Rose Gold & Cz
+14k Rose Gold & Real Diamonds
+
+You can check in detail page for selection 
+
+
+These should appear as dropdown options when adding products.
+PRODUCT DETAIL PAGE
+Each product page must contain the following sections:
+
+HOW IT WORKS
+DESCRIPTION
+SHIPPING
+RETURN & EXCHANGES
+CUSTOM GRILLZ
+
+CART SYSTEM
+Add to Cart should open from a side panel.
+Users can view cart items from the side panel.
+
+CHECKOUT
+Create a checkout page with Stripe payment integration.
+Admin should be able to set Stripe API keys from the admin panel.
+
+USER ACCOUNT SYSTEM
+After payment is completed, the user must register or login (mandatory).
+
+Users should be able to:
+
+* Track their orders
+* Download invoices
+* Update account details
+
+SEARCH
+The frontend header must include a product search feature.
+
+SEO MANAGEMENT
+Every page must have SEO settings managed from the admin panel:
+
+* Meta title
+* Meta description
+* Keywords
+* SEO content
+
+PRODUCT URL STRUCTURE
+Product pages must use SEO-friendly slugs instead of IDs.
+
+Example:
+/product/diamond-grillz-18k
+
+ADMIN DASHBOARD
+The admin dashboard should display:
+
+* Latest orders
+* Payment summary
+* Revenue statistics
+* Order graphs / analytics
+* Customer activity
+
+ORDER MANAGEMENT
+Admin must be able to:
+
+* View order listings
+* View customer details
+* Download invoices
+* Update order status
+
+Order status flow:
+Pending → Dispatch → Shipping → Delivered
+
+INVOICE MANAGEMENT
+Admin should be able to view all invoices separately.
+Invoices should be downloadable as PDF.
+Admin must also be able to create custom invoices manually.
+
+EMAIL NOTIFICATIONS
+Email notifications must be sent for:
+
+* Order confirmation
+* Payment confirmation
+* Order status updates
+* Shipping updates
+* Invoice delivery
