@@ -75,17 +75,27 @@ export default function Home() {
   const heroBanner = banners?.find((b: any) => b.page === "home") || null;
   const midBanner = banners?.find((b: any) => b.page === "mid") || (bannersData && bannersData.length > 1 ? bannersData[1] : null);
 
+  const assetMap: Record<string, string> = {
+    "/assets/product_1.png": product1,
+    "/assets/product_2.png": product2,
+    "/assets/product_3.png": product3,
+    "/assets/cat-grillz.png": catGrillz,
+    "/assets/cat-chains.png": catChains,
+    "/assets/cat-rings.png": catRings,
+    "/assets/cat-bracelets.png": catBracelets,
+    "/assets/hero.png": heroImg,
+  };
+
   const resolveImage = (dbPath: string | null | undefined, fallback: string) => {
     if (!dbPath) return fallback;
-    if (dbPath.startsWith("/uploads/")) return dbPath;
-    if (dbPath.startsWith("http")) return dbPath;
-    return fallback;
+    if (dbPath.startsWith("/uploads/") || dbPath.startsWith("http")) return dbPath;
+    return assetMap[dbPath] || fallback;
   };
 
   const categories = categoriesData && categoriesData.length > 0
     ? categoriesData.slice(0, 6).map((cat: any, i: number) => ({
         name: cat.name,
-        image: cat.image || fallbackCategories[i]?.image || catGrillz,
+        image: resolveImage(cat.image, fallbackCategories[i]?.image || catGrillz),
         slug: cat.slug,
       }))
     : fallbackCategories;
@@ -151,7 +161,8 @@ export default function Home() {
               oldPrice: product.discountPrice ? product.price : null,
               currency: "GBP",
             };
-            const img = product.images?.[0] || product.image || [product1, product2, product3, catGrillz][idx % 4];
+            const rawImg = product.images?.[0] || product.image;
+            const img = resolveImage(rawImg, [product1, product2, product3, catGrillz][idx % 4]);
             const slug = product.slug || `product-${product.id}`;
             return (
               <Link key={product.id} href={`/product/${slug}`} className="group cursor-pointer block" data-testid={`card-product-${product.id}`}>

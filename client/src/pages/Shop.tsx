@@ -10,6 +10,19 @@ import catGrillz from "@/assets/cat-grillz.png";
 
 const fallbackImages = [product1, product2, product3, catGrillz];
 
+const assetMap: Record<string, string> = {
+  "/assets/product_1.png": product1,
+  "/assets/product_2.png": product2,
+  "/assets/product_3.png": product3,
+  "/assets/cat-grillz.png": catGrillz,
+};
+
+function resolveImage(src: string | null | undefined, fallback: string): string {
+  if (!src) return fallback;
+  if (src.startsWith("/uploads/") || src.startsWith("http")) return src;
+  return assetMap[src] || fallback;
+}
+
 const SORT_OPTIONS = [
   { label: "Featured", value: "featured" },
   { label: "Best selling", value: "bestselling" },
@@ -172,7 +185,7 @@ export default function Shop() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-6 mb-16" data-testid="product-grid">
             {sortedProducts.map((product: any, idx: number) => {
               const pricing = getProductPrice(product);
-              const img = product.images?.[0] || fallbackImages[idx % fallbackImages.length];
+              const img = resolveImage(product.images?.[0], fallbackImages[idx % fallbackImages.length]);
               return (
                 <Link key={product.id} href={`/product/${product.slug}`} className="group block cursor-pointer" data-testid={`card-product-${product.id}`}>
                     <div className="relative aspect-[4/5] bg-zinc-900 mb-4 overflow-hidden">

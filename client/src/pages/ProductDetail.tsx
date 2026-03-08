@@ -11,6 +11,22 @@ import product3 from "@/assets/product_3.png";
 
 const fallbackImages = [product1, product2, product3];
 
+const assetMap: Record<string, string> = {
+  "/assets/product_1.png": product1,
+  "/assets/product_2.png": product2,
+  "/assets/product_3.png": product3,
+};
+
+function resolveImage(src: string | null | undefined, fallback: string): string {
+  if (!src) return fallback;
+  if (src.startsWith("/uploads/") || src.startsWith("http")) return src;
+  return assetMap[src] || fallback;
+}
+
+function resolveImages(images: string[]): string[] {
+  return images.map((img, i) => resolveImage(img, fallbackImages[i % fallbackImages.length]));
+}
+
 function getProductPrice(product: any) {
   if (product.prices && product.prices.length > 0) {
     const gbp = product.prices.find((p: any) => p.currency === "GBP") || product.prices[0];
@@ -46,7 +62,7 @@ export default function ProductDetail() {
     enabled: !!product?.category?.slug,
   });
 
-  const images = product?.images?.length > 0 ? product.images : fallbackImages;
+  const images = product?.images?.length > 0 ? resolveImages(product.images) : fallbackImages;
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const mainImage = selectedImage || images[0];
 
@@ -233,7 +249,7 @@ export default function ProductDetail() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-6">
             {relatedProducts.map((rp: any, idx: number) => {
               const rpPricing = getProductPrice(rp);
-              const rpImg = rp.images?.[0] || fallbackImages[idx % fallbackImages.length];
+              const rpImg = resolveImage(rp.images?.[0], fallbackImages[idx % fallbackImages.length]);
               return (
                 <Link key={rp.id} href={`/product/${rp.slug}`} className="group block cursor-pointer" data-testid={`card-related-${rp.id}`}>
                     <div className="relative aspect-[4/5] bg-zinc-900 mb-4 overflow-hidden">
