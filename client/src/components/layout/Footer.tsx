@@ -18,7 +18,12 @@ export default function Footer() {
                   <img src={logoImg} alt="Logo" className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                 </div>
                 <div>
-                  <span className="text-xl font-heading font-bold tracking-[0.2em] leading-none block uppercase">3D GRILLS GENIUS</span>
+                  <span 
+                    className="text-2xl font-bold tracking-[0.15em] leading-none block uppercase bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] text-transparent bg-clip-text drop-shadow-sm"
+                    style={{ fontFamily: "'Cinzel', serif" }}
+                  >
+                    3D GRILLS GENIUS
+                  </span>
                 </div>
               </a>
             </Link>
