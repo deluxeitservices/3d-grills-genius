@@ -1,192 +1,294 @@
-import { useState } from "react";
-import { Link } from "wouter";
-import { ChevronDown, ChevronRight, X, ChevronUp } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
+import { Link, useSearch, useParams } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/api";
+import { ChevronDown, ChevronRight, X, ChevronUp, Loader2 } from "lucide-react";
 import product1 from "@/assets/product_1.png";
 import product2 from "@/assets/product_2.png";
 import product3 from "@/assets/product_3.png";
 import catGrillz from "@/assets/cat-grillz.png";
-import catChains from "@/assets/cat-chains.png";
-import catRings from "@/assets/cat-rings.png";
-import catBracelets from "@/assets/cat-bracelets.png";
 
-const MOCK_PRODUCTS = [
-  { id: 1, name: ".Sparkle + window grillz set", price: "£176.00", oldPrice: "£200.00", image: product1 },
-  { id: 2, name: "1 Chrome heart inspired window with inlay", price: "£135.00", oldPrice: "£180.00", image: product2 },
-  { id: 3, name: "1x Mould Kit for top or bottom teeth", price: "£11.99", image: product3 },
-  { id: 4, name: "3 stone combo Special Design", price: "£200.00", oldPrice: "£230.00", image: catGrillz },
-  { id: 5, name: "Abstract Heart Window with inlay", price: "£130.00", image: catChains },
-  { id: 6, name: "Africa shaped cap", price: "£93.00", oldPrice: "£120.00", image: catRings },
-  { id: 7, name: "Bottom 6 with iced canines", price: "£520.00", oldPrice: "£580.00", image: catBracelets },
-  { id: 8, name: "Butterfly fangs x 2", price: "£225.00", oldPrice: "£250.00", image: product1 }
+const fallbackImages = [product1, product2, product3, catGrillz];
+
+const SORT_OPTIONS = [
+  { label: "Featured", value: "featured" },
+  { label: "Best selling", value: "bestselling" },
+  { label: "Alphabetically, A-Z", value: "alpha-asc" },
+  { label: "Alphabetically, Z-A", value: "alpha-desc" },
+  { label: "Price, low to high", value: "price-asc" },
+  { label: "Price, high to low", value: "price-desc" },
+  { label: "Date, old to new", value: "date-asc" },
+  { label: "Date, new to old", value: "date-desc" },
 ];
 
-const RECENTLY_VIEWED = [
-  { id: 11, name: "Four Windows and Two Solid Caps Set", price: "£400.00", image: product2 },
-  { id: 12, name: "Window with inlay 'Jurja' design", price: "£90.00", image: product3 },
-  { id: 13, name: "1 Chrome heart inspired window with inlay", price: "£135.00", oldPrice: "£180.00", image: catGrillz }
-];
+function getProductPrice(product: any) {
+  if (product.prices && product.prices.length > 0) {
+    const gbp = product.prices.find((p: any) => p.currency === "GBP") || product.prices[0];
+    return {
+      price: parseFloat(gbp.discountPrice || gbp.price),
+      oldPrice: gbp.discountPrice ? parseFloat(gbp.price) : null,
+      currency: gbp.currency || "GBP",
+    };
+  }
+  return { price: 0, oldPrice: null, currency: "GBP" };
+}
+
+function formatPrice(amount: number, currency: string = "GBP") {
+  return new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(amount);
+}
+
+const ITEMS_PER_PAGE = 12;
 
 export default function Shop() {
+  const routeParams = useParams<{ category?: string }>();
+  const searchString = useSearch();
+  const params = new URLSearchParams(searchString);
+  const categorySlug = routeParams.category || params.get("category") || "";
+  const searchQuery = params.get("search") || "";
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [availabilityOpen, setAvailabilityOpen] = useState(true);
   const [priceOpen, setPriceOpen] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState("featured");
+  const [sortOpen, setSortOpen] = useState(false);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [categorySlug, searchQuery]);
+
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  const apiUrl = `/api/products?limit=${ITEMS_PER_PAGE}&offset=${offset}${categorySlug ? `&category=${categorySlug}` : ""}${searchQuery ? `&search=${searchQuery}` : ""}`;
+
+  const { data, isLoading } = useQuery<{ products: any[]; total: number }>({
+    queryKey: ["/api/products", categorySlug, searchQuery, currentPage],
+    queryFn: getQueryFn(apiUrl),
+  });
+
+  const { data: categoriesData } = useQuery<any[]>({
+    queryKey: ["/api/categories"],
+    queryFn: getQueryFn("/api/categories"),
+  });
+
+  const products = data?.products || [];
+  const total = data?.total || 0;
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+
+  const sortedProducts = [...products].sort((a, b) => {
+    const pa = getProductPrice(a);
+    const pb = getProductPrice(b);
+    switch (sortBy) {
+      case "alpha-asc": return a.name.localeCompare(b.name);
+      case "alpha-desc": return b.name.localeCompare(a.name);
+      case "price-asc": return pa.price - pb.price;
+      case "price-desc": return pb.price - pa.price;
+      default: return 0;
+    }
+  });
+
+  const currentCategory = categoriesData?.find((c: any) => c.slug === categorySlug);
+  const currentSortLabel = SORT_OPTIONS.find(o => o.value === sortBy)?.label || "Featured";
 
   return (
     <div className="bg-black text-white min-h-screen relative">
-      {/* Breadcrumb & Title Banner */}
       <div className="relative mb-16 py-12 md:py-16 overflow-hidden border-b border-white/10">
         <div className="absolute inset-0">
-          <img src={catGrillz} alt="Grillz Background" className="w-full h-full object-cover opacity-15 grayscale" />
+          <img src={currentCategory?.image || catGrillz} alt="Grillz Background" className="w-full h-full object-cover opacity-15 grayscale" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/80 to-black"></div>
         </div>
         <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center space-y-4">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/50">
-            <Link href="/"><a className="hover:text-primary transition-colors">Home</a></Link>
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/50" data-testid="breadcrumb-shop">
+            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
             <ChevronRight className="w-3 h-3" />
-            <span className="text-white">Products</span>
+            <span className="text-white">{currentCategory?.name || "Products"}</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-heading font-bold text-white tracking-wider text-center">
-            OUR <span className="text-primary italic font-serif lowercase tracking-normal">Collection</span>
+          <h1 className="text-5xl md:text-7xl font-heading font-bold text-white tracking-wider text-center" data-testid="text-shop-title">
+            {searchQuery ? (
+              <>Search: "{searchQuery}"</>
+            ) : currentCategory ? (
+              currentCategory.name.toUpperCase()
+            ) : (
+              <>OUR <span className="text-primary italic font-serif lowercase tracking-normal">Collection</span></>
+            )}
           </h1>
           <p className="text-white/60 text-center max-w-2xl text-sm md:text-base font-light">
-            Discover our meticulously crafted pieces. From subtle gold accents to bold diamond statements.
+            {currentCategory?.description || "Discover our meticulously crafted pieces. From subtle gold accents to bold diamond statements."}
           </p>
+          {total > 0 && <p className="text-white/40 text-xs" data-testid="text-product-count">{total} product{total !== 1 ? "s" : ""}</p>}
         </div>
       </div>
 
       <div className="container mx-auto px-4 lg:px-8">
         
-        {/* Filters Bar */}
         <div className="flex items-center gap-6 mb-8 border-b border-white/10 pb-4 relative z-20">
           <button 
             onClick={() => setIsFilterOpen(true)}
             className="flex items-center gap-2 text-sm font-bold text-white hover:text-primary transition-colors uppercase tracking-widest"
+            data-testid="button-filter"
           >
             Filter <ChevronDown className="w-3 h-3" />
           </button>
           
-          <div className="relative group">
-            <button className="flex items-center gap-2 text-sm font-bold text-white hover:text-primary transition-colors uppercase tracking-widest">
-              Alphabetically, A-Z <ChevronDown className="w-3 h-3 group-hover:rotate-180 transition-transform duration-200" />
+          <div className="relative">
+            <button 
+              onClick={() => setSortOpen(!sortOpen)}
+              className="flex items-center gap-2 text-sm font-bold text-white hover:text-primary transition-colors uppercase tracking-widest"
+              data-testid="button-sort"
+            >
+              {currentSortLabel} <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${sortOpen ? "rotate-180" : ""}`} />
             </button>
             
-            {/* Dropdown Menu */}
-            <div className="absolute top-full left-0 mt-4 w-60 bg-black border border-white/10 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-4">
-              <ul className="flex flex-col gap-1">
-                {[
-                  "Featured",
-                  "Best selling",
-                  "Alphabetically, A-Z",
-                  "Alphabetically, Z-A",
-                  "Price, low to high",
-                  "Price, high to low",
-                  "Date, old to new",
-                  "Date, new to old"
-                ].map((option) => (
-                  <li key={option}>
-                    <button className={`w-full text-left px-6 py-1.5 text-lg font-heading font-bold transition-colors ${option === "Alphabetically, A-Z" ? "text-white" : "text-white/60 hover:text-white"}`}>
-                      {option}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {sortOpen && (
+              <div className="absolute top-full left-0 mt-4 w-60 bg-black border border-white/10 shadow-2xl z-50 py-4">
+                <ul className="flex flex-col gap-1">
+                  {SORT_OPTIONS.map((option) => (
+                    <li key={option.value}>
+                      <button 
+                        onClick={() => { setSortBy(option.value); setSortOpen(false); }}
+                        className={`w-full text-left px-6 py-1.5 text-lg font-heading font-bold transition-colors ${option.value === sortBy ? "text-white" : "text-white/60 hover:text-white"}`}
+                        data-testid={`sort-option-${option.value}`}
+                      >
+                        {option.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Product Grid - 4 Columns */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-6 mb-16">
-          {MOCK_PRODUCTS.map((product) => (
-            <Link key={product.id} href={`/product/${product.id}`}>
-              <a className="group block cursor-pointer">
-                <div className="relative aspect-[4/5] bg-zinc-900 mb-4 overflow-hidden">
-                  <img 
-                    src={product.image} 
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-                <div className="text-center px-2">
-                  <h3 className="text-[10px] md:text-xs font-heading font-bold mb-1 uppercase tracking-wider group-hover:text-primary transition-colors line-clamp-2 min-h-[30px]">
-                    {product.name}
-                  </h3>
-                  <div className="flex items-center justify-center gap-2 text-[10px] md:text-sm font-bold mt-1">
-                    <span className={product.oldPrice ? "text-red-500" : "text-primary"}>{product.price}</span>
-                    {product.oldPrice && <span className="text-white/60 line-through text-[10px] md:text-xs">{product.oldPrice}</span>}
-                  </div>
-                </div>
-              </a>
-            </Link>
-          ))}
-        </div>
-
-        {/* Pagination */}
-        <div className="flex items-center justify-center gap-4 mb-24 border-t border-white/10 pt-10">
-          <button className="w-8 h-8 rounded-full bg-white text-black font-bold flex items-center justify-center text-sm">1</button>
-          <button className="w-8 h-8 rounded-full text-white hover:bg-white/10 font-bold flex items-center justify-center text-sm transition-colors">2</button>
-          <button className="w-8 h-8 rounded-full text-white hover:bg-white/10 font-bold flex items-center justify-center text-sm transition-colors">3</button>
-          <span className="text-white">...</span>
-          <button className="w-8 h-8 rounded-full text-white hover:bg-white/10 font-bold flex items-center justify-center text-sm transition-colors">8</button>
-          <button className="w-8 h-8 rounded-full text-white hover:bg-white/10 flex items-center justify-center transition-colors">
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Recently Viewed */}
-        <div>
-          <h2 className="text-2xl md:text-3xl font-heading font-bold mb-8 tracking-wide">Recently Viewed Products</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-6">
-            {RECENTLY_VIEWED.map((product) => (
-              <Link key={product.id} href={`/product/${product.id}`}>
-                <a className="group block cursor-pointer">
-                  <div className="relative aspect-[4/5] bg-zinc-900 mb-4 overflow-hidden">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="text-center px-2">
-                    <h3 className="text-[10px] md:text-xs font-heading font-bold mb-1 uppercase tracking-wider group-hover:text-primary transition-colors line-clamp-2 min-h-[30px]">
-                      {product.name}
-                    </h3>
-                    <div className="flex items-center justify-center gap-2 text-xs md:text-sm font-bold">
-                      <span className="text-primary">{product.price}</span>
-                      {product.oldPrice && <span className="text-white/50 line-through">{product.oldPrice}</span>}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-32">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : sortedProducts.length === 0 ? (
+          <div className="text-center py-32" data-testid="text-no-products">
+            <p className="text-white/60 text-lg">No products found.</p>
+            <Link href="/shop" className="text-primary underline mt-4 inline-block">View all products</Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-6 mb-16" data-testid="product-grid">
+            {sortedProducts.map((product: any, idx: number) => {
+              const pricing = getProductPrice(product);
+              const img = product.images?.[0] || fallbackImages[idx % fallbackImages.length];
+              return (
+                <Link key={product.id} href={`/product/${product.slug}`} className="group block cursor-pointer" data-testid={`card-product-${product.id}`}>
+                    <div className="relative aspect-[4/5] bg-zinc-900 mb-4 overflow-hidden">
+                      <img 
+                        src={img} 
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
                     </div>
-                  </div>
-                </a>
-              </Link>
-            ))}
+                    <div className="text-center px-2">
+                      <h3 className="text-[10px] md:text-xs font-heading font-bold mb-1 uppercase tracking-wider group-hover:text-primary transition-colors line-clamp-2 min-h-[30px]" data-testid={`text-product-name-${product.id}`}>
+                        {product.name}
+                      </h3>
+                      <div className="flex items-center justify-center gap-2 text-[10px] md:text-sm font-bold mt-1">
+                        <span className={pricing.oldPrice ? "text-red-500" : "text-primary"} data-testid={`text-price-${product.id}`}>{formatPrice(pricing.price, pricing.currency)}</span>
+                        {pricing.oldPrice && <span className="text-white/60 line-through text-[10px] md:text-xs">{formatPrice(pricing.oldPrice, pricing.currency)}</span>}
+                      </div>
+                    </div>
+                </Link>
+              );
+            })}
           </div>
-        </div>
+        )}
 
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-4 mb-24 border-t border-white/10 pt-10" data-testid="pagination">
+            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+              let page: number;
+              if (totalPages <= 5) {
+                page = i + 1;
+              } else if (currentPage <= 3) {
+                page = i + 1;
+              } else if (currentPage >= totalPages - 2) {
+                page = totalPages - 4 + i;
+              } else {
+                page = currentPage - 2 + i;
+              }
+              return (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-8 h-8 rounded-full font-bold flex items-center justify-center text-sm transition-colors ${currentPage === page ? "bg-white text-black" : "text-white hover:bg-white/10"}`}
+                  data-testid={`button-page-${page}`}
+                >
+                  {page}
+                </button>
+              );
+            })}
+            {totalPages > 5 && currentPage < totalPages - 2 && (
+              <>
+                <span className="text-white">...</span>
+                <button
+                  onClick={() => setCurrentPage(totalPages)}
+                  className="w-8 h-8 rounded-full text-white hover:bg-white/10 font-bold flex items-center justify-center text-sm transition-colors"
+                >
+                  {totalPages}
+                </button>
+              </>
+            )}
+            {currentPage < totalPages && (
+              <button 
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className="w-8 h-8 rounded-full text-white hover:bg-white/10 flex items-center justify-center transition-colors"
+                data-testid="button-next-page"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
-      {/* Filter Sidebar Overlay */}
+
       {isFilterOpen && (
         <div className="fixed inset-0 z-50 flex">
-          {/* Backdrop */}
           <div 
             className="absolute inset-0 bg-black/60 backdrop-blur-sm" 
             onClick={() => setIsFilterOpen(false)}
           />
           
-          {/* Sidebar */}
           <div className="relative w-[320px] md:w-[400px] h-full bg-black border-r border-white/10 flex flex-col p-6 animate-in slide-in-from-left duration-300">
-            {/* Header */}
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-3xl font-heading font-bold tracking-wider">Filters</h2>
               <button 
                 onClick={() => setIsFilterOpen(false)}
                 className="text-white hover:text-primary transition-colors"
+                data-testid="button-close-filter"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
             <div className="flex-1 overflow-y-auto pr-2 space-y-8">
-              {/* Availability Filter */}
+              {categoriesData && categoriesData.length > 0 && (
+                <div>
+                  <p className="text-xl font-heading font-bold tracking-wider mb-4">Categories</p>
+                  <div className="space-y-3">
+                    <Link href="/shop"
+                      onClick={() => setIsFilterOpen(false)}
+                      className={`block text-sm font-bold font-heading tracking-wide transition-colors ${!categorySlug ? "text-primary" : "text-white/70 hover:text-white"}`}
+                      data-testid="filter-category-all"
+                    >
+                      All Products
+                    </Link>
+                    {categoriesData.map((cat: any) => (
+                      <Link key={cat.id} href={`/shop/${cat.slug}`}
+                        onClick={() => setIsFilterOpen(false)}
+                        className={`block text-sm font-bold font-heading tracking-wide transition-colors ${categorySlug === cat.slug ? "text-primary" : "text-white/70 hover:text-white"}`}
+                        data-testid={`filter-category-${cat.slug}`}
+                      >
+                        {cat.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div>
                 <button 
                   onClick={() => setAvailabilityOpen(!availabilityOpen)}
@@ -199,20 +301,17 @@ export default function Shop() {
                 {availabilityOpen && (
                   <div className="mt-4 space-y-4">
                     <label className="flex items-center gap-3 cursor-pointer group">
-                      <div className="w-5 h-5 border border-white/20 bg-transparent flex items-center justify-center group-hover:border-white transition-colors">
-                        {/* Checkbox checkmark would go here when active */}
-                      </div>
-                      <span className="text-sm font-bold font-heading tracking-wide">In stock (81)</span>
+                      <div className="w-5 h-5 border border-white/20 bg-transparent flex items-center justify-center group-hover:border-white transition-colors"></div>
+                      <span className="text-sm font-bold font-heading tracking-wide">In stock</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <div className="w-5 h-5 border border-white/20 bg-transparent flex items-center justify-center group-hover:border-white transition-colors"></div>
-                      <span className="text-sm font-bold font-heading tracking-wide">Out of stock (7)</span>
+                      <span className="text-sm font-bold font-heading tracking-wide">Out of stock</span>
                     </label>
                   </div>
                 )}
               </div>
 
-              {/* Price Filter */}
               <div>
                 <button 
                   onClick={() => setPriceOpen(!priceOpen)}
@@ -224,14 +323,12 @@ export default function Shop() {
                 
                 {priceOpen && (
                   <div className="mt-8">
-                    {/* Fake slider UI */}
                     <div className="relative h-[2px] bg-white/20 mb-8 mx-2">
                       <div className="absolute left-0 right-0 h-full bg-white"></div>
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow cursor-grab"></div>
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow cursor-grab"></div>
                     </div>
                     
-                    {/* Price Inputs */}
                     <div className="flex items-center gap-4">
                       <div className="flex-1 relative border border-white/20 flex items-center px-3 h-12 bg-[#1a1a1a]">
                         <span className="text-white/80 font-bold text-sm">£</span>
@@ -255,7 +352,6 @@ export default function Shop() {
                 )}
               </div>
               
-              {/* Sale Banner Mockup */}
               <div className="mt-8 p-6 bg-[#2a2a2a] text-center relative overflow-hidden group cursor-pointer h-[280px] flex flex-col items-center justify-center">
                 <div className="relative z-10 w-full flex flex-col items-center">
                   <p className="text-[13px] font-heading font-bold tracking-wide mb-2">Online Exclusive</p>
@@ -265,7 +361,6 @@ export default function Shop() {
                     SHOP THE SALE
                   </button>
                 </div>
-                {/* Abstract background elements */}
                 <div className="absolute inset-0 opacity-[0.03] group-hover:scale-105 transition-transform duration-700 pointer-events-none border-[10px] border-white m-4 rounded-[40px]">
                 </div>
               </div>

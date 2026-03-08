@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Facebook, Instagram, Twitter, Youtube, ArrowRight } from "lucide-react";
+import { Facebook, Instagram, Youtube } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import logoImg from "@/assets/logo.jpeg";
@@ -10,22 +10,17 @@ export default function Footer() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
           
-          {/* Brand & Newsletter (Left side large column) */}
           <div className="lg:col-span-4">
-            <Link href="/">
-              <a className="flex flex-col items-center gap-2 mb-10 group w-fit">
-                <div className="w-14 h-14 flex items-center justify-center">
-                  <img src={logoImg} alt="Logo" className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
-                </div>
-                <div>
-                  <span 
-                    className="text-2xl font-bold tracking-[0.15em] leading-none block uppercase bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] text-transparent bg-clip-text drop-shadow-sm"
-                    style={{ fontFamily: "'Cinzel', serif" }}
-                  >
-                    3D GRILLS GENIUS
-                  </span>
-                </div>
-              </a>
+            <Link href="/" className="flex flex-col items-center gap-2 mb-10 group w-fit">
+              <div className="w-14 h-14 flex items-center justify-center">
+                <img src={logoImg} alt="Logo" className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+              </div>
+              <span 
+                className="text-2xl font-bold tracking-[0.15em] leading-none block uppercase bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] text-transparent bg-clip-text drop-shadow-sm"
+                style={{ fontFamily: "'Cinzel', serif" }}
+              >
+                3D GRILLS GENIUS
+              </span>
             </Link>
             
             <h4 className="text-2xl font-heading font-bold uppercase tracking-wide mb-2 text-primary">LET'S GET IN TOUCH</h4>
@@ -35,45 +30,42 @@ export default function Footer() {
                 type="email" 
                 placeholder="Enter your email" 
                 className="bg-white border-0 text-black rounded-none h-12 px-4 focus-visible:ring-0"
+                data-testid="input-newsletter-email"
               />
-              <Button className="rounded-none bg-white text-black hover:bg-zinc-200 font-bold uppercase tracking-widest h-12 px-8 w-fit transition-colors">
+              <Button className="rounded-none bg-white text-black hover:bg-zinc-200 font-bold uppercase tracking-widest h-12 px-8 w-fit transition-colors" data-testid="button-subscribe">
                 Subscribe Now
               </Button>
             </div>
           </div>
 
-          {/* Spacer */}
           <div className="hidden lg:block lg:col-span-1"></div>
 
-          {/* Shop Links */}
           <div className="lg:col-span-2">
             <h4 className="text-sm font-bold uppercase tracking-wider mb-6 text-primary">Shop</h4>
             <ul className="space-y-4">
-              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">All Grillz</a></Link></li>
-              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Single Grillz</a></Link></li>
-              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Curves & Colour</a></Link></li>
-              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Diamond Grillz</a></Link></li>
-              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Set Of Gold Grillz</a></Link></li>
-              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Tooth Gems</a></Link></li>
-              <li><Link href="/shop"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Extras</a></Link></li>
+              <li><Link href="/shop" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">All Grillz</Link></li>
+              <li><Link href="/shop" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Single Grillz</Link></li>
+              <li><Link href="/shop" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Curves & Colour</Link></li>
+              <li><Link href="/shop" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Diamond Grillz</Link></li>
+              <li><Link href="/shop" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Set Of Gold Grillz</Link></li>
+              <li><Link href="/shop" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Tooth Gems</Link></li>
+              <li><Link href="/shop" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Extras</Link></li>
             </ul>
           </div>
 
-          {/* Helpful Links */}
           <div className="lg:col-span-2">
             <h4 className="text-sm font-bold uppercase tracking-wider mb-6 text-primary">Helpful</h4>
             <ul className="space-y-4">
-              <li><Link href="/faq"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">FAQs</a></Link></li>
-              <li><Link href="/contact"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Contact Us</a></Link></li>
-              <li><Link href="/about"><a className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">How It Works</a></Link></li>
-              <li><a href="#" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">How To Use Mould Kit</a></li>
-              <li><a href="#" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Return & Exchanges</a></li>
-              <li><a href="#" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Privacy Policy</a></li>
-              <li><a href="#" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Terms Of Service</a></li>
+              <li><Link href="/faq" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">FAQs</Link></li>
+              <li><Link href="/contact" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Contact Us</Link></li>
+              <li><Link href="/about" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">How It Works</Link></li>
+              <li><Link href="/page/how-to-use-mould-kit" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">How To Use Mould Kit</Link></li>
+              <li><Link href="/page/return-exchanges" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Return & Exchanges</Link></li>
+              <li><Link href="/page/privacy-policy" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Privacy Policy</Link></li>
+              <li><Link href="/page/terms-of-service" className="text-white font-bold hover:text-primary transition-colors text-xs uppercase tracking-wide">Terms Of Service</Link></li>
             </ul>
           </div>
 
-          {/* Social */}
           <div className="lg:col-span-3">
             <h4 className="text-sm font-bold uppercase tracking-wider mb-6 text-primary">Follow Us</h4>
             <div className="flex flex-wrap items-center gap-3">
@@ -88,11 +80,11 @@ export default function Footer() {
               </a>
             </div>
             
-            {/* Scroll to top button */}
             <div className="mt-12 flex justify-end">
               <button 
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-black hover:bg-white transition-all"
+                data-testid="button-scroll-top"
               >
                 ↑
               </button>
