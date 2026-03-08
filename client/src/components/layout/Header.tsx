@@ -31,7 +31,7 @@ export default function Header() {
                 <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
               </div>
               <div>
-                <span className="text-lg md:text-xl font-heading font-bold tracking-widest leading-none block">3D grills genius</span>
+                <span className="text-lg md:text-xl font-heading font-bold tracking-widest leading-none block uppercase">3D GRILLS GENIUS</span>
               </div>
             </a>
           </Link>

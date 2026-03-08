@@ -131,7 +131,7 @@ export default function Home() {
                 author: "Ayesha M."
               },
               {
-                text: "The process was super easy, and the result was even better than I expected! My custom grillz fit perfectly, feel amazing, and have the perfect shine. 3D grills genius made sure I was happy with every detail. Totally worth it!",
+                text: "The process was super easy, and the result was even better than I expected! My custom grillz fit perfectly, feel amazing, and have the perfect shine. 3D GRILLS GENIUS made sure I was happy with every detail. Totally worth it!",
                 author: "Marcus L."
               }
             ].map((review, i) => (
@@ -157,7 +157,7 @@ export default function Home() {
             <div className="w-full md:w-1/2 md:pr-12 lg:pr-24">
               <h2 className="text-4xl md:text-6xl font-heading font-bold mb-6 uppercase">Shine Like Never</h2>
               <p className="text-white/80 font-light leading-relaxed mb-10 text-sm md:text-base">
-                There's a reason we choose to stand out—because we believe in our uniqueness. 3D grills genius's grillz are for those who don't just follow trends, but define them. Each piece is crafted for comfort, designed for those who know that a confident smile speaks louder than words. Whether it's the subtle elegance of gold or the boldness of diamond details, our grillz empower you to show the world exactly who you are.
+                There's a reason we choose to stand out—because we believe in our uniqueness. 3D GRILLS GENIUS's grillz are for those who don't just follow trends, but define them. Each piece is crafted for comfort, designed for those who know that a confident smile speaks louder than words. Whether it's the subtle elegance of gold or the boldness of diamond details, our grillz empower you to show the world exactly who you are.
               </p>
               <Button size="lg" className="bg-white text-black hover:bg-zinc-200 px-10 py-6 text-sm font-bold uppercase tracking-widest rounded-none">
                 Shop Now
