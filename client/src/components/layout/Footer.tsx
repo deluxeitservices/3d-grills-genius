@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Facebook, Instagram, Twitter, Youtube, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import logoImg from "@/assets/logo.jpeg";
 
 export default function Footer() {
   return (
@@ -9,8 +10,19 @@ export default function Footer() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
           
-          {/* Newsletter (Left side large column) */}
+          {/* Brand & Newsletter (Left side large column) */}
           <div className="lg:col-span-4">
+            <Link href="/">
+              <a className="flex items-center gap-3 mb-8 hover:opacity-80 transition-opacity">
+                <div className="w-12 h-12 flex items-center justify-center">
+                  <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
+                </div>
+                <div>
+                  <span className="text-xl font-heading font-bold tracking-widest leading-none block uppercase">3D grills genius</span>
+                </div>
+              </a>
+            </Link>
+            
             <h4 className="text-2xl font-heading font-bold uppercase tracking-wide mb-2 text-primary">LET'S GET IN TOUCH</h4>
             <p className="text-white text-sm font-bold mb-6">Sign up for our newsletter and receive 10% off your first order</p>
             <div className="flex flex-col gap-4">
