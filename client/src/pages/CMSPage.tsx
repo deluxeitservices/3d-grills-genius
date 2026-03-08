@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "@/lib/api";
-import { useRoute } from "wouter";
+import { useRoute, useLocation } from "wouter";
 import { Loader2 } from "lucide-react";
 
 interface CmsPageData {
@@ -12,9 +12,17 @@ interface CmsPageData {
   metaDescription: string | null;
 }
 
+const pathToSlugMap: Record<string, string> = {
+  "/about": "how-it-works",
+  "/contact": "contact-us",
+  "/faq": "faq",
+};
+
 export default function CMSPage() {
-  const [, params] = useRoute("/page/:slug");
-  const slug = params?.slug;
+  const [, pageParams] = useRoute("/page/:slug");
+  const [location] = useLocation();
+
+  const slug = pageParams?.slug || pathToSlugMap[location] || location.replace("/", "");
 
   const { data: page, isLoading, error } = useQuery<CmsPageData>({
     queryKey: ["/api/cms", slug],

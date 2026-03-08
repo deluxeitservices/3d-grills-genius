@@ -6,6 +6,7 @@ import { ChevronLeft, Loader2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiRequest } from "@/lib/api";
+import logoImg from "@/assets/logo.jpeg";
 
 export default function Checkout() {
   const { items, total, itemCount } = useCart();
@@ -78,8 +79,11 @@ export default function Checkout() {
     <div className="bg-white text-black min-h-screen">
       <header className="py-6 border-b border-zinc-200">
         <div className="container mx-auto px-4 max-w-6xl flex justify-between items-center">
-          <Link href="/" className="text-2xl font-serif tracking-widest text-black">
-            3D GRILLS GENIUS
+          <Link href="/" className="flex items-center gap-3">
+            <img src={logoImg} alt="3D Grills Genius" className="w-10 h-10 object-contain" />
+            <span className="text-xl font-bold tracking-[0.1em] uppercase bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] text-transparent bg-clip-text" style={{ fontFamily: "'Cinzel', serif" }}>
+              3D GRILLS GENIUS
+            </span>
           </Link>
           <Link href="/cart" data-testid="link-return-cart" className="text-sm flex items-center gap-1 text-zinc-500 hover:text-black transition-colors">
             <ChevronLeft className="w-4 h-4" /> Return to Cart

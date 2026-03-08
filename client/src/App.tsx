@@ -10,9 +10,6 @@ import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import FAQ from "./pages/FAQ";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
@@ -32,6 +29,7 @@ import AdminCMS from "./pages/admin/AdminCMS";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminSEO from "./pages/admin/AdminSEO";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminSubscribers from "./pages/admin/AdminSubscribers";
 
 function Router() {
   return (
@@ -40,9 +38,9 @@ function Router() {
       <Route path="/shop" component={Shop}/>
       <Route path="/shop/:category" component={Shop}/>
       <Route path="/product/:slug" component={ProductDetail}/>
-      <Route path="/about" component={About}/>
-      <Route path="/contact" component={Contact}/>
-      <Route path="/faq" component={FAQ}/>
+      <Route path="/about" component={CMSPage}/>
+      <Route path="/contact" component={CMSPage}/>
+      <Route path="/faq" component={CMSPage}/>
       <Route path="/cart" component={Cart}/>
       <Route path="/login" component={Login}/>
       <Route path="/register" component={Register}/>
@@ -64,6 +62,7 @@ function AdminRouter() {
         <Route path="/admin/reviews" component={AdminReviews} />
         <Route path="/admin/cms" component={AdminCMS} />
         <Route path="/admin/orders" component={AdminOrders} />
+        <Route path="/admin/subscribers" component={AdminSubscribers} />
         <Route path="/admin/seo" component={AdminSEO} />
         <Route path="/admin/settings" component={AdminSettings} />
         <Route component={AdminDashboard} />

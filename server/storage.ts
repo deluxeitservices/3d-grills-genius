@@ -3,7 +3,7 @@ import { eq, desc, asc, like, and, sql, ilike, or, inArray } from "drizzle-orm";
 import {
   users, categories, products, productPrices, productAttributes,
   productAttributeValues, banners, reviews, orders, orderItems,
-  cmsPages, seoSettings, invoices, adminSettings,
+  cmsPages, seoSettings, invoices, adminSettings, subscribers,
   type User, type InsertUser, type Category, type InsertCategory,
   type Product, type InsertProduct, type ProductPrice, type InsertProductPrice,
   type ProductAttribute, type InsertProductAttribute,
@@ -12,6 +12,7 @@ import {
   type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
   type CmsPage, type InsertCmsPage, type SeoSetting, type InsertSeoSetting,
   type Invoice, type InsertInvoice, type AdminSetting, type InsertAdminSetting,
+  type Subscriber, type InsertSubscriber,
 } from "@shared/schema";
 
 export class DatabaseStorage {
@@ -316,6 +317,25 @@ export class DatabaseStorage {
   }
   async listSettings(): Promise<AdminSetting[]> {
     return db.select().from(adminSettings);
+  }
+  // Subscribers
+  async addSubscriber(email: string): Promise<Subscriber> {
+    const [sub] = await db.insert(subscribers).values({ email }).onConflictDoNothing().returning();
+    if (!sub) {
+      const [existing] = await db.select().from(subscribers).where(eq(subscribers.email, email));
+      return existing;
+    }
+    return sub;
+  }
+  async listSubscribers(): Promise<Subscriber[]> {
+    return db.select().from(subscribers).orderBy(desc(subscribers.createdAt));
+  }
+  async deleteSubscriber(id: number): Promise<void> {
+    await db.delete(subscribers).where(eq(subscribers.id, id));
+  }
+  async getSubscriberCount(): Promise<number> {
+    const [result] = await db.select({ count: sql<number>`count(*)::int` }).from(subscribers);
+    return result.count;
   }
 }
 

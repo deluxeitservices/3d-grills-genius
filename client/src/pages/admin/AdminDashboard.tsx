@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DollarSign, ShoppingCart, Users, TrendingUp } from "lucide-react";
+import { DollarSign, ShoppingCart, Users, TrendingUp, Mail } from "lucide-react";
 
 export default function AdminDashboard() {
   const { data, isLoading } = useQuery<any>({
@@ -31,12 +31,10 @@ export default function AdminDashboard() {
       color: "text-purple-500",
     },
     {
-      title: "Avg Order",
-      value: data?.orderCount > 0
-        ? `£${(parseFloat(data?.revenue || "0") / data.orderCount).toFixed(2)}`
-        : "£0.00",
-      icon: TrendingUp,
-      color: "text-red-500",
+      title: "Subscribers",
+      value: data?.subscriberCount || 0,
+      icon: Mail,
+      color: "text-yellow-500",
     },
   ];
 

@@ -189,6 +189,19 @@ export async function registerRoutes(
     res.json(reviewList);
   });
 
+  app.post("/api/subscribe", async (req: Request, res: Response) => {
+    try {
+      const { email } = req.body;
+      if (!email || typeof email !== "string" || !email.includes("@")) {
+        return res.status(400).json({ error: "Valid email is required" });
+      }
+      await storage.addSubscriber(email.toLowerCase().trim());
+      res.json({ success: true, message: "Subscribed successfully!" });
+    } catch (err: any) {
+      res.status(500).json({ error: "Failed to subscribe" });
+    }
+  });
+
   app.get("/api/cms/:slug", async (req: Request, res: Response) => {
     const page = await storage.getCmsPageBySlug(req.params.slug);
     if (!page || !page.isActive) return res.status(404).json({ error: "Page not found" });
@@ -347,13 +360,14 @@ export async function registerRoutes(
   // Dashboard
   app.get("/api/admin/dashboard", requireAdmin, async (_req: Request, res: Response) => {
     try {
-      const [orderCount, userCount, revenue, recentOrders] = await Promise.all([
+      const [orderCount, userCount, revenue, recentOrders, subscriberCount] = await Promise.all([
         storage.getOrderCount(),
         storage.getUserCount(),
         storage.getRevenue(),
         storage.getRecentOrders(10),
+        storage.getSubscriberCount(),
       ]);
-      res.json({ orderCount, userCount, revenue, recentOrders });
+      res.json({ orderCount, userCount, revenue, recentOrders, subscriberCount });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
     }
@@ -590,6 +604,16 @@ export async function registerRoutes(
   app.get("/api/admin/users", requireAdmin, async (_req: Request, res: Response) => {
     const userList = await storage.listUsers();
     res.json(userList.map(u => ({ ...u, password: undefined })));
+  });
+
+  // Admin Subscribers
+  app.get("/api/admin/subscribers", requireAdmin, async (_req: Request, res: Response) => {
+    const subs = await storage.listSubscribers();
+    res.json(subs);
+  });
+  app.delete("/api/admin/subscribers/:id", requireAdmin, async (req: Request, res: Response) => {
+    await storage.deleteSubscriber(parseInt(req.params.id));
+    res.json({ success: true });
   });
 
   return httpServer;

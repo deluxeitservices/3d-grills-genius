@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   X,
+  Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/cms", label: "CMS Pages", icon: FileText },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { href: "/admin/subscribers", label: "Subscribers", icon: Mail },
   { href: "/admin/seo", label: "SEO", icon: Search },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
