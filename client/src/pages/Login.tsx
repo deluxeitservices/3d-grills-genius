@@ -91,9 +91,7 @@ export default function Login() {
 
           <p className="text-center text-white/60 text-sm">
             Don't have an account?{" "}
-            <Link href="/register">
-              <a data-testid="link-register" className="text-primary hover:underline">Create one</a>
-            </Link>
+            <Link href="/register" data-testid="link-register" className="text-primary hover:underline">Create one</Link>
           </p>
         </form>
       </div>

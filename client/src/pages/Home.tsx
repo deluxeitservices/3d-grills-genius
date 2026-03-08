@@ -52,8 +52,8 @@ function formatPrice(amount: number, currency: string = "GBP") {
 
 export default function Home() {
   const { data: bannersData } = useQuery<any[]>({
-    queryKey: ["/api/banners", "home"],
-    queryFn: getQueryFn("/api/banners?page=home"),
+    queryKey: ["/api/banners"],
+    queryFn: getQueryFn("/api/banners"),
   });
 
   const { data: categoriesData } = useQuery<any[]>({
@@ -72,8 +72,15 @@ export default function Home() {
   });
 
   const banners = bannersData && bannersData.length > 0 ? bannersData : null;
-  const heroBanner = banners ? banners[0] : null;
-  const midBanner = banners && banners.length > 1 ? banners[1] : null;
+  const heroBanner = banners?.find((b: any) => b.page === "home") || null;
+  const midBanner = banners?.find((b: any) => b.page === "mid") || (bannersData && bannersData.length > 1 ? bannersData[1] : null);
+
+  const resolveImage = (dbPath: string | null | undefined, fallback: string) => {
+    if (!dbPath) return fallback;
+    if (dbPath.startsWith("/uploads/")) return dbPath;
+    if (dbPath.startsWith("http")) return dbPath;
+    return fallback;
+  };
 
   const categories = categoriesData && categoriesData.length > 0
     ? categoriesData.slice(0, 6).map((cat: any, i: number) => ({
@@ -95,7 +102,7 @@ export default function Home() {
       <section className="relative h-[60vh] md:h-[85vh] w-full flex flex-col justify-end items-center pb-16 md:pb-24" data-testid="hero-section">
         <div className="absolute inset-0">
           <img 
-            src={heroBanner?.image || heroImg} 
+            src={resolveImage(heroBanner?.image, heroImg)} 
             alt={heroBanner?.title || "Hero Grillz"} 
             className="w-full h-full object-cover"
             data-testid="img-hero"
@@ -171,7 +178,7 @@ export default function Home() {
       <section className="relative h-[60vh] md:h-[70vh] flex items-center px-4 md:px-20 overflow-hidden" data-testid="made-for-you-section">
         <div className="absolute inset-0">
           <img 
-            src={midBanner?.image || heroImg} 
+            src={resolveImage(midBanner?.image, heroImg)} 
             alt={midBanner?.title || "Made For You"} 
             className="w-full h-full object-cover grayscale opacity-80"
           />
