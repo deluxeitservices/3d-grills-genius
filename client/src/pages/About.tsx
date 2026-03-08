@@ -26,7 +26,7 @@ export default function About() {
           <div>
             <h2 className="text-2xl md:text-3xl font-serif mb-6">The Vision</h2>
             <p className="text-white/70 font-light leading-relaxed text-lg">
-              ZA JEWELLERS was born out of a desire to bridge the gap between traditional fine jewelry and modern urban culture. We observed a landscape filled with mass-produced pieces lacking soul and decided to build a brand focused entirely on bespoke craftsmanship and uncompromising quality.
+              3D GRILLS GENIUS was born out of a desire to bridge the gap between traditional fine jewelry and modern urban culture. We observed a landscape filled with mass-produced pieces lacking soul and decided to build a brand focused entirely on bespoke craftsmanship and uncompromising quality.
             </p>
           </div>
 
