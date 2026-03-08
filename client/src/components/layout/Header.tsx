@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Search, User, Heart, ShoppingBag, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import logoImg from "@/assets/logo.png";
+import logoImg from "@/assets/logo.jpeg";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -31,7 +31,7 @@ export default function Header() {
                 <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
               </div>
               <div>
-                <span className="text-lg md:text-xl font-heading font-bold tracking-widest leading-none block">GRILLZ SHOP</span>
+                <span className="text-lg md:text-xl font-heading font-bold tracking-widest leading-none block">3D grills genius</span>
               </div>
             </a>
           </Link>
