@@ -30,6 +30,9 @@ import AdminOrders from "./pages/admin/AdminOrders";
 import AdminSEO from "./pages/admin/AdminSEO";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminSubscribers from "./pages/admin/AdminSubscribers";
+import AdminProductEdit from "./pages/admin/AdminProductEdit";
+import AdminCategoryEdit from "./pages/admin/AdminCategoryEdit";
+import AdminContacts from "./pages/admin/AdminContacts";
 
 function Router() {
   return (
@@ -56,8 +59,13 @@ function AdminRouter() {
     <AdminLayout>
       <Switch>
         <Route path="/admin" component={AdminDashboard} />
+        <Route path="/admin/products/new" component={AdminProductEdit} />
+        <Route path="/admin/products/edit/:id" component={AdminProductEdit} />
         <Route path="/admin/products" component={AdminProducts} />
+        <Route path="/admin/categories/new" component={AdminCategoryEdit} />
+        <Route path="/admin/categories/edit/:id" component={AdminCategoryEdit} />
         <Route path="/admin/categories" component={AdminCategories} />
+        <Route path="/admin/contacts" component={AdminContacts} />
         <Route path="/admin/banners" component={AdminBanners} />
         <Route path="/admin/reviews" component={AdminReviews} />
         <Route path="/admin/cms" component={AdminCMS} />

@@ -202,6 +202,22 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/contact", async (req: Request, res: Response) => {
+    try {
+      const { name, email, subject, message } = req.body;
+      if (!name || !email || !message) {
+        return res.status(400).json({ error: "Name, email, and message are required" });
+      }
+      if (typeof email !== "string" || !email.includes("@")) {
+        return res.status(400).json({ error: "Valid email is required" });
+      }
+      const submission = await storage.createContactSubmission({ name, email, subject: subject || null, message });
+      res.json({ success: true, message: "Your message has been sent successfully!" });
+    } catch (err: any) {
+      res.status(500).json({ error: "Failed to submit contact form" });
+    }
+  });
+
   app.get("/api/cms/:slug", async (req: Request, res: Response) => {
     const page = await storage.getCmsPageBySlug(req.params.slug);
     if (!page || !page.isActive) return res.status(404).json({ error: "Page not found" });
@@ -360,14 +376,15 @@ export async function registerRoutes(
   // Dashboard
   app.get("/api/admin/dashboard", requireAdmin, async (_req: Request, res: Response) => {
     try {
-      const [orderCount, userCount, revenue, recentOrders, subscriberCount] = await Promise.all([
+      const [orderCount, userCount, revenue, recentOrders, subscriberCount, productCount] = await Promise.all([
         storage.getOrderCount(),
         storage.getUserCount(),
         storage.getRevenue(),
         storage.getRecentOrders(10),
         storage.getSubscriberCount(),
+        storage.getProductCount(),
       ]);
-      res.json({ orderCount, userCount, revenue, recentOrders, subscriberCount });
+      res.json({ orderCount, userCount, revenue, recentOrders, subscriberCount, productCount });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
     }
@@ -613,6 +630,20 @@ export async function registerRoutes(
   });
   app.delete("/api/admin/subscribers/:id", requireAdmin, async (req: Request, res: Response) => {
     await storage.deleteSubscriber(parseInt(req.params.id));
+    res.json({ success: true });
+  });
+
+  // Admin Contacts
+  app.get("/api/admin/contacts", requireAdmin, async (_req: Request, res: Response) => {
+    const submissions = await storage.listContactSubmissions();
+    res.json(submissions);
+  });
+  app.patch("/api/admin/contacts/:id/read", requireAdmin, async (req: Request, res: Response) => {
+    const submission = await storage.markContactRead(parseInt(req.params.id));
+    res.json(submission);
+  });
+  app.delete("/api/admin/contacts/:id", requireAdmin, async (req: Request, res: Response) => {
+    await storage.deleteContactSubmission(parseInt(req.params.id));
     res.json({ success: true });
   });
 

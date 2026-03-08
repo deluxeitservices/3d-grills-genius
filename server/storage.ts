@@ -3,7 +3,7 @@ import { eq, desc, asc, like, and, sql, ilike, or, inArray } from "drizzle-orm";
 import {
   users, categories, products, productPrices, productAttributes,
   productAttributeValues, banners, reviews, orders, orderItems,
-  cmsPages, seoSettings, invoices, adminSettings, subscribers,
+  cmsPages, seoSettings, invoices, adminSettings, subscribers, contactSubmissions,
   type User, type InsertUser, type Category, type InsertCategory,
   type Product, type InsertProduct, type ProductPrice, type InsertProductPrice,
   type ProductAttribute, type InsertProductAttribute,
@@ -13,6 +13,7 @@ import {
   type CmsPage, type InsertCmsPage, type SeoSetting, type InsertSeoSetting,
   type Invoice, type InsertInvoice, type AdminSetting, type InsertAdminSetting,
   type Subscriber, type InsertSubscriber,
+  type ContactSubmission, type InsertContactSubmission,
 } from "@shared/schema";
 
 export class DatabaseStorage {
@@ -335,6 +336,30 @@ export class DatabaseStorage {
   }
   async getSubscriberCount(): Promise<number> {
     const [result] = await db.select({ count: sql<number>`count(*)::int` }).from(subscribers);
+    return result.count;
+  }
+
+  async getProductCount(): Promise<number> {
+    const [result] = await db.select({ count: sql<number>`count(*)::int` }).from(products);
+    return result.count;
+  }
+
+  async createContactSubmission(data: InsertContactSubmission): Promise<ContactSubmission> {
+    const [sub] = await db.insert(contactSubmissions).values(data).returning();
+    return sub;
+  }
+  async listContactSubmissions(): Promise<ContactSubmission[]> {
+    return db.select().from(contactSubmissions).orderBy(desc(contactSubmissions.createdAt));
+  }
+  async markContactRead(id: number): Promise<ContactSubmission | undefined> {
+    const [sub] = await db.update(contactSubmissions).set({ isRead: true }).where(eq(contactSubmissions.id, id)).returning();
+    return sub;
+  }
+  async deleteContactSubmission(id: number): Promise<void> {
+    await db.delete(contactSubmissions).where(eq(contactSubmissions.id, id));
+  }
+  async getUnreadContactCount(): Promise<number> {
+    const [result] = await db.select({ count: sql<number>`count(*)::int` }).from(contactSubmissions).where(eq(contactSubmissions.isRead, false));
     return result.count;
   }
 }
