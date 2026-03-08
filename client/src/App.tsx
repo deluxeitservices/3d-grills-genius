@@ -80,6 +80,7 @@ function App() {
             <Toaster />
             <Switch>
               <Route path="/admin/login" component={AdminLogin} />
+              <Route path="/admin" component={AdminRouter} />
               <Route path="/admin/:rest*" component={AdminRouter} />
               <Route path="/checkout/success" component={CheckoutSuccess} />
               <Route path="/checkout/cancel" component={CheckoutCancel} />

@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { useLocation, Link } from "wouter";
+import { useLocation, Link, Redirect } from "wouter";
 import { ReactNode, useState } from "react";
 import {
   LayoutDashboard,
@@ -45,8 +45,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   }
 
   if (!user || !isAdmin) {
-    navigate("/admin/login");
-    return null;
+    return <Redirect to="/admin/login" />;
   }
 
   const handleLogout = async () => {
