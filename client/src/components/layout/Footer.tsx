@@ -13,12 +13,12 @@ export default function Footer() {
           {/* Brand & Newsletter (Left side large column) */}
           <div className="lg:col-span-4">
             <Link href="/">
-              <a className="flex items-center gap-3 mb-8 hover:opacity-80 transition-opacity">
-                <div className="w-12 h-12 flex items-center justify-center">
-                  <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
+              <a className="flex flex-col items-start gap-2 mb-10 group">
+                <div className="w-14 h-14 flex items-center justify-center">
+                  <img src={logoImg} alt="Logo" className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                 </div>
                 <div>
-                  <span className="text-xl font-heading font-bold tracking-widest leading-none block uppercase">3D GRILLS GENIUS</span>
+                  <span className="text-xl font-heading font-bold tracking-[0.2em] leading-none block uppercase">3D GRILLS GENIUS</span>
                 </div>
               </a>
             </Link>

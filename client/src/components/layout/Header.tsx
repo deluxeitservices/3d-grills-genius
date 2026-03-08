@@ -26,12 +26,12 @@ export default function Header() {
         {/* Logo - Left */}
         <div className="flex-shrink-0">
           <Link href="/">
-            <a className="flex items-center gap-2">
-              <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center font-bold text-xl">
-                <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
+            <a className="flex flex-col items-center gap-1 group">
+              <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
+                <img src={logoImg} alt="Logo" className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
               </div>
               <div>
-                <span className="text-lg md:text-xl font-heading font-bold tracking-widest leading-none block uppercase">3D GRILLS GENIUS</span>
+                <span className="text-sm md:text-base font-heading font-bold tracking-[0.2em] leading-none block uppercase">3D GRILLS GENIUS</span>
               </div>
             </a>
           </Link>
