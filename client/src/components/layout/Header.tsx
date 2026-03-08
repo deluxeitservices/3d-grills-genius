@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Search, User, Heart, ShoppingBag, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import logoImg from "@/assets/logo.jpeg";
+import logoImg from "@/assets/logo.png";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -26,12 +26,9 @@ export default function Header() {
         {/* Logo - Left */}
         <div className="flex-shrink-0">
           <Link href="/">
-            <a className="flex flex-col items-center gap-1 group">
-              <div className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
-                <img src={logoImg} alt="Logo" className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
-              </div>
-              <div>
-                <span className="text-sm md:text-base font-heading font-bold tracking-[0.2em] leading-none block uppercase">3D GRILLS GENIUS</span>
+            <a className="flex items-center group">
+              <div className="w-32 md:w-40 flex items-center justify-center">
+                <img src={logoImg} alt="ZA Jewellers Logo" className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300" />
               </div>
             </a>
           </Link>

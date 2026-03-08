@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Facebook, Instagram, Twitter, Youtube, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import logoImg from "@/assets/logo.jpeg";
+import logoImg from "@/assets/logo.png";
 
 export default function Footer() {
   return (
@@ -13,12 +13,9 @@ export default function Footer() {
           {/* Brand & Newsletter (Left side large column) */}
           <div className="lg:col-span-4">
             <Link href="/">
-              <a className="flex flex-col items-center gap-2 mb-10 group w-fit">
-                <div className="w-14 h-14 flex items-center justify-center">
-                  <img src={logoImg} alt="Logo" className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
-                </div>
-                <div>
-                  <span className="text-xl font-heading font-bold tracking-[0.2em] leading-none block uppercase">3D GRILLS GENIUS</span>
+              <a className="flex items-center mb-10 group w-fit">
+                <div className="w-48 flex items-center justify-center">
+                  <img src={logoImg} alt="ZA Jewellers Logo" className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300" />
                 </div>
               </a>
             </Link>
