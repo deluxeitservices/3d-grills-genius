@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Brand & Newsletter (Left side large column) */}
           <div className="lg:col-span-4">
             <Link href="/">
-              <a className="flex flex-col items-start gap-2 mb-10 group">
+              <a className="flex flex-col items-center gap-2 mb-10 group w-fit">
                 <div className="w-14 h-14 flex items-center justify-center">
                   <img src={logoImg} alt="Logo" className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                 </div>
