@@ -1,10 +1,17 @@
 import { X, Minus, Plus, ShoppingBag } from "lucide-react";
+import { useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { resolveAdminImage } from "@/lib/resolveImage";
 
 export default function CartDrawer() {
   const { items, removeItem, updateQuantity, total, itemCount, isCartOpen, setIsCartOpen } = useCart();
+
+  useEffect(() => {
+    document.body.style.overflow = isCartOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isCartOpen]);
 
   if (!isCartOpen) return null;
 
@@ -41,7 +48,7 @@ export default function CartDrawer() {
                 <div key={`${item.productId}-${idx}`} className="flex gap-4" data-testid={`cart-item-${item.productId}`}>
                   <div className="w-20 h-20 bg-zinc-900 flex-shrink-0 overflow-hidden">
                     {item.image && (
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                      <img src={resolveAdminImage(item.image) || item.image} alt={item.name} className="w-full h-full object-cover" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">

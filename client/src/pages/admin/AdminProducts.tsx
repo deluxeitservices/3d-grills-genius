@@ -105,7 +105,7 @@ export default function AdminProducts() {
                     <Button variant="ghost" size="sm" onClick={() => navigate(`/admin/products/edit/${product.id}`)} className="text-zinc-400 hover:text-white" data-testid={`button-edit-product-${product.id}`}>
                       <Pencil size={14} />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => deleteMutation.mutate(product.id)} className="text-zinc-400 hover:text-red-500" data-testid={`button-delete-product-${product.id}`}>
+                    <Button variant="ghost" size="sm" onClick={() => { if (window.confirm(`Delete "${product.name}"? This cannot be undone.`)) deleteMutation.mutate(product.id); }} className="text-zinc-400 hover:text-red-500" data-testid={`button-delete-product-${product.id}`}>
                       <Trash2 size={14} />
                     </Button>
                   </td>

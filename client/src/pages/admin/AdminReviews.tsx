@@ -89,7 +89,7 @@ export default function AdminReviews() {
               </div>
               <div className="flex gap-2 ml-4">
                 <Button variant="ghost" size="sm" onClick={() => openEdit(review)} className="text-zinc-400 hover:text-white" data-testid={`button-edit-review-${review.id}`}><Pencil size={16} /></Button>
-                <Button variant="ghost" size="sm" onClick={() => deleteMutation.mutate(review.id)} className="text-zinc-400 hover:text-red-500" data-testid={`button-delete-review-${review.id}`}><Trash2 size={16} /></Button>
+                <Button variant="ghost" size="sm" onClick={() => { if (window.confirm(`Delete review by "${review.author}"?`)) deleteMutation.mutate(review.id); }} className="text-zinc-400 hover:text-red-500" data-testid={`button-delete-review-${review.id}`}><Trash2 size={16} /></Button>
               </div>
             </CardContent>
           </Card>

@@ -30,6 +30,11 @@ export default function Header() {
     }
   }, [isSearchOpen]);
 
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isMobileMenuOpen]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -49,7 +54,7 @@ export default function Header() {
 
         <div className="px-4 md:px-8 h-20 md:h-24 flex items-center justify-between">
           <button 
-            className="md:hidden p-2 -ml-2"
+            className="lg:hidden p-2 -ml-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             data-testid="button-mobile-menu"
           >
@@ -144,33 +149,36 @@ export default function Header() {
         )}
 
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-black border-b border-white/10 py-6 px-4 flex flex-col gap-6 z-50">
-            <Link href="/shop" className="text-lg uppercase tracking-wider hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>All Grillz</Link>
-            {categories.map((cat: any) => (
-              <Link key={cat.id} href={`/shop/${cat.slug}`} className="text-lg uppercase tracking-wider hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>
-                {cat.name}
-              </Link>
-            ))}
-            <Link href="/about" className="text-lg uppercase tracking-wider hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>How It Works</Link>
-            <Link href="/faq" className="text-lg uppercase tracking-wider hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>FAQs</Link>
-            <div className="h-px w-full bg-white/10 my-2"></div>
-            <form onSubmit={handleSearch} className="flex items-center gap-3">
-              <Search className="h-5 w-5 text-white/50" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="flex-1 bg-transparent border-b border-white/20 text-white placeholder:text-white/40 py-1 focus:outline-none"
-                data-testid="input-search-mobile"
-              />
-            </form>
-            <div className="flex items-center gap-6">
-              <Link href={user ? "/account" : "/login"} className="flex items-center gap-2 hover:text-primary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
-                <User className="h-5 w-5" /> {user ? "Account" : "Login"}
-              </Link>
+          <>
+            <div className="lg:hidden fixed inset-0 top-0 bg-black/60 z-40" onClick={() => setIsMobileMenuOpen(false)} />
+            <div className="lg:hidden absolute top-full left-0 w-full bg-black border-b border-white/10 py-6 px-4 flex flex-col gap-6 z-50 max-h-[70vh] overflow-y-auto">
+              <Link href="/shop" className="text-lg uppercase tracking-wider hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>All Grillz</Link>
+              {categories.map((cat: any) => (
+                <Link key={cat.id} href={`/shop/${cat.slug}`} className="text-lg uppercase tracking-wider hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>
+                  {cat.name}
+                </Link>
+              ))}
+              <Link href="/about" className="text-lg uppercase tracking-wider hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>How It Works</Link>
+              <Link href="/faq" className="text-lg uppercase tracking-wider hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>FAQs</Link>
+              <div className="h-px w-full bg-white/10 my-2"></div>
+              <form onSubmit={handleSearch} className="flex items-center gap-3">
+                <Search className="h-5 w-5 text-white/50" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
+                  className="flex-1 bg-transparent border-b border-white/20 text-white placeholder:text-white/40 py-1 focus:outline-none"
+                  data-testid="input-search-mobile"
+                />
+              </form>
+              <div className="flex items-center gap-6">
+                <Link href={user ? "/account" : "/login"} className="flex items-center gap-2 hover:text-primary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                  <User className="h-5 w-5" /> {user ? "Account" : "Login"}
+                </Link>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </header>
 

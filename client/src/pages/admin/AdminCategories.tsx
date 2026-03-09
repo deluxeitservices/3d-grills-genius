@@ -50,7 +50,7 @@ export default function AdminCategories() {
                 <Button variant="ghost" size="sm" onClick={() => navigate(`/admin/categories/edit/${cat.id}`)} className="text-zinc-400 hover:text-white" data-testid={`button-edit-category-${cat.id}`}>
                   <Pencil size={16} />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deleteMutation.mutate(cat.id)} className="text-zinc-400 hover:text-red-500" data-testid={`button-delete-category-${cat.id}`}>
+                <Button variant="ghost" size="sm" onClick={() => { if (window.confirm(`Delete "${cat.name}"? This cannot be undone.`)) deleteMutation.mutate(cat.id); }} className="text-zinc-400 hover:text-red-500" data-testid={`button-delete-category-${cat.id}`}>
                   <Trash2 size={16} />
                 </Button>
               </div>

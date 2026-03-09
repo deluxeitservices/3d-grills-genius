@@ -154,7 +154,20 @@ export default function AdminOrders() {
               {selectedOrder.shippingAddress && (
                 <div>
                   <p className="text-zinc-500 text-sm mb-1">Shipping Address</p>
-                  <p className="text-zinc-300 text-sm whitespace-pre-line">{typeof selectedOrder.shippingAddress === "object" ? JSON.stringify(selectedOrder.shippingAddress, null, 2) : selectedOrder.shippingAddress}</p>
+                  {typeof selectedOrder.shippingAddress === "object" ? (
+                    <div className="text-zinc-300 text-sm space-y-0.5">
+                      {selectedOrder.shippingAddress.name && <p className="font-medium text-white">{selectedOrder.shippingAddress.name}</p>}
+                      {selectedOrder.shippingAddress.line1 && <p>{selectedOrder.shippingAddress.line1}</p>}
+                      {selectedOrder.shippingAddress.line2 && <p>{selectedOrder.shippingAddress.line2}</p>}
+                      {(selectedOrder.shippingAddress.city || selectedOrder.shippingAddress.state || selectedOrder.shippingAddress.postalCode) && (
+                        <p>{[selectedOrder.shippingAddress.city, selectedOrder.shippingAddress.state, selectedOrder.shippingAddress.postalCode].filter(Boolean).join(", ")}</p>
+                      )}
+                      {selectedOrder.shippingAddress.country && <p>{selectedOrder.shippingAddress.country}</p>}
+                      {selectedOrder.shippingAddress.phone && <p className="text-zinc-500 mt-1">Tel: {selectedOrder.shippingAddress.phone}</p>}
+                    </div>
+                  ) : (
+                    <p className="text-zinc-300 text-sm whitespace-pre-line">{selectedOrder.shippingAddress}</p>
+                  )}
                 </div>
               )}
 

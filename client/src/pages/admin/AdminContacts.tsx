@@ -90,7 +90,7 @@ export default function AdminContacts() {
                       <MailOpen size={16} />
                     </Button>
                   )}
-                  <Button variant="ghost" size="sm" onClick={() => deleteMutation.mutate(contact.id)} className="text-zinc-400 hover:text-red-500" data-testid={`button-delete-contact-${contact.id}`}>
+                  <Button variant="ghost" size="sm" onClick={() => { if (window.confirm("Delete this contact submission?")) deleteMutation.mutate(contact.id); }} className="text-zinc-400 hover:text-red-500" data-testid={`button-delete-contact-${contact.id}`}>
                     <Trash2 size={16} />
                   </Button>
                 </div>

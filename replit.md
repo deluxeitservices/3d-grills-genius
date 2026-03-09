@@ -30,9 +30,10 @@ server/
 client/src/
   App.tsx                 - Root routes (admin + public)
   contexts/               - AuthContext, CartContext
-  lib/                    - apiRequest, queryClient
+  lib/                    - apiRequest, queryClient, resolveImage
   components/layout/      - Layout, Header, Footer
-  pages/                  - Public pages (Home, Shop, ProductDetail, etc.)
+  components/CartDrawer   - Slide-in cart drawer
+  pages/                  - Public pages (Home, Shop, ProductDetail, Cart, etc.)
   pages/admin/            - Admin panel pages
 ```
 
@@ -42,16 +43,29 @@ client/src/
 - **Pages**: Dashboard, Products (full-page editor), Categories (full-page editor), Banners, Reviews, CMS Pages, Orders, Contacts, Subscribers, SEO, Settings
 - **Product/Category editing**: Full-page forms (not modals)
 - **Contact submissions**: Public contact form on /page/contact-us, viewable in admin
+- **Delete confirmations**: All delete actions require confirmation prompt
+- **Developer credit**: "Development by Deluxe IT Services" in admin sidebar footer
 
 ## Database Tables
 users, categories, products, product_prices, product_attributes, product_attribute_values, banners, reviews, orders, order_items, cms_pages, seo_settings, invoices, admin_settings, subscribers, contact_submissions
 
 ## Key Patterns
-- `resolveImage()` / `resolveAdminImage()` - Maps Vite asset paths to imported modules for seed data images
+- `resolveAdminImage()` in `client/src/lib/resolveImage.ts` - Centralized image resolver mapping DB asset paths to Vite-bundled imports. Used across all pages (Home, Shop, ProductDetail, Cart, CartDrawer, Admin).
 - `apiRequest()` - Centralized API call utility with error handling
 - wouter `<Link>` renders its own `<a>` — never wrap with `<a>`
 - Country-based pricing: product_prices table with countryCode/currency
 - CMS pages served at /page/:slug, legacy routes (/about, /contact, /faq) mapped via pathToSlugMap
+
+## Variant Pricing Model
+- `priceModifier` DB field = variant's actual price. `0` = use base product price. Positive value = variant price (replaces base).
+- Formula: `calcTotal(variantPrice, shipping, taxRate)` = (price + shipping) × (1 + tax/100)
+- Trust badge: `trust_badge` column on products, editable per product in admin, displayed as green banner on product detail page
+
+## Responsive Design
+- Header: mobile menu at `lg:hidden`, desktop nav at `lg:flex`
+- Scroll lock on mobile menu and cart drawer
+- Mobile menu has backdrop overlay
+- Footer: copyright left, developer credit right (stacks on mobile)
 
 ## CMS Pages (seeded)
 faq, contact-us, how-it-works, how-to-use-mould-kit, return-exchanges, privacy-policy, terms-of-service, refund-policy
