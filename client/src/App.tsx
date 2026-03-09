@@ -34,6 +34,14 @@ import AdminProductEdit from "./pages/admin/AdminProductEdit";
 import AdminCategoryEdit from "./pages/admin/AdminCategoryEdit";
 import AdminContacts from "./pages/admin/AdminContacts";
 
+function AdminPage({ component: Component }: { component: React.ComponentType }) {
+  return (
+    <AdminLayout>
+      <Component />
+    </AdminLayout>
+  );
+}
+
 function Router() {
   return (
     <Switch>
@@ -54,31 +62,6 @@ function Router() {
   );
 }
 
-function AdminRouter() {
-  return (
-    <AdminLayout>
-      <Switch>
-        <Route path="/admin" component={AdminDashboard} />
-        <Route path="/admin/products/new" component={AdminProductEdit} />
-        <Route path="/admin/products/edit/:id" component={AdminProductEdit} />
-        <Route path="/admin/products" component={AdminProducts} />
-        <Route path="/admin/categories/new" component={AdminCategoryEdit} />
-        <Route path="/admin/categories/edit/:id" component={AdminCategoryEdit} />
-        <Route path="/admin/categories" component={AdminCategories} />
-        <Route path="/admin/contacts" component={AdminContacts} />
-        <Route path="/admin/banners" component={AdminBanners} />
-        <Route path="/admin/reviews" component={AdminReviews} />
-        <Route path="/admin/cms" component={AdminCMS} />
-        <Route path="/admin/orders" component={AdminOrders} />
-        <Route path="/admin/subscribers" component={AdminSubscribers} />
-        <Route path="/admin/seo" component={AdminSEO} />
-        <Route path="/admin/settings" component={AdminSettings} />
-        <Route component={AdminDashboard} />
-      </Switch>
-    </AdminLayout>
-  );
-}
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -88,8 +71,21 @@ function App() {
             <Toaster />
             <Switch>
               <Route path="/admin/login" component={AdminLogin} />
-              <Route path="/admin" component={AdminRouter} />
-              <Route path="/admin/:rest*" component={AdminRouter} />
+              <Route path="/admin/products/new">{() => <AdminPage component={AdminProductEdit} />}</Route>
+              <Route path="/admin/products/edit/:id">{() => <AdminPage component={AdminProductEdit} />}</Route>
+              <Route path="/admin/products">{() => <AdminPage component={AdminProducts} />}</Route>
+              <Route path="/admin/categories/new">{() => <AdminPage component={AdminCategoryEdit} />}</Route>
+              <Route path="/admin/categories/edit/:id">{() => <AdminPage component={AdminCategoryEdit} />}</Route>
+              <Route path="/admin/categories">{() => <AdminPage component={AdminCategories} />}</Route>
+              <Route path="/admin/contacts">{() => <AdminPage component={AdminContacts} />}</Route>
+              <Route path="/admin/banners">{() => <AdminPage component={AdminBanners} />}</Route>
+              <Route path="/admin/reviews">{() => <AdminPage component={AdminReviews} />}</Route>
+              <Route path="/admin/cms">{() => <AdminPage component={AdminCMS} />}</Route>
+              <Route path="/admin/orders">{() => <AdminPage component={AdminOrders} />}</Route>
+              <Route path="/admin/subscribers">{() => <AdminPage component={AdminSubscribers} />}</Route>
+              <Route path="/admin/seo">{() => <AdminPage component={AdminSEO} />}</Route>
+              <Route path="/admin/settings">{() => <AdminPage component={AdminSettings} />}</Route>
+              <Route path="/admin">{() => <AdminPage component={AdminDashboard} />}</Route>
               <Route path="/checkout/success" component={CheckoutSuccess} />
               <Route path="/checkout/cancel" component={CheckoutCancel} />
               <Route path="/checkout" component={Checkout} />
