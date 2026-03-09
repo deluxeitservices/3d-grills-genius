@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Upload, Loader2, X, Save, Plus, Trash2, Pencil, Check } from "lucide-react";
+import { ArrowLeft, Upload, Loader2, X, Save, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { resolveAdminImage } from "@/lib/resolveImage";
@@ -189,55 +189,6 @@ export default function AdminProductEdit() {
       ...prev,
       prices: prev.prices.filter((_, i) => i !== idx),
     }));
-  };
-
-  const [newAttrName, setNewAttrName] = useState("");
-  const [showNewAttrInput, setShowNewAttrInput] = useState(false);
-  const [editingAttrId, setEditingAttrId] = useState<number | null>(null);
-  const [editingAttrName, setEditingAttrName] = useState("");
-
-  const handleCreateAttribute = async (name?: string) => {
-    const attrName = name || newAttrName.trim();
-    if (!attrName) return;
-    try {
-      const res = await apiRequest("POST", "/api/admin/product-attributes", { name: attrName, values: [] });
-      const attr = await res.json();
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/product-attributes"] });
-      setSelectedAttributeId(attr.id);
-      setNewAttrName("");
-      setShowNewAttrInput(false);
-      toast({ title: `"${attrName}" attribute created` });
-    } catch (err: any) {
-      toast({ title: "Error creating attribute", description: err.message, variant: "destructive" });
-    }
-  };
-
-  const handleEditAttribute = async () => {
-    if (!editingAttrId || !editingAttrName.trim()) return;
-    try {
-      await apiRequest("PATCH", `/api/admin/product-attributes/${editingAttrId}`, { name: editingAttrName.trim() });
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/product-attributes"] });
-      setEditingAttrId(null);
-      setEditingAttrName("");
-      toast({ title: "Attribute renamed" });
-    } catch (err: any) {
-      toast({ title: "Error renaming attribute", description: err.message, variant: "destructive" });
-    }
-  };
-
-  const handleDeleteAttribute = async (id: number) => {
-    if (!confirm("Delete this attribute type? All variant values for this attribute across all products will be removed.")) return;
-    try {
-      await apiRequest("DELETE", `/api/admin/product-attributes/${id}`);
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/product-attributes"] });
-      if (selectedAttributeId === id) {
-        setSelectedAttributeId(null);
-      }
-      setForm(prev => ({ ...prev, attributeValues: prev.attributeValues.filter(av => av.attributeId !== id) }));
-      toast({ title: "Attribute deleted" });
-    } catch (err: any) {
-      toast({ title: "Error deleting attribute", description: err.message, variant: "destructive" });
-    }
   };
 
   const defaultVariants = [
@@ -445,67 +396,8 @@ export default function AdminProductEdit() {
                 <CardTitle className="text-white text-lg">Metal & Stone Types</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label className="text-zinc-400">Attribute Type</Label>
-                  <div className="flex gap-2">
-                    <Select value={selectedAttributeId?.toString() || ""} onValueChange={(v) => setSelectedAttributeId(parseInt(v))}>
-                      <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white rounded-none flex-1" data-testid="select-attribute-type">
-                        <SelectValue placeholder="Select attribute type" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-zinc-800 border-zinc-700 text-white">
-                        {productAttributes.map((attr: any) => (
-                          <SelectItem key={attr.id} value={attr.id.toString()}>{attr.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {selectedAttributeId && (
-                      <>
-                        <button type="button" onClick={() => { const attr = productAttributes.find((a: any) => a.id === selectedAttributeId); if (attr) { setEditingAttrId(attr.id); setEditingAttrName(attr.name); } }} className="w-9 h-9 flex items-center justify-center bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white hover:border-yellow-500" data-testid="button-edit-attribute" title="Rename attribute">
-                          <Pencil size={14} />
-                        </button>
-                        <button type="button" onClick={() => handleDeleteAttribute(selectedAttributeId)} className="w-9 h-9 flex items-center justify-center bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-red-500 hover:border-red-500" data-testid="button-delete-attribute" title="Delete attribute">
-                          <Trash2 size={14} />
-                        </button>
-                      </>
-                    )}
-                    <button type="button" onClick={() => setShowNewAttrInput(!showNewAttrInput)} className="w-9 h-9 flex items-center justify-center bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-green-500 hover:border-green-500" data-testid="button-show-new-attribute" title="Add new attribute type">
-                      <Plus size={14} />
-                    </button>
-                  </div>
-                </div>
-
-                {showNewAttrInput && (
-                  <div className="flex gap-2 items-end p-3 bg-zinc-800/50 border border-zinc-700 rounded">
-                    <div className="flex-1 space-y-1">
-                      <Label className="text-zinc-400 text-xs">New Attribute Name</Label>
-                      <Input value={newAttrName} onChange={(e) => setNewAttrName(e.target.value)} placeholder="e.g. Metal & Stone Type" className="bg-zinc-800 border-zinc-700 text-white rounded-none h-9" data-testid="input-new-attribute-name" onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleCreateAttribute(); } }} />
-                    </div>
-                    <Button type="button" size="sm" onClick={() => handleCreateAttribute()} disabled={!newAttrName.trim()} className="bg-green-600 hover:bg-green-700 text-white rounded-none h-9 px-3" data-testid="button-save-new-attribute">
-                      <Check size={14} className="mr-1" /> Create
-                    </Button>
-                    <Button type="button" variant="ghost" size="sm" onClick={() => { setShowNewAttrInput(false); setNewAttrName(""); }} className="text-zinc-400 hover:text-white h-9 px-2" data-testid="button-cancel-new-attribute">
-                      <X size={14} />
-                    </Button>
-                  </div>
-                )}
-
-                {editingAttrId && (
-                  <div className="flex gap-2 items-end p-3 bg-zinc-800/50 border border-yellow-600/30 rounded">
-                    <div className="flex-1 space-y-1">
-                      <Label className="text-yellow-500 text-xs">Rename Attribute</Label>
-                      <Input value={editingAttrName} onChange={(e) => setEditingAttrName(e.target.value)} className="bg-zinc-800 border-zinc-700 text-white rounded-none h-9" data-testid="input-edit-attribute-name" onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleEditAttribute(); } }} />
-                    </div>
-                    <Button type="button" size="sm" onClick={handleEditAttribute} disabled={!editingAttrName.trim()} className="bg-yellow-600 hover:bg-yellow-700 text-white rounded-none h-9 px-3" data-testid="button-save-edit-attribute">
-                      <Check size={14} className="mr-1" /> Save
-                    </Button>
-                    <Button type="button" variant="ghost" size="sm" onClick={() => { setEditingAttrId(null); setEditingAttrName(""); }} className="text-zinc-400 hover:text-white h-9 px-2" data-testid="button-cancel-edit-attribute">
-                      <X size={14} />
-                    </Button>
-                  </div>
-                )}
-
                 {selectedAttributeId && (
-                  <div className="space-y-3 pt-2 border-t border-zinc-800">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between flex-wrap gap-2">
                       <Label className="text-zinc-400 font-medium">Variant Values</Label>
                       <div className="flex gap-2">
@@ -567,9 +459,6 @@ export default function AdminProductEdit() {
                   </div>
                 )}
 
-                {!selectedAttributeId && productAttributes.length === 0 && !showNewAttrInput && (
-                  <p className="text-zinc-500 text-sm text-center py-2">No attribute types yet. Click + to create one.</p>
-                )}
               </CardContent>
             </Card>
 
