@@ -4,7 +4,7 @@ import { Link, useParams } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "@/lib/api";
 import { useCart } from "@/contexts/CartContext";
-import { ChevronRight, Shield, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
+import { ChevronRight, Shield, ChevronDown, ChevronUp, Loader2, ShieldCheck, Package } from "lucide-react";
 import product1 from "@/assets/product_1.png";
 import product2 from "@/assets/product_2.png";
 import product3 from "@/assets/product_3.png";
@@ -199,7 +199,12 @@ export default function ProductDetail() {
               {pricing.taxRate > 0 ? `Tax (${pricing.taxRate}%) included.` : "Tax included."}
               {pricing.shipping > 0 && ` Shipping (${formatPrice(pricing.shipping, pricing.currency)}) included.`}
             </p>
-            {pricing.shipping === 0 && <p className="text-xs text-green-500 mb-8 italic">Free shipping.</p>}
+            {pricing.shipping === 0 && <p className="text-xs text-green-500 mb-4 italic">Free shipping.</p>}
+
+            <div className="flex items-center gap-2 bg-green-950/40 border border-green-800/40 px-4 py-2.5 mb-8" data-testid="trust-banner-shipping">
+              <ShieldCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
+              <span className="text-xs text-green-400 font-semibold tracking-wide">Shipping protected, mould kit ready to ship</span>
+            </div>
 
             {Object.entries(attributeGroups).map(([name, group]) => {
               const selected = selectedAttributes[name] || { value: group.values[0]?.value, variantPrice: group.values[0]?.variantPrice || pricing.basePrice };
