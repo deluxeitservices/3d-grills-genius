@@ -35,11 +35,17 @@ const SORT_OPTIONS = [
 ];
 
 function getProductPrice(product: any) {
+  const taxRate = parseFloat(product.taxPercentage) || 0;
+  const shipping = parseFloat(product.shippingCharges) || 0;
   if (product.prices && product.prices.length > 0) {
     const gbp = product.prices.find((p: any) => p.currency === "GBP") || product.prices[0];
+    const basePrice = parseFloat(gbp.discountPrice || gbp.price);
+    const originalPrice = parseFloat(gbp.price);
+    const priceWithTax = (basePrice + shipping) * (1 + taxRate / 100);
+    const originalWithTax = gbp.discountPrice ? (originalPrice + shipping) * (1 + taxRate / 100) : null;
     return {
-      price: parseFloat(gbp.discountPrice || gbp.price),
-      oldPrice: gbp.discountPrice ? parseFloat(gbp.price) : null,
+      price: Math.round(priceWithTax * 100) / 100,
+      oldPrice: originalWithTax ? Math.round(originalWithTax * 100) / 100 : null,
       currency: gbp.currency || "GBP",
     };
   }

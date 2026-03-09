@@ -28,15 +28,23 @@ function resolveImages(images: string[]): string[] {
 }
 
 function getProductPrice(product: any) {
+  const taxRate = parseFloat(product.taxPercentage) || 0;
+  const shipping = parseFloat(product.shippingCharges) || 0;
   if (product.prices && product.prices.length > 0) {
     const gbp = product.prices.find((p: any) => p.currency === "GBP") || product.prices[0];
+    const basePrice = parseFloat(gbp.discountPrice || gbp.price);
+    const originalPrice = parseFloat(gbp.price);
+    const priceWithTax = (basePrice + shipping) * (1 + taxRate / 100);
+    const originalWithTax = gbp.discountPrice ? (originalPrice + shipping) * (1 + taxRate / 100) : null;
     return {
-      price: parseFloat(gbp.discountPrice || gbp.price),
-      oldPrice: gbp.discountPrice ? parseFloat(gbp.price) : null,
+      price: Math.round(priceWithTax * 100) / 100,
+      oldPrice: originalWithTax ? Math.round(originalWithTax * 100) / 100 : null,
       currency: gbp.currency || "GBP",
+      shipping,
+      taxRate,
     };
   }
-  return { price: 0, oldPrice: null, currency: "GBP" };
+  return { price: 0, oldPrice: null, currency: "GBP", shipping: 0, taxRate: 0 };
 }
 
 function formatPrice(amount: number, currency: string = "GBP") {
@@ -110,8 +118,9 @@ export default function ProductDetail() {
     attributeGroups[name].values.push({ value: attr.value, priceModifier: parseFloat(attr.priceModifier) || 0 });
   }
 
-  const totalPriceModifier = Object.values(selectedAttributes).reduce((sum, attr) => sum + attr.priceModifier, 0);
-  const displayPrice = pricing.price + totalPriceModifier;
+  const rawModifier = Object.values(selectedAttributes).reduce((sum, attr) => sum + attr.priceModifier, 0);
+  const taxedModifier = rawModifier * (1 + pricing.taxRate / 100);
+  const displayPrice = Math.round((pricing.price + taxedModifier) * 100) / 100;
 
   const handleAddToCart = () => {
     const attrs: Record<string, string> = {};
@@ -182,11 +191,14 @@ export default function ProductDetail() {
             
             <div className="flex items-baseline gap-3 mb-2">
               <span className="text-2xl font-bold text-primary" data-testid="text-product-price">{formatPrice(displayPrice, pricing.currency)}</span>
-              {pricing.oldPrice && <span className="text-white/50 line-through text-sm">{formatPrice(pricing.oldPrice + totalPriceModifier, pricing.currency)}</span>}
+              {pricing.oldPrice && <span className="text-white/50 line-through text-sm">{formatPrice(pricing.oldPrice + taxedModifier, pricing.currency)}</span>}
             </div>
             
-            <p className="text-xs text-white/50 mb-6">Tax included.</p>
-            <p className="text-xs text-green-500 mb-8 italic">Shipping calculated at checkout.</p>
+            <p className="text-xs text-white/50 mb-6">
+              {pricing.taxRate > 0 ? `Tax (${pricing.taxRate}%) included.` : "Tax included."}
+              {pricing.shipping > 0 && ` Shipping (${formatPrice(pricing.shipping, pricing.currency)}) included.`}
+            </p>
+            {pricing.shipping === 0 && <p className="text-xs text-green-500 mb-8 italic">Free shipping.</p>}
 
             {Object.entries(attributeGroups).map(([name, group]) => {
               const selected = selectedAttributes[name] || { value: group.values[0]?.value, priceModifier: group.values[0]?.priceModifier || 0 };
