@@ -21,7 +21,7 @@ const emptyForm = {
   quantity: 0, shippingCharges: "0", taxPercentage: "0",
   isActive: true, isFeatured: false,
   metaTitle: "", metaDescription: "", metaKeywords: "",
-  howItWorks: "", shippingInfo: "", returnExchanges: "", customGrillz: "",
+  howItWorks: "", shippingInfo: "", returnExchanges: "", customGrillz: "", trustBadge: "",
   prices: [{ countryCode: "GB", currency: "GBP", price: "", discountPrice: "" }] as any[],
   attributeValues: [] as { attributeId: number; value: string; priceModifier: string }[],
 };
@@ -77,6 +77,7 @@ export default function AdminProductEdit() {
           shippingInfo: product.shippingInfo || "",
           returnExchanges: product.returnExchanges || "",
           customGrillz: product.customGrillz || "",
+          trustBadge: product.trustBadge || "",
           prices: product.prices?.length > 0
             ? product.prices.map((p: any) => ({ countryCode: p.countryCode, currency: p.currency, price: p.price, discountPrice: p.discountPrice || "" }))
             : [{ countryCode: "GB", currency: "GBP", price: "", discountPrice: "" }],
@@ -354,6 +355,17 @@ export default function AdminProductEdit() {
                     <Label className="text-zinc-400">Tax %</Label>
                     <Input value={form.taxPercentage} onChange={(e) => setForm({ ...form, taxPercentage: e.target.value })} className="bg-zinc-800 border-zinc-700 text-white rounded-none" data-testid="input-product-tax" />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-zinc-400">Trust Badge Text <span className="text-zinc-600 text-xs">(green banner on product page)</span></Label>
+                  <Input
+                    value={form.trustBadge}
+                    onChange={(e) => setForm({ ...form, trustBadge: e.target.value })}
+                    placeholder="Shipping protected, mould kit ready to ship"
+                    className="bg-zinc-800 border-zinc-700 text-white rounded-none"
+                    data-testid="input-product-trust-badge"
+                  />
                 </div>
 
                 <div className="border-t border-zinc-800 pt-4">

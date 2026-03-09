@@ -44,6 +44,7 @@ export const products = pgTable("products", {
   shippingInfo: text("shipping_info"),
   returnExchanges: text("return_exchanges"),
   customGrillz: text("custom_grillz"),
+  trustBadge: text("trust_badge"),
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => [
   index("products_category_idx").on(table.categoryId),
