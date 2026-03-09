@@ -11,31 +11,10 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Upload, Loader2, X, Save } from "lucide-react";
+import { ArrowLeft, Upload, Loader2, X, Save, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-import product1png from "@/assets/product_1.png";
-import product1jpg from "@/assets/product_1.jpg";
-import product2png from "@/assets/product_2.png";
-import product2jpg from "@/assets/product_2.jpg";
-import product3png from "@/assets/product_3.png";
-import product3jpg from "@/assets/product_3.jpg";
-
-const assetMap: Record<string, string> = {
-  "/assets/product_1.png": product1png,
-  "/assets/product_1.jpg": product1jpg,
-  "/assets/product_2.png": product2png,
-  "/assets/product_2.jpg": product2jpg,
-  "/assets/product_3.png": product3png,
-  "/assets/product_3.jpg": product3jpg,
-};
-
-export function resolveAdminImage(path: string): string {
-  if (!path) return "";
-  if (path.startsWith("/uploads/") || path.startsWith("http")) return path;
-  if (assetMap[path]) return assetMap[path];
-  return path;
-}
+import { resolveAdminImage } from "@/lib/resolveImage";
 
 const emptyForm = {
   name: "", description: "", categoryId: null as number | null, images: [] as string[],
@@ -44,6 +23,7 @@ const emptyForm = {
   metaTitle: "", metaDescription: "", metaKeywords: "",
   howItWorks: "", shippingInfo: "", returnExchanges: "", customGrillz: "",
   prices: [{ countryCode: "GB", currency: "GBP", price: "", discountPrice: "" }] as any[],
+  attributeValues: [] as { attributeId: number; value: string; priceModifier: string }[],
 };
 
 export default function AdminProductEdit() {
@@ -63,6 +43,12 @@ export default function AdminProductEdit() {
   const { data: categories = [] } = useQuery<any[]>({
     queryKey: ["/api/admin/categories"],
   });
+
+  const { data: productAttributes = [] } = useQuery<any[]>({
+    queryKey: ["/api/admin/product-attributes"],
+  });
+
+  const [selectedAttributeId, setSelectedAttributeId] = useState<number | null>(null);
 
   useEffect(() => {
     if (isEditing && data?.products) {
@@ -88,7 +74,15 @@ export default function AdminProductEdit() {
           prices: product.prices?.length > 0
             ? product.prices.map((p: any) => ({ countryCode: p.countryCode, currency: p.currency, price: p.price, discountPrice: p.discountPrice || "" }))
             : [{ countryCode: "GB", currency: "GBP", price: "", discountPrice: "" }],
+          attributeValues: product.attributes?.map((a: any) => ({
+            attributeId: a.attributeId,
+            value: a.value,
+            priceModifier: a.priceModifier || "0",
+          })) || [],
         });
+        if (product.attributes?.length > 0) {
+          setSelectedAttributeId(product.attributes[0].attributeId);
+        }
       }
     }
   }, [isEditing, data, productId]);
@@ -124,6 +118,7 @@ export default function AdminProductEdit() {
     const payload = {
       ...form,
       prices: form.prices.filter((p) => p.price),
+      attributeValues: form.attributeValues.filter((av) => av.value.trim()),
     };
     if (isEditing && productId) {
       updateMutation.mutate({ id: productId, data: payload });
@@ -187,6 +182,40 @@ export default function AdminProductEdit() {
     setForm((prev) => ({
       ...prev,
       prices: prev.prices.filter((_, i) => i !== idx),
+    }));
+  };
+
+  const handleCreateAttribute = async () => {
+    try {
+      const res = await apiRequest("POST", "/api/admin/product-attributes", { name: "Metal & Stone Type", values: [] });
+      const attr = await res.json();
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/product-attributes"] });
+      setSelectedAttributeId(attr.id);
+      toast({ title: "Metal & Stone Type attribute created" });
+    } catch (err: any) {
+      toast({ title: "Error creating attribute", description: err.message, variant: "destructive" });
+    }
+  };
+
+  const addVariantRow = () => {
+    if (!selectedAttributeId) return;
+    setForm((prev) => ({
+      ...prev,
+      attributeValues: [...prev.attributeValues, { attributeId: selectedAttributeId, value: "", priceModifier: "0" }],
+    }));
+  };
+
+  const updateVariant = (idx: number, field: string, value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      attributeValues: prev.attributeValues.map((av, i) => (i === idx ? { ...av, [field]: value } : av)),
+    }));
+  };
+
+  const removeVariant = (idx: number) => {
+    setForm((prev) => ({
+      ...prev,
+      attributeValues: prev.attributeValues.filter((_, i) => i !== idx),
     }));
   };
 
@@ -344,6 +373,94 @@ export default function AdminProductEdit() {
                     <Label className="text-zinc-400">Featured</Label>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-zinc-900 border-zinc-800">
+              <CardHeader>
+                <CardTitle className="text-white text-lg">Metal & Stone Types</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {productAttributes.length === 0 ? (
+                  <div className="text-center py-4">
+                    <p className="text-zinc-400 text-sm mb-3">No attribute types exist yet.</p>
+                    <Button type="button" variant="outline" onClick={handleCreateAttribute} className="border-zinc-700 text-zinc-300 hover:text-white hover:border-red-500" data-testid="button-create-attribute">
+                      <Plus size={14} className="mr-2" /> Create Metal Type Attribute
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="space-y-2">
+                      <Label className="text-zinc-400">Select Attribute Type</Label>
+                      <Select value={selectedAttributeId?.toString() || ""} onValueChange={(v) => setSelectedAttributeId(parseInt(v))}>
+                        <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white rounded-none" data-testid="select-attribute-type">
+                          <SelectValue placeholder="Select attribute type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-800 border-zinc-700 text-white">
+                          {productAttributes.map((attr: any) => (
+                            <SelectItem key={attr.id} value={attr.id.toString()}>{attr.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {selectedAttributeId && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-zinc-400 font-medium">Variant Values</Label>
+                          <Button type="button" variant="ghost" size="sm" onClick={addVariantRow} className="text-red-500 hover:text-red-400 text-xs" data-testid="button-add-variant">
+                            <Plus size={14} className="mr-1" /> Add Variant
+                          </Button>
+                        </div>
+
+                        {form.attributeValues.filter(av => av.attributeId === selectedAttributeId).length === 0 ? (
+                          <p className="text-zinc-500 text-sm text-center py-3">No variants added yet. Click "Add Variant" to begin.</p>
+                        ) : (
+                          <div className="space-y-2">
+                            <div className="grid grid-cols-[1fr_120px_40px] gap-2 text-xs text-zinc-500 px-1">
+                              <span>Value Name</span>
+                              <span>Price Modifier (£)</span>
+                              <span></span>
+                            </div>
+                            {form.attributeValues.map((av, i) => {
+                              if (av.attributeId !== selectedAttributeId) return null;
+                              return (
+                                <div key={i} className="grid grid-cols-[1fr_120px_40px] gap-2 items-center">
+                                  <Input
+                                    placeholder="e.g. Silver & Real Diamond"
+                                    value={av.value}
+                                    onChange={(e) => updateVariant(i, "value", e.target.value)}
+                                    className="bg-zinc-800 border-zinc-700 text-white rounded-none"
+                                    data-testid={`input-variant-value-${i}`}
+                                  />
+                                  <div className="relative">
+                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-zinc-500 text-sm">£</span>
+                                    <Input
+                                      type="number"
+                                      step="0.01"
+                                      value={av.priceModifier}
+                                      onChange={(e) => updateVariant(i, "priceModifier", e.target.value)}
+                                      className="bg-zinc-800 border-zinc-700 text-white rounded-none pl-6"
+                                      data-testid={`input-variant-price-${i}`}
+                                    />
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => removeVariant(i)}
+                                    className="w-8 h-8 flex items-center justify-center text-zinc-500 hover:text-red-500"
+                                    data-testid={`button-remove-variant-${i}`}
+                                  >
+                                    <Trash2 size={14} />
+                                  </button>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
               </CardContent>
             </Card>
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Link, useParams } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -47,7 +47,7 @@ export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
-  const [selectedAttribute, setSelectedAttribute] = useState<string>("");
+  const [selectedAttributes, setSelectedAttributes] = useState<Record<string, { value: string; priceModifier: number }>>({});
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({});
 
   const { data: product, isLoading, error } = useQuery<any>({
@@ -61,6 +61,21 @@ export default function ProductDetail() {
     queryFn: getQueryFn(`/api/products?limit=4&category=${product?.category?.slug || ""}`),
     enabled: !!product?.category?.slug,
   });
+
+  useEffect(() => {
+    if (!product?.attributes?.length) {
+      setSelectedAttributes({});
+      return;
+    }
+    const groups: Record<string, { value: string; priceModifier: number }> = {};
+    for (const attr of product.attributes) {
+      const name = attr.attributeName || `Attribute ${attr.attributeId}`;
+      if (!groups[name]) {
+        groups[name] = { value: attr.value, priceModifier: parseFloat(attr.priceModifier) || 0 };
+      }
+    }
+    setSelectedAttributes(groups);
+  }, [product?.id]);
 
   const images = product?.images?.length > 0 ? resolveImages(product.images) : fallbackImages;
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -86,24 +101,27 @@ export default function ProductDetail() {
   const pricing = getProductPrice(product);
 
   const attributes = product.attributes || [];
-  const attributeGroups: Record<string, { attributeId: number; values: { value: string; priceModifier: string }[] }> = {};
+  const attributeGroups: Record<string, { attributeId: number; values: { value: string; priceModifier: number }[] }> = {};
   for (const attr of attributes) {
     const name = attr.attributeName || `Attribute ${attr.attributeId}`;
     if (!attributeGroups[name]) {
       attributeGroups[name] = { attributeId: attr.attributeId, values: [] };
     }
-    attributeGroups[name].values.push({ value: attr.value, priceModifier: attr.priceModifier });
+    attributeGroups[name].values.push({ value: attr.value, priceModifier: parseFloat(attr.priceModifier) || 0 });
   }
+
+  const totalPriceModifier = Object.values(selectedAttributes).reduce((sum, attr) => sum + attr.priceModifier, 0);
+  const displayPrice = pricing.price + totalPriceModifier;
 
   const handleAddToCart = () => {
     const attrs: Record<string, string> = {};
-    if (selectedAttribute) {
-      attrs["option"] = selectedAttribute;
+    for (const [name, sel] of Object.entries(selectedAttributes)) {
+      attrs[name] = sel.value;
     }
     addItem({
       productId: product.id,
       name: product.name,
-      price: pricing.price,
+      price: displayPrice,
       image: images[0] || product1,
       quantity,
       attributes: Object.keys(attrs).length > 0 ? attrs : undefined,
@@ -163,32 +181,35 @@ export default function ProductDetail() {
             <h1 className="text-3xl md:text-4xl font-heading font-bold mb-4 uppercase tracking-wider" data-testid="text-product-name">{product.name}</h1>
             
             <div className="flex items-baseline gap-3 mb-2">
-              <span className="text-2xl font-bold text-primary" data-testid="text-product-price">{formatPrice(pricing.price, pricing.currency)}</span>
-              {pricing.oldPrice && <span className="text-white/50 line-through text-sm">{formatPrice(pricing.oldPrice, pricing.currency)}</span>}
+              <span className="text-2xl font-bold text-primary" data-testid="text-product-price">{formatPrice(displayPrice, pricing.currency)}</span>
+              {pricing.oldPrice && <span className="text-white/50 line-through text-sm">{formatPrice(pricing.oldPrice + totalPriceModifier, pricing.currency)}</span>}
             </div>
             
             <p className="text-xs text-white/50 mb-6">Tax included.</p>
             <p className="text-xs text-green-500 mb-8 italic">Shipping calculated at checkout.</p>
 
-            {Object.entries(attributeGroups).map(([name, group]) => (
-              <div key={name} className="mb-8">
-                <div className="mb-3">
-                  <span className="text-sm font-bold tracking-wider">{name}: <span className="font-normal text-white/80">{selectedAttribute || group.values[0]?.value}</span></span>
+            {Object.entries(attributeGroups).map(([name, group]) => {
+              const selected = selectedAttributes[name] || { value: group.values[0]?.value, priceModifier: group.values[0]?.priceModifier || 0 };
+              return (
+                <div key={name} className="mb-8">
+                  <div className="mb-3">
+                    <span className="text-sm font-bold tracking-wider">{name}: <span className="font-normal text-white/80">{selected.value}</span></span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {group.values.map(({ value, priceModifier }) => (
+                      <button 
+                        key={value}
+                        onClick={() => setSelectedAttributes(prev => ({ ...prev, [name]: { value, priceModifier } }))}
+                        className={`px-4 py-2 border text-xs transition-colors ${selected.value === value ? 'border-white text-white font-bold bg-white/10' : 'border-white/20 text-white/70 hover:border-white/50'}`}
+                        data-testid={`button-attribute-${value}`}
+                      >
+                        {value}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {group.values.map(({ value }) => (
-                    <button 
-                      key={value}
-                      onClick={() => setSelectedAttribute(value)}
-                      className={`px-4 py-2 border text-xs transition-colors ${(selectedAttribute || group.values[0]?.value) === value ? 'border-white text-white font-bold bg-white/10' : 'border-white/20 text-white/70 hover:border-white/50'}`}
-                      data-testid={`button-attribute-${value}`}
-                    >
-                      {value}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
 
             <div className="mb-6">
               <span className="text-sm font-bold tracking-wider block mb-3">Quantity</span>
@@ -280,7 +301,7 @@ export default function ProductDetail() {
           <img src={mainImage} className="w-10 h-10 object-cover rounded" />
           <div className="flex flex-col truncate">
             <span className="text-[10px] font-bold uppercase truncate">{product.name}</span>
-            <span className="text-xs text-primary font-bold">{formatPrice(pricing.price, pricing.currency)}</span>
+            <span className="text-xs text-primary font-bold">{formatPrice(displayPrice, pricing.currency)}</span>
           </div>
         </div>
         <Button 

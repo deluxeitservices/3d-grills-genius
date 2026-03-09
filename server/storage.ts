@@ -142,8 +142,15 @@ export class DatabaseStorage {
   }
 
   // Product Attribute Values
-  async getProductAttributeValues(productId: number): Promise<ProductAttributeValue[]> {
-    return db.select().from(productAttributeValues).where(eq(productAttributeValues.productId, productId));
+  async getProductAttributeValues(productId: number) {
+    return db.select({
+      id: productAttributeValues.id,
+      productId: productAttributeValues.productId,
+      attributeId: productAttributeValues.attributeId,
+      value: productAttributeValues.value,
+      priceModifier: productAttributeValues.priceModifier,
+      attributeName: productAttributes.name,
+    }).from(productAttributeValues).leftJoin(productAttributes, eq(productAttributeValues.attributeId, productAttributes.id)).where(eq(productAttributeValues.productId, productId));
   }
   async setProductAttributeValue(data: InsertProductAttributeValue): Promise<ProductAttributeValue> {
     const [val] = await db.insert(productAttributeValues).values(data).returning();

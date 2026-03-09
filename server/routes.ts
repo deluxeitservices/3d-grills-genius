@@ -425,7 +425,8 @@ export async function registerRoutes(
     const productsWithPrices = await Promise.all(
       result.products.map(async (p) => {
         const prices = await storage.getProductPrices(p.id);
-        return { ...p, prices };
+        const attributes = await storage.getProductAttributeValues(p.id);
+        return { ...p, prices, attributes };
       })
     );
     res.json({ products: productsWithPrices, total: result.total });
@@ -443,6 +444,7 @@ export async function registerRoutes(
       }
       if (attributeValues && Array.isArray(attributeValues)) {
         for (const av of attributeValues) {
+          if (!av.value || !av.attributeId || isNaN(parseFloat(av.priceModifier))) continue;
           await storage.setProductAttributeValue({ ...av, productId: product.id });
         }
       }
@@ -466,6 +468,7 @@ export async function registerRoutes(
       if (attributeValues && Array.isArray(attributeValues)) {
         await storage.deleteProductAttributeValues(id);
         for (const av of attributeValues) {
+          if (!av.value || !av.attributeId || isNaN(parseFloat(av.priceModifier))) continue;
           await storage.setProductAttributeValue({ ...av, productId: id });
         }
       }

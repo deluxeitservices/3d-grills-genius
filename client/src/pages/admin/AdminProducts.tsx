@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Pencil, Trash2, Search, ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { resolveAdminImage } from "./AdminProductEdit";
+import { resolveAdminImage } from "@/lib/resolveImage";
 
 export default function AdminProducts() {
   const { toast } = useToast();
