@@ -418,7 +418,7 @@ export default function AdminProductEdit() {
                       <div className="space-y-2">
                         <div className="grid grid-cols-[1fr_120px_40px] gap-2 text-xs text-zinc-500 px-1">
                           <span>Value Name</span>
-                          <span>Price Modifier (£)</span>
+                          <span>Variant Price (£)</span>
                           <span></span>
                         </div>
                         {form.attributeValues.map((av, i) => {

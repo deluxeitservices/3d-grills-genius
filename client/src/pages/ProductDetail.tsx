@@ -34,17 +34,19 @@ function getProductPrice(product: any) {
     const gbp = product.prices.find((p: any) => p.currency === "GBP") || product.prices[0];
     const basePrice = parseFloat(gbp.discountPrice || gbp.price);
     const originalPrice = parseFloat(gbp.price);
-    const priceWithTax = (basePrice + shipping) * (1 + taxRate / 100);
-    const originalWithTax = gbp.discountPrice ? (originalPrice + shipping) * (1 + taxRate / 100) : null;
     return {
-      price: Math.round(priceWithTax * 100) / 100,
-      oldPrice: originalWithTax ? Math.round(originalWithTax * 100) / 100 : null,
+      basePrice,
+      oldPrice: gbp.discountPrice ? originalPrice : null,
       currency: gbp.currency || "GBP",
       shipping,
       taxRate,
     };
   }
-  return { price: 0, oldPrice: null, currency: "GBP", shipping: 0, taxRate: 0 };
+  return { basePrice: 0, oldPrice: null, currency: "GBP", shipping: 0, taxRate: 0 };
+}
+
+function calcTotal(unitPrice: number, shipping: number, taxRate: number) {
+  return Math.round((unitPrice + shipping) * (1 + taxRate / 100) * 100) / 100;
 }
 
 function formatPrice(amount: number, currency: string = "GBP") {
@@ -55,7 +57,7 @@ export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
-  const [selectedAttributes, setSelectedAttributes] = useState<Record<string, { value: string; priceModifier: number }>>({});
+  const [selectedAttributes, setSelectedAttributes] = useState<Record<string, { value: string; variantPrice: number }>>({});
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({});
 
   const { data: product, isLoading, error } = useQuery<any>({
@@ -75,11 +77,13 @@ export default function ProductDetail() {
       setSelectedAttributes({});
       return;
     }
-    const groups: Record<string, { value: string; priceModifier: number }> = {};
+    const groups: Record<string, { value: string; variantPrice: number }> = {};
+    const baseP = parseFloat(product.prices?.find((p: any) => p.currency === "GBP")?.discountPrice || product.prices?.[0]?.price) || 0;
     for (const attr of product.attributes) {
       const name = attr.attributeName || `Attribute ${attr.attributeId}`;
       if (!groups[name]) {
-        groups[name] = { value: attr.value, priceModifier: parseFloat(attr.priceModifier) || 0 };
+        const vp = parseFloat(attr.priceModifier) || 0;
+        groups[name] = { value: attr.value, variantPrice: vp > 0 ? vp : baseP };
       }
     }
     setSelectedAttributes(groups);
@@ -109,18 +113,20 @@ export default function ProductDetail() {
   const pricing = getProductPrice(product);
 
   const attributes = product.attributes || [];
-  const attributeGroups: Record<string, { attributeId: number; values: { value: string; priceModifier: number }[] }> = {};
+  const attributeGroups: Record<string, { attributeId: number; values: { value: string; variantPrice: number }[] }> = {};
   for (const attr of attributes) {
     const name = attr.attributeName || `Attribute ${attr.attributeId}`;
     if (!attributeGroups[name]) {
       attributeGroups[name] = { attributeId: attr.attributeId, values: [] };
     }
-    attributeGroups[name].values.push({ value: attr.value, priceModifier: parseFloat(attr.priceModifier) || 0 });
+    const vp = parseFloat(attr.priceModifier) || 0;
+    attributeGroups[name].values.push({ value: attr.value, variantPrice: vp > 0 ? vp : pricing.basePrice });
   }
 
-  const rawModifier = Object.values(selectedAttributes).reduce((sum, attr) => sum + attr.priceModifier, 0);
-  const taxedModifier = rawModifier * (1 + pricing.taxRate / 100);
-  const displayPrice = Math.round((pricing.price + taxedModifier) * 100) / 100;
+  const selectedVariantPrice = Object.values(selectedAttributes).length > 0
+    ? Object.values(selectedAttributes).reduce((_, attr) => attr.variantPrice, pricing.basePrice)
+    : pricing.basePrice;
+  const displayPrice = calcTotal(selectedVariantPrice, pricing.shipping, pricing.taxRate);
 
   const handleAddToCart = () => {
     const attrs: Record<string, string> = {};
@@ -191,7 +197,7 @@ export default function ProductDetail() {
             
             <div className="flex items-baseline gap-3 mb-2">
               <span className="text-2xl font-bold text-primary" data-testid="text-product-price">{formatPrice(displayPrice, pricing.currency)}</span>
-              {pricing.oldPrice && <span className="text-white/50 line-through text-sm">{formatPrice(pricing.oldPrice + taxedModifier, pricing.currency)}</span>}
+              {pricing.oldPrice && <span className="text-white/50 line-through text-sm">{formatPrice(calcTotal(pricing.oldPrice, pricing.shipping, pricing.taxRate), pricing.currency)}</span>}
             </div>
             
             <p className="text-xs text-white/50 mb-6">
@@ -201,17 +207,17 @@ export default function ProductDetail() {
             {pricing.shipping === 0 && <p className="text-xs text-green-500 mb-8 italic">Free shipping.</p>}
 
             {Object.entries(attributeGroups).map(([name, group]) => {
-              const selected = selectedAttributes[name] || { value: group.values[0]?.value, priceModifier: group.values[0]?.priceModifier || 0 };
+              const selected = selectedAttributes[name] || { value: group.values[0]?.value, variantPrice: group.values[0]?.variantPrice || pricing.basePrice };
               return (
                 <div key={name} className="mb-8">
                   <div className="mb-3">
                     <span className="text-sm font-bold tracking-wider">{name}: <span className="font-normal text-white/80">{selected.value}</span></span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {group.values.map(({ value, priceModifier }) => (
+                    {group.values.map(({ value, variantPrice }) => (
                       <button 
                         key={value}
-                        onClick={() => setSelectedAttributes(prev => ({ ...prev, [name]: { value, priceModifier } }))}
+                        onClick={() => setSelectedAttributes(prev => ({ ...prev, [name]: { value, variantPrice } }))}
                         className={`px-4 py-2 border text-xs transition-colors ${selected.value === value ? 'border-white text-white font-bold bg-white/10' : 'border-white/20 text-white/70 hover:border-white/50'}`}
                         data-testid={`button-attribute-${value}`}
                       >

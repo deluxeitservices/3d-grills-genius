@@ -41,11 +41,11 @@ function getProductPrice(product: any) {
     const gbp = product.prices.find((p: any) => p.currency === "GBP") || product.prices[0];
     const basePrice = parseFloat(gbp.discountPrice || gbp.price);
     const originalPrice = parseFloat(gbp.price);
-    const priceWithTax = (basePrice + shipping) * (1 + taxRate / 100);
-    const originalWithTax = gbp.discountPrice ? (originalPrice + shipping) * (1 + taxRate / 100) : null;
+    const total = Math.round((basePrice + shipping) * (1 + taxRate / 100) * 100) / 100;
+    const originalTotal = gbp.discountPrice ? Math.round((originalPrice + shipping) * (1 + taxRate / 100) * 100) / 100 : null;
     return {
-      price: Math.round(priceWithTax * 100) / 100,
-      oldPrice: originalWithTax ? Math.round(originalWithTax * 100) / 100 : null,
+      price: total,
+      oldPrice: originalTotal,
       currency: gbp.currency || "GBP",
     };
   }
