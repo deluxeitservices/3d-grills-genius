@@ -98,11 +98,3 @@
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }
-
-.bg-zinc-800 input::placeholder,
-input.bg-zinc-800::placeholder,
-textarea.bg-zinc-800::placeholder,
-.bg-zinc-800 textarea::placeholder {
-  color: rgb(161 161 170) !important;
-  opacity: 1;
-}
