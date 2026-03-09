@@ -51,6 +51,12 @@ export default function AdminProductEdit() {
   const [selectedAttributeId, setSelectedAttributeId] = useState<number | null>(null);
 
   useEffect(() => {
+    if (productAttributes.length > 0 && !selectedAttributeId) {
+      setSelectedAttributeId(productAttributes[0].id);
+    }
+  }, [productAttributes]);
+
+  useEffect(() => {
     if (isEditing && data?.products) {
       const product = data.products.find((p: any) => p.id === productId);
       if (product) {
@@ -195,6 +201,27 @@ export default function AdminProductEdit() {
     } catch (err: any) {
       toast({ title: "Error creating attribute", description: err.message, variant: "destructive" });
     }
+  };
+
+  const defaultVariants = [
+    { value: "Silver & Real Diamond", priceModifier: "0" },
+    { value: "Silver & Cz", priceModifier: "-20" },
+    { value: "Dental Yellow Gold & Cz", priceModifier: "50" },
+    { value: "Dental Yellow Gold & Real Diamonds", priceModifier: "100" },
+    { value: "Dental White Gold & Cz", priceModifier: "50" },
+    { value: "Dental White Gold & Real Diamonds", priceModifier: "100" },
+    { value: "14k Yellow Gold & Cz", priceModifier: "150" },
+    { value: "14k Yellow Gold & Real Diamonds", priceModifier: "200" },
+    { value: "14k Rose Gold & Cz", priceModifier: "150" },
+    { value: "14k Rose Gold & Real Diamonds", priceModifier: "200" },
+  ];
+
+  const loadDefaultVariants = () => {
+    if (!selectedAttributeId) return;
+    const otherValues = form.attributeValues.filter(av => av.attributeId !== selectedAttributeId);
+    const newValues = defaultVariants.map(v => ({ attributeId: selectedAttributeId, ...v }));
+    setForm((prev) => ({ ...prev, attributeValues: [...otherValues, ...newValues] }));
+    toast({ title: "Default variants loaded" });
   };
 
   const addVariantRow = () => {
@@ -406,15 +433,22 @@ export default function AdminProductEdit() {
 
                     {selectedAttributeId && (
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between flex-wrap gap-2">
                           <Label className="text-zinc-400 font-medium">Variant Values</Label>
-                          <Button type="button" variant="ghost" size="sm" onClick={addVariantRow} className="text-red-500 hover:text-red-400 text-xs" data-testid="button-add-variant">
-                            <Plus size={14} className="mr-1" /> Add Variant
-                          </Button>
+                          <div className="flex gap-2">
+                            {form.attributeValues.filter(av => av.attributeId === selectedAttributeId).length === 0 && (
+                              <Button type="button" variant="outline" size="sm" onClick={loadDefaultVariants} className="border-zinc-700 text-zinc-300 hover:text-white hover:border-red-500 text-xs" data-testid="button-load-defaults">
+                                Load Default Variants
+                              </Button>
+                            )}
+                            <Button type="button" variant="ghost" size="sm" onClick={addVariantRow} className="text-red-500 hover:text-red-400 text-xs" data-testid="button-add-variant">
+                              <Plus size={14} className="mr-1" /> Add Variant
+                            </Button>
+                          </div>
                         </div>
 
                         {form.attributeValues.filter(av => av.attributeId === selectedAttributeId).length === 0 ? (
-                          <p className="text-zinc-500 text-sm text-center py-3">No variants added yet. Click "Add Variant" to begin.</p>
+                          <p className="text-zinc-500 text-sm text-center py-3">No variants added yet. Click "Load Default Variants" or "Add Variant" to begin.</p>
                         ) : (
                           <div className="space-y-2">
                             <div className="grid grid-cols-[1fr_120px_40px] gap-2 text-xs text-zinc-500 px-1">
