@@ -11,6 +11,7 @@ import product1 from "@/assets/product_1.png";
 import product2 from "@/assets/product_2.png";
 import product3 from "@/assets/product_3.png";
 import { ShieldCheck, Truck, Gem, Star } from "lucide-react";
+import { resolveAdminImage } from "@/lib/resolveImage";
 
 const fallbackCategories = [
   { name: "Single Grillz", image: catGrillz, slug: "single-grillz" },
@@ -81,21 +82,10 @@ export default function Home() {
   const heroBanner = banners?.find((b: any) => b.page === "home") || null;
   const midBanner = banners?.find((b: any) => b.page === "mid") || (bannersData && bannersData.length > 1 ? bannersData[1] : null);
 
-  const assetMap: Record<string, string> = {
-    "/assets/product_1.png": product1,
-    "/assets/product_2.png": product2,
-    "/assets/product_3.png": product3,
-    "/assets/cat-grillz.png": catGrillz,
-    "/assets/cat-chains.png": catChains,
-    "/assets/cat-rings.png": catRings,
-    "/assets/cat-bracelets.png": catBracelets,
-    "/assets/hero.png": heroImg,
-  };
-
   const resolveImage = (dbPath: string | null | undefined, fallback: string) => {
     if (!dbPath) return fallback;
-    if (dbPath.startsWith("/uploads/") || dbPath.startsWith("http")) return dbPath;
-    return assetMap[dbPath] || fallback;
+    const resolved = resolveAdminImage(dbPath);
+    return resolved || fallback;
   };
 
   const categories = categoriesData && categoriesData.length > 0

@@ -8,19 +8,14 @@ import { ChevronRight, Shield, ChevronDown, ChevronUp, Loader2 } from "lucide-re
 import product1 from "@/assets/product_1.png";
 import product2 from "@/assets/product_2.png";
 import product3 from "@/assets/product_3.png";
+import { resolveAdminImage } from "@/lib/resolveImage";
 
 const fallbackImages = [product1, product2, product3];
 
-const assetMap: Record<string, string> = {
-  "/assets/product_1.png": product1,
-  "/assets/product_2.png": product2,
-  "/assets/product_3.png": product3,
-};
-
 function resolveImage(src: string | null | undefined, fallback: string): string {
   if (!src) return fallback;
-  if (src.startsWith("/uploads/") || src.startsWith("http")) return src;
-  return assetMap[src] || fallback;
+  const resolved = resolveAdminImage(src);
+  return resolved || fallback;
 }
 
 function resolveImages(images: string[]): string[] {

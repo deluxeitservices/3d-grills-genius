@@ -7,20 +7,14 @@ import product1 from "@/assets/product_1.png";
 import product2 from "@/assets/product_2.png";
 import product3 from "@/assets/product_3.png";
 import catGrillz from "@/assets/cat-grillz.png";
+import { resolveAdminImage } from "@/lib/resolveImage";
 
 const fallbackImages = [product1, product2, product3, catGrillz];
 
-const assetMap: Record<string, string> = {
-  "/assets/product_1.png": product1,
-  "/assets/product_2.png": product2,
-  "/assets/product_3.png": product3,
-  "/assets/cat-grillz.png": catGrillz,
-};
-
 function resolveImage(src: string | null | undefined, fallback: string): string {
   if (!src) return fallback;
-  if (src.startsWith("/uploads/") || src.startsWith("http")) return src;
-  return assetMap[src] || fallback;
+  const resolved = resolveAdminImage(src);
+  return resolved || fallback;
 }
 
 const SORT_OPTIONS = [
@@ -113,7 +107,7 @@ export default function Shop() {
     <div className="bg-black text-white min-h-screen relative">
       <div className="relative mb-16 py-12 md:py-16 overflow-hidden border-b border-white/10">
         <div className="absolute inset-0">
-          <img src={currentCategory?.image || catGrillz} alt="Grillz Background" className="w-full h-full object-cover opacity-15 grayscale" />
+          <img src={resolveImage(currentCategory?.image, catGrillz)} alt="Grillz Background" className="w-full h-full object-cover opacity-15 grayscale" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/80 to-black"></div>
         </div>
         <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center space-y-4">
