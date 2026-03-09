@@ -172,6 +172,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <LogOut size={15} className="mr-2" />
             Log out
           </Button>
+          <div className="pt-3 border-t border-zinc-800/60 mt-3 text-center">
+            <a href="https://deluxe-it-services.co.uk/" target="_blank" rel="noopener noreferrer" className="text-[10px] text-zinc-500 hover:text-amber-400 transition-colors" data-testid="link-developer-credit">
+              Development by <span className="font-semibold">Deluxe IT Services</span>
+            </a>
+          </div>
         </div>
       </aside>
 
