@@ -439,7 +439,8 @@ export async function registerRoutes(
 
       if (prices && Array.isArray(prices)) {
         for (const p of prices) {
-          await storage.setProductPrice({ ...p, productId: product.id });
+          const cleaned = { ...p, productId: product.id, discountPrice: p.discountPrice || null };
+          await storage.setProductPrice(cleaned);
         }
       }
       if (attributeValues && Array.isArray(attributeValues)) {
@@ -462,7 +463,8 @@ export async function registerRoutes(
 
       if (prices && Array.isArray(prices)) {
         for (const p of prices) {
-          await storage.setProductPrice({ ...p, productId: id });
+          const cleaned = { ...p, productId: id, discountPrice: p.discountPrice || null };
+          await storage.setProductPrice(cleaned);
         }
       }
       if (attributeValues && Array.isArray(attributeValues)) {

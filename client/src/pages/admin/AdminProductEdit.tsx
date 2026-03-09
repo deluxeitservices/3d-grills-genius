@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Upload, Loader2, X, Save, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Upload, Loader2, X, Save, Plus, Trash2, Pencil, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { resolveAdminImage } from "@/lib/resolveImage";
@@ -191,15 +191,52 @@ export default function AdminProductEdit() {
     }));
   };
 
-  const handleCreateAttribute = async () => {
+  const [newAttrName, setNewAttrName] = useState("");
+  const [showNewAttrInput, setShowNewAttrInput] = useState(false);
+  const [editingAttrId, setEditingAttrId] = useState<number | null>(null);
+  const [editingAttrName, setEditingAttrName] = useState("");
+
+  const handleCreateAttribute = async (name?: string) => {
+    const attrName = name || newAttrName.trim();
+    if (!attrName) return;
     try {
-      const res = await apiRequest("POST", "/api/admin/product-attributes", { name: "Metal & Stone Type", values: [] });
+      const res = await apiRequest("POST", "/api/admin/product-attributes", { name: attrName, values: [] });
       const attr = await res.json();
       queryClient.invalidateQueries({ queryKey: ["/api/admin/product-attributes"] });
       setSelectedAttributeId(attr.id);
-      toast({ title: "Metal & Stone Type attribute created" });
+      setNewAttrName("");
+      setShowNewAttrInput(false);
+      toast({ title: `"${attrName}" attribute created` });
     } catch (err: any) {
       toast({ title: "Error creating attribute", description: err.message, variant: "destructive" });
+    }
+  };
+
+  const handleEditAttribute = async () => {
+    if (!editingAttrId || !editingAttrName.trim()) return;
+    try {
+      await apiRequest("PATCH", `/api/admin/product-attributes/${editingAttrId}`, { name: editingAttrName.trim() });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/product-attributes"] });
+      setEditingAttrId(null);
+      setEditingAttrName("");
+      toast({ title: "Attribute renamed" });
+    } catch (err: any) {
+      toast({ title: "Error renaming attribute", description: err.message, variant: "destructive" });
+    }
+  };
+
+  const handleDeleteAttribute = async (id: number) => {
+    if (!confirm("Delete this attribute type? All variant values for this attribute across all products will be removed.")) return;
+    try {
+      await apiRequest("DELETE", `/api/admin/product-attributes/${id}`);
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/product-attributes"] });
+      if (selectedAttributeId === id) {
+        setSelectedAttributeId(null);
+      }
+      setForm(prev => ({ ...prev, attributeValues: prev.attributeValues.filter(av => av.attributeId !== id) }));
+      toast({ title: "Attribute deleted" });
+    } catch (err: any) {
+      toast({ title: "Error deleting attribute", description: err.message, variant: "destructive" });
     }
   };
 
@@ -408,92 +445,130 @@ export default function AdminProductEdit() {
                 <CardTitle className="text-white text-lg">Metal & Stone Types</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {productAttributes.length === 0 ? (
-                  <div className="text-center py-4">
-                    <p className="text-zinc-400 text-sm mb-3">No attribute types exist yet.</p>
-                    <Button type="button" variant="outline" onClick={handleCreateAttribute} className="border-zinc-700 text-zinc-300 hover:text-white hover:border-red-500" data-testid="button-create-attribute">
-                      <Plus size={14} className="mr-2" /> Create Metal Type Attribute
+                <div className="space-y-2">
+                  <Label className="text-zinc-400">Attribute Type</Label>
+                  <div className="flex gap-2">
+                    <Select value={selectedAttributeId?.toString() || ""} onValueChange={(v) => setSelectedAttributeId(parseInt(v))}>
+                      <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white rounded-none flex-1" data-testid="select-attribute-type">
+                        <SelectValue placeholder="Select attribute type" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-zinc-800 border-zinc-700 text-white">
+                        {productAttributes.map((attr: any) => (
+                          <SelectItem key={attr.id} value={attr.id.toString()}>{attr.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {selectedAttributeId && (
+                      <>
+                        <button type="button" onClick={() => { const attr = productAttributes.find((a: any) => a.id === selectedAttributeId); if (attr) { setEditingAttrId(attr.id); setEditingAttrName(attr.name); } }} className="w-9 h-9 flex items-center justify-center bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white hover:border-yellow-500" data-testid="button-edit-attribute" title="Rename attribute">
+                          <Pencil size={14} />
+                        </button>
+                        <button type="button" onClick={() => handleDeleteAttribute(selectedAttributeId)} className="w-9 h-9 flex items-center justify-center bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-red-500 hover:border-red-500" data-testid="button-delete-attribute" title="Delete attribute">
+                          <Trash2 size={14} />
+                        </button>
+                      </>
+                    )}
+                    <button type="button" onClick={() => setShowNewAttrInput(!showNewAttrInput)} className="w-9 h-9 flex items-center justify-center bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-green-500 hover:border-green-500" data-testid="button-show-new-attribute" title="Add new attribute type">
+                      <Plus size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {showNewAttrInput && (
+                  <div className="flex gap-2 items-end p-3 bg-zinc-800/50 border border-zinc-700 rounded">
+                    <div className="flex-1 space-y-1">
+                      <Label className="text-zinc-400 text-xs">New Attribute Name</Label>
+                      <Input value={newAttrName} onChange={(e) => setNewAttrName(e.target.value)} placeholder="e.g. Metal & Stone Type" className="bg-zinc-800 border-zinc-700 text-white rounded-none h-9" data-testid="input-new-attribute-name" onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleCreateAttribute(); } }} />
+                    </div>
+                    <Button type="button" size="sm" onClick={() => handleCreateAttribute()} disabled={!newAttrName.trim()} className="bg-green-600 hover:bg-green-700 text-white rounded-none h-9 px-3" data-testid="button-save-new-attribute">
+                      <Check size={14} className="mr-1" /> Create
+                    </Button>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => { setShowNewAttrInput(false); setNewAttrName(""); }} className="text-zinc-400 hover:text-white h-9 px-2" data-testid="button-cancel-new-attribute">
+                      <X size={14} />
                     </Button>
                   </div>
-                ) : (
-                  <>
-                    <div className="space-y-2">
-                      <Label className="text-zinc-400">Select Attribute Type</Label>
-                      <Select value={selectedAttributeId?.toString() || ""} onValueChange={(v) => setSelectedAttributeId(parseInt(v))}>
-                        <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white rounded-none" data-testid="select-attribute-type">
-                          <SelectValue placeholder="Select attribute type" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-zinc-800 border-zinc-700 text-white">
-                          {productAttributes.map((attr: any) => (
-                            <SelectItem key={attr.id} value={attr.id.toString()}>{attr.name}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                )}
+
+                {editingAttrId && (
+                  <div className="flex gap-2 items-end p-3 bg-zinc-800/50 border border-yellow-600/30 rounded">
+                    <div className="flex-1 space-y-1">
+                      <Label className="text-yellow-500 text-xs">Rename Attribute</Label>
+                      <Input value={editingAttrName} onChange={(e) => setEditingAttrName(e.target.value)} className="bg-zinc-800 border-zinc-700 text-white rounded-none h-9" data-testid="input-edit-attribute-name" onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleEditAttribute(); } }} />
+                    </div>
+                    <Button type="button" size="sm" onClick={handleEditAttribute} disabled={!editingAttrName.trim()} className="bg-yellow-600 hover:bg-yellow-700 text-white rounded-none h-9 px-3" data-testid="button-save-edit-attribute">
+                      <Check size={14} className="mr-1" /> Save
+                    </Button>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => { setEditingAttrId(null); setEditingAttrName(""); }} className="text-zinc-400 hover:text-white h-9 px-2" data-testid="button-cancel-edit-attribute">
+                      <X size={14} />
+                    </Button>
+                  </div>
+                )}
+
+                {selectedAttributeId && (
+                  <div className="space-y-3 pt-2 border-t border-zinc-800">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <Label className="text-zinc-400 font-medium">Variant Values</Label>
+                      <div className="flex gap-2">
+                        {form.attributeValues.filter(av => av.attributeId === selectedAttributeId).length === 0 && (
+                          <Button type="button" variant="outline" size="sm" onClick={loadDefaultVariants} className="border-zinc-700 text-zinc-300 hover:text-white hover:border-red-500 text-xs" data-testid="button-load-defaults">
+                            Load Defaults
+                          </Button>
+                        )}
+                        <Button type="button" variant="ghost" size="sm" onClick={addVariantRow} className="text-red-500 hover:text-red-400 text-xs" data-testid="button-add-variant">
+                          <Plus size={14} className="mr-1" /> Add Variant
+                        </Button>
+                      </div>
                     </div>
 
-                    {selectedAttributeId && (
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between flex-wrap gap-2">
-                          <Label className="text-zinc-400 font-medium">Variant Values</Label>
-                          <div className="flex gap-2">
-                            {form.attributeValues.filter(av => av.attributeId === selectedAttributeId).length === 0 && (
-                              <Button type="button" variant="outline" size="sm" onClick={loadDefaultVariants} className="border-zinc-700 text-zinc-300 hover:text-white hover:border-red-500 text-xs" data-testid="button-load-defaults">
-                                Load Default Variants
-                              </Button>
-                            )}
-                            <Button type="button" variant="ghost" size="sm" onClick={addVariantRow} className="text-red-500 hover:text-red-400 text-xs" data-testid="button-add-variant">
-                              <Plus size={14} className="mr-1" /> Add Variant
-                            </Button>
-                          </div>
+                    {form.attributeValues.filter(av => av.attributeId === selectedAttributeId).length === 0 ? (
+                      <p className="text-zinc-500 text-sm text-center py-3">No variants added. Click "Load Defaults" or "Add Variant".</p>
+                    ) : (
+                      <div className="space-y-2">
+                        <div className="grid grid-cols-[1fr_120px_40px] gap-2 text-xs text-zinc-500 px-1">
+                          <span>Value Name</span>
+                          <span>Price Modifier (£)</span>
+                          <span></span>
                         </div>
-
-                        {form.attributeValues.filter(av => av.attributeId === selectedAttributeId).length === 0 ? (
-                          <p className="text-zinc-500 text-sm text-center py-3">No variants added yet. Click "Load Default Variants" or "Add Variant" to begin.</p>
-                        ) : (
-                          <div className="space-y-2">
-                            <div className="grid grid-cols-[1fr_120px_40px] gap-2 text-xs text-zinc-500 px-1">
-                              <span>Value Name</span>
-                              <span>Price Modifier (£)</span>
-                              <span></span>
+                        {form.attributeValues.map((av, i) => {
+                          if (av.attributeId !== selectedAttributeId) return null;
+                          return (
+                            <div key={i} className="grid grid-cols-[1fr_120px_40px] gap-2 items-center">
+                              <Input
+                                placeholder="e.g. Silver & Real Diamond"
+                                value={av.value}
+                                onChange={(e) => updateVariant(i, "value", e.target.value)}
+                                className="bg-zinc-800 border-zinc-700 text-white rounded-none"
+                                data-testid={`input-variant-value-${i}`}
+                              />
+                              <div className="relative">
+                                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-zinc-500 text-sm">£</span>
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  value={av.priceModifier}
+                                  onChange={(e) => updateVariant(i, "priceModifier", e.target.value)}
+                                  className="bg-zinc-800 border-zinc-700 text-white rounded-none pl-6"
+                                  data-testid={`input-variant-price-${i}`}
+                                />
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => removeVariant(i)}
+                                className="w-8 h-8 flex items-center justify-center text-zinc-500 hover:text-red-500"
+                                data-testid={`button-remove-variant-${i}`}
+                              >
+                                <Trash2 size={14} />
+                              </button>
                             </div>
-                            {form.attributeValues.map((av, i) => {
-                              if (av.attributeId !== selectedAttributeId) return null;
-                              return (
-                                <div key={i} className="grid grid-cols-[1fr_120px_40px] gap-2 items-center">
-                                  <Input
-                                    placeholder="e.g. Silver & Real Diamond"
-                                    value={av.value}
-                                    onChange={(e) => updateVariant(i, "value", e.target.value)}
-                                    className="bg-zinc-800 border-zinc-700 text-white rounded-none"
-                                    data-testid={`input-variant-value-${i}`}
-                                  />
-                                  <div className="relative">
-                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-zinc-500 text-sm">£</span>
-                                    <Input
-                                      type="number"
-                                      step="0.01"
-                                      value={av.priceModifier}
-                                      onChange={(e) => updateVariant(i, "priceModifier", e.target.value)}
-                                      className="bg-zinc-800 border-zinc-700 text-white rounded-none pl-6"
-                                      data-testid={`input-variant-price-${i}`}
-                                    />
-                                  </div>
-                                  <button
-                                    type="button"
-                                    onClick={() => removeVariant(i)}
-                                    className="w-8 h-8 flex items-center justify-center text-zinc-500 hover:text-red-500"
-                                    data-testid={`button-remove-variant-${i}`}
-                                  >
-                                    <Trash2 size={14} />
-                                  </button>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        )}
+                          );
+                        })}
                       </div>
                     )}
-                  </>
+                  </div>
+                )}
+
+                {!selectedAttributeId && productAttributes.length === 0 && !showNewAttrInput && (
+                  <p className="text-zinc-500 text-sm text-center py-2">No attribute types yet. Click + to create one.</p>
                 )}
               </CardContent>
             </Card>
