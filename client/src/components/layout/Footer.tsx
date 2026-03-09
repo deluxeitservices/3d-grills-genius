@@ -133,7 +133,7 @@ export default function Footer() {
           
         </div>
 
-        <div className="border-t border-white/10 pt-6 flex flex-col items-center gap-2">
+        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-white/40" data-testid="text-copyright">© 2026 3D Grills Genius. All Rights Reserved.</p>
           <a href="https://deluxe-it-services.co.uk/" target="_blank" rel="noopener noreferrer" className="text-xs text-white/40 hover:text-primary transition-colors" data-testid="link-developer-credit-footer">
             Development by <span className="font-semibold">Deluxe IT Services</span>
