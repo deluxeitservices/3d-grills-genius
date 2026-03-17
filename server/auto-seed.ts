@@ -135,7 +135,7 @@ export async function autoSeed() {
       name: "Diamond Dust Bottom 6",
       slug: "diamond-dust-bottom-6",
       description: "Six bottom teeth covered in diamond dust finish for maximum sparkle. Each tooth is hand-finished with a diamond dust texture that catches light from every angle. A favourite among artists and performers.",
-      images: ["/assets/product_2.png"],
+      images: ["/assets/cat-rings.png"],
       categoryId: catBySlug("diamond-grillz")?.id,
       quantity: 8,
       isActive: true,
@@ -149,7 +149,7 @@ export async function autoSeed() {
       name: "Rose Gold Fangs Set",
       slug: "rose-gold-fangs-set",
       description: "Striking rose gold fang grillz for a bold vampire-inspired look. Features extended canine designs in beautiful rose gold, creating a fierce yet elegant aesthetic. Perfect for special occasions and photoshoots.",
-      images: ["/assets/product_3.png"],
+      images: ["/assets/cat-bracelets.png"],
       categoryId: catBySlug("curves-colour")?.id,
       quantity: 20,
       isActive: true,
@@ -163,7 +163,7 @@ export async function autoSeed() {
       name: "Iced Out Full Set (Top & Bottom)",
       slug: "iced-out-full-set",
       description: "The ultimate statement piece — a full top and bottom set completely iced out with CZ stones. Every tooth is covered in brilliant-cut cubic zirconia for non-stop shine. For those who want to go all out.",
-      images: ["/assets/cat-grillz.png"],
+      images: ["/assets/product_3.png"],
       categoryId: catBySlug("diamond-grillz")?.id,
       quantity: 5,
       isActive: true,
@@ -177,7 +177,7 @@ export async function autoSeed() {
       name: "Swarovski Crystal Tooth Gem (Single)",
       slug: "swarovski-crystal-tooth-gem",
       description: "A single Swarovski crystal gem bonded to your tooth for instant sparkle. Non-invasive application that lasts 6-12 months. Available in clear, pink, blue, and green crystal options.",
-      images: ["/assets/product_1.png"],
+      images: ["/assets/cat-rings.png"],
       categoryId: catBySlug("tooth-gems")?.id,
       quantity: 100,
       isActive: true,
@@ -207,7 +207,7 @@ export async function autoSeed() {
       name: "Rainbow Chrome Top 4",
       slug: "rainbow-chrome-top-4",
       description: "Four top teeth in a stunning rainbow chrome finish. Each tooth transitions through different colours — gold, rose, silver, and blue — creating an eye-catching gradient effect.",
-      images: ["/assets/product_3.png"],
+      images: ["/assets/cat-chains.png"],
       categoryId: catBySlug("curves-colour")?.id,
       quantity: 10,
       isActive: true,
@@ -235,6 +235,27 @@ export async function autoSeed() {
     console.log(`Created ${prods.length} products`);
   } else {
     console.log(`Products already exist (${prods.length}), skipping`);
+    const prodImageMap: Record<string, string[]> = {
+      "hello-kitty-heart-set": ["/assets/product_1.png"],
+      "window-and-heart-cap": ["/assets/product_2.png"],
+      "sparkle-window-grillz-set": ["/assets/product_3.png"],
+      "london-bridge-design": ["/assets/cat-chains.png"],
+      "classic-gold-single-tooth-cap": ["/assets/cat-grillz.png"],
+      "diamond-dust-bottom-6": ["/assets/cat-rings.png"],
+      "rose-gold-fangs-set": ["/assets/cat-bracelets.png"],
+      "iced-out-full-set": ["/assets/product_3.png"],
+      "swarovski-crystal-tooth-gem": ["/assets/cat-rings.png"],
+      "premium-mould-kit": ["/assets/product_2.png"],
+      "rainbow-chrome-top-4": ["/assets/cat-chains.png"],
+      "solid-gold-bottom-8-bar": ["/assets/cat-grillz.png"],
+    };
+    for (const prod of prods) {
+      const expected = prodImageMap[prod.slug];
+      if (expected && JSON.stringify(prod.images) !== JSON.stringify(expected)) {
+        await db.update(products).set({ images: expected }).where(eq(products.id, prod.id));
+        console.log(`Updated product image: ${prod.slug} -> ${expected[0]}`);
+      }
+    }
   }
 
   const basePrices = [
