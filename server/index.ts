@@ -116,6 +116,14 @@ app.use((req, res, next) => {
     console.error('Stripe initialization error (non-fatal):', err);
   }
 
+  // Auto-seed all data (categories, products, prices, variants, reviews, banners, CMS pages)
+  try {
+    const { autoSeed } = await import('./auto-seed');
+    await autoSeed();
+  } catch (err) {
+    console.error('Auto-seed error (non-fatal):', err);
+  }
+
   // Seed default admin user
   try {
     const { storage } = await import('./storage');
