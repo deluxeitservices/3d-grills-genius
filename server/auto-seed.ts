@@ -11,6 +11,44 @@ export async function autoSeed() {
   const existingBanners = await db.select().from(banners);
   const existingCms = await db.select().from(cmsPages);
 
+  const catImageMap: Record<string, string> = {
+    "single-grillz": "/assets/cat-grillz.png",
+    "gold-set-grillz": "/assets/cat-chains.png",
+    "diamond-grillz": "/assets/cat-rings.png",
+    "curves-colour": "/assets/cat-bracelets.png",
+    "tooth-gems": "/assets/product_1.png",
+    "tooth-mould-kit": "/assets/product_2.png",
+  };
+  for (const cat of existingCats) {
+    const expected = catImageMap[cat.slug];
+    if (expected && cat.image !== expected) {
+      await db.update(categories).set({ image: expected }).where(eq(categories.id, cat.id));
+      console.log(`Fixed category image: ${cat.slug} -> ${expected}`);
+    }
+  }
+
+  const prodImageMap: Record<string, string[]> = {
+    "hello-kitty-heart-set": ["/assets/product_1.png"],
+    "window-and-heart-cap": ["/assets/product_2.png"],
+    "sparkle-window-grillz-set": ["/assets/product_3.png"],
+    "london-bridge-design": ["/assets/cat-chains.png"],
+    "classic-gold-single-tooth-cap": ["/assets/cat-grillz.png"],
+    "diamond-dust-bottom-6": ["/assets/cat-rings.png"],
+    "rose-gold-fangs-set": ["/assets/cat-bracelets.png"],
+    "iced-out-full-set": ["/assets/product_3.png"],
+    "swarovski-crystal-tooth-gem": ["/assets/cat-rings.png"],
+    "premium-mould-kit": ["/assets/product_2.png"],
+    "rainbow-chrome-top-4": ["/assets/cat-chains.png"],
+    "solid-gold-bottom-8-bar": ["/assets/cat-grillz.png"],
+  };
+  for (const prod of existingProds) {
+    const expected = prodImageMap[prod.slug];
+    if (expected && JSON.stringify(prod.images) !== JSON.stringify(expected)) {
+      await db.update(products).set({ images: expected }).where(eq(products.id, prod.id));
+      console.log(`Fixed product image: ${prod.slug} -> ${expected[0]}`);
+    }
+  }
+
   if (existingCats.length >= 6 && existingProds.length >= 12 && existingPrices.length >= 36
       && existingVariants.length >= 120 && existingReviews.length >= 6
       && existingBanners.length >= 2 && existingCms.length >= 8) {
@@ -33,21 +71,6 @@ export async function autoSeed() {
     console.log(`Created ${cats.length} categories`);
   } else {
     console.log(`Categories already exist (${cats.length}), skipping`);
-    const catImageMap: Record<string, string> = {
-      "single-grillz": "/assets/cat-grillz.png",
-      "gold-set-grillz": "/assets/cat-chains.png",
-      "diamond-grillz": "/assets/cat-rings.png",
-      "curves-colour": "/assets/cat-bracelets.png",
-      "tooth-gems": "/assets/product_1.png",
-      "tooth-mould-kit": "/assets/product_2.png",
-    };
-    for (const cat of cats) {
-      const expected = catImageMap[cat.slug];
-      if (expected && cat.image !== expected) {
-        await db.update(categories).set({ image: expected }).where(eq(categories.id, cat.id));
-        console.log(`Updated category image: ${cat.slug} -> ${expected}`);
-      }
-    }
   }
 
   const catBySlug = (slug: string) => cats.find(c => c.slug === slug);
@@ -235,27 +258,6 @@ export async function autoSeed() {
     console.log(`Created ${prods.length} products`);
   } else {
     console.log(`Products already exist (${prods.length}), skipping`);
-    const prodImageMap: Record<string, string[]> = {
-      "hello-kitty-heart-set": ["/assets/product_1.png"],
-      "window-and-heart-cap": ["/assets/product_2.png"],
-      "sparkle-window-grillz-set": ["/assets/product_3.png"],
-      "london-bridge-design": ["/assets/cat-chains.png"],
-      "classic-gold-single-tooth-cap": ["/assets/cat-grillz.png"],
-      "diamond-dust-bottom-6": ["/assets/cat-rings.png"],
-      "rose-gold-fangs-set": ["/assets/cat-bracelets.png"],
-      "iced-out-full-set": ["/assets/product_3.png"],
-      "swarovski-crystal-tooth-gem": ["/assets/cat-rings.png"],
-      "premium-mould-kit": ["/assets/product_2.png"],
-      "rainbow-chrome-top-4": ["/assets/cat-chains.png"],
-      "solid-gold-bottom-8-bar": ["/assets/cat-grillz.png"],
-    };
-    for (const prod of prods) {
-      const expected = prodImageMap[prod.slug];
-      if (expected && JSON.stringify(prod.images) !== JSON.stringify(expected)) {
-        await db.update(products).set({ images: expected }).where(eq(products.id, prod.id));
-        console.log(`Updated product image: ${prod.slug} -> ${expected[0]}`);
-      }
-    }
   }
 
   const basePrices = [
