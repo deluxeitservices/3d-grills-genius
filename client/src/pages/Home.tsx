@@ -19,7 +19,7 @@ const fallbackCategories = [
   { name: "Diamond Grillz", image: catRings, slug: "diamond-grillz" },
   { name: "Curves & Colour", image: catBracelets, slug: "curves-colour" },
   { name: "Tooth Gems", image: product1, slug: "tooth-gems" },
-  { name: "Tooth Mould", image: product2, slug: "tooth-mould" },
+  { name: "Tooth Mould Kit", image: product2, slug: "tooth-mould-kit" },
 ];
 
 const fallbackProducts = [

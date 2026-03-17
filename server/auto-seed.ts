@@ -24,15 +24,30 @@ export async function autoSeed() {
   if (existingCats.length === 0) {
     cats = await db.insert(categories).values([
       { name: "Single Grillz", slug: "single-grillz", image: "/assets/cat-grillz.png", description: "Individual tooth grillz for a subtle shine", sortOrder: 1, isActive: true },
-      { name: "Gold Set Grillz", slug: "gold-set-grillz", image: "/assets/cat-grillz.png", description: "Complete sets of gold grillz for top and bottom teeth", sortOrder: 2, isActive: true },
-      { name: "Diamond Grillz", slug: "diamond-grillz", image: "/assets/cat-grillz.png", description: "Premium diamond-encrusted grillz", sortOrder: 3, isActive: true },
-      { name: "Curves & Colour", slug: "curves-colour", image: "/assets/cat-grillz.png", description: "Colourful and uniquely shaped grillz designs", sortOrder: 4, isActive: true },
-      { name: "Tooth Gems", slug: "tooth-gems", image: "/assets/cat-rings.png", description: "Sparkling gems to add to individual teeth", sortOrder: 5, isActive: true },
-      { name: "Tooth Mould Kit", slug: "tooth-mould-kit", image: "/assets/cat-grillz.png", description: "DIY mould kits for custom-fit grillz", sortOrder: 6, isActive: true },
+      { name: "Gold Set Grillz", slug: "gold-set-grillz", image: "/assets/cat-chains.png", description: "Complete sets of gold grillz for top and bottom teeth", sortOrder: 2, isActive: true },
+      { name: "Diamond Grillz", slug: "diamond-grillz", image: "/assets/cat-rings.png", description: "Premium diamond-encrusted grillz", sortOrder: 3, isActive: true },
+      { name: "Curves & Colour", slug: "curves-colour", image: "/assets/cat-bracelets.png", description: "Colourful and uniquely shaped grillz designs", sortOrder: 4, isActive: true },
+      { name: "Tooth Gems", slug: "tooth-gems", image: "/assets/product_1.png", description: "Sparkling gems to add to individual teeth", sortOrder: 5, isActive: true },
+      { name: "Tooth Mould Kit", slug: "tooth-mould-kit", image: "/assets/product_2.png", description: "DIY mould kits for custom-fit grillz", sortOrder: 6, isActive: true },
     ]).returning();
     console.log(`Created ${cats.length} categories`);
   } else {
     console.log(`Categories already exist (${cats.length}), skipping`);
+    const catImageMap: Record<string, string> = {
+      "single-grillz": "/assets/cat-grillz.png",
+      "gold-set-grillz": "/assets/cat-chains.png",
+      "diamond-grillz": "/assets/cat-rings.png",
+      "curves-colour": "/assets/cat-bracelets.png",
+      "tooth-gems": "/assets/product_1.png",
+      "tooth-mould-kit": "/assets/product_2.png",
+    };
+    for (const cat of cats) {
+      const expected = catImageMap[cat.slug];
+      if (expected && cat.image !== expected) {
+        await db.update(categories).set({ image: expected }).where(eq(categories.id, cat.id));
+        console.log(`Updated category image: ${cat.slug} -> ${expected}`);
+      }
+    }
   }
 
   const catBySlug = (slug: string) => cats.find(c => c.slug === slug);
