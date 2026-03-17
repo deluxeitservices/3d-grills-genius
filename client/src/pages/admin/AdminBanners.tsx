@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Pencil, Trash2, Upload, Loader2, ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { resolveAdminImage } from "@/lib/resolveImage";
 
 const PAGE_OPTIONS = [
   { value: "home", label: "Home Hero" },
@@ -123,7 +124,7 @@ export default function AdminBanners() {
             <CardContent className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 {banner.image ? (
-                  <img src={banner.image} alt={banner.title || "Banner"} className="w-32 h-20 object-cover rounded-none bg-zinc-800" />
+                  <img src={resolveAdminImage(banner.image) || banner.image} alt={banner.title || "Banner"} className="w-32 h-20 object-cover rounded-none bg-zinc-800" />
                 ) : (
                   <div className="w-32 h-20 bg-zinc-800 flex items-center justify-center">
                     <ImageIcon className="w-8 h-8 text-zinc-600" />
@@ -159,7 +160,7 @@ export default function AdminBanners() {
               <div className="relative">
                 {form.image ? (
                   <div className="relative group">
-                    <img src={form.image} alt="Preview" className="w-full h-40 object-cover rounded-none bg-zinc-800" />
+                    <img src={resolveAdminImage(form.image) || form.image} alt="Preview" className="w-full h-40 object-cover rounded-none bg-zinc-800" />
                     <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity">
                       <div className="flex items-center gap-2 text-white text-sm font-medium">
                         <Upload size={16} /> Change Image

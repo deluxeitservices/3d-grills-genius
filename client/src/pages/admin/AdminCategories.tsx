@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { resolveAdminImage } from "@/lib/resolveImage";
 
 export default function AdminCategories() {
   const { toast } = useToast();
@@ -39,7 +40,7 @@ export default function AdminCategories() {
           <Card key={cat.id} className="bg-zinc-900 border-zinc-800 rounded-none">
             <CardContent className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                {cat.image && <img src={cat.image} alt={cat.name} className="w-12 h-12 object-cover rounded-none" />}
+                {cat.image && <img src={resolveAdminImage(cat.image) || cat.image} alt={cat.name} className="w-12 h-12 object-cover rounded-none" />}
                 <div>
                   <p className="text-white font-medium" data-testid={`text-category-name-${cat.id}`}>{cat.name}</p>
                   <p className="text-xs text-zinc-500">/{cat.slug} • Order: {cat.sortOrder}</p>

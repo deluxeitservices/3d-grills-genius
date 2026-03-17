@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { resolveAdminImage } from "@/lib/resolveImage";
 import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -150,7 +151,7 @@ export default function AdminCategoryEdit() {
             {form.image && (
               <div className="space-y-2">
                 <Label className="text-zinc-400">Preview</Label>
-                <img src={form.image} alt="Category preview" className="w-full max-w-xs h-48 object-cover border border-zinc-700" />
+                <img src={resolveAdminImage(form.image) || form.image} alt="Category preview" className="w-full max-w-xs h-48 object-cover border border-zinc-700" />
                 <Button type="button" variant="ghost" size="sm" onClick={() => setForm({ ...form, image: "" })} className="text-red-500 hover:text-red-400" data-testid="button-remove-category-image">
                   Remove Image
                 </Button>
