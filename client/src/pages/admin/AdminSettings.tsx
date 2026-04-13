@@ -9,17 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Save, Loader2, CheckCircle, XCircle, CreditCard, Zap } from "lucide-react";
 
-function maskKey(key: string): string {
-  if (!key || key.length < 12) return key;
-  return key.substring(0, 7) + "••••••••••••" + key.substring(key.length - 4);
-}
-
 export default function AdminSettings() {
   const { toast } = useToast();
 
   const { data: stripeSettings, isLoading: stripeLoading } = useQuery<{
     publishableKey: string;
-    secretKey: string;
+    secretKeyMasked: string;
+    hasSecretKey: boolean;
     isConfigured: boolean;
   }>({
     queryKey: ["/api/admin/stripe-settings"],
@@ -35,7 +31,6 @@ export default function AdminSettings() {
   useEffect(() => {
     if (stripeSettings) {
       setPublishableKey(stripeSettings.publishableKey);
-      setSecretKey(stripeSettings.secretKey);
     }
   }, [stripeSettings]);
 
@@ -52,7 +47,7 @@ export default function AdminSettings() {
       toast({ title: "Stripe keys saved successfully" });
       setTestResult(null);
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       toast({ title: "Failed to save", description: err.message, variant: "destructive" });
     },
   });
@@ -135,7 +130,7 @@ export default function AdminSettings() {
                     type={showSecret ? "text" : "password"}
                     value={secretKey}
                     onChange={(e) => setSecretKey(e.target.value)}
-                    placeholder="sk_live_... or sk_test_..."
+                    placeholder={stripeSettings?.hasSecretKey ? stripeSettings.secretKeyMasked : "sk_live_... or sk_test_..."}
                     className="bg-zinc-800 border-zinc-700 text-white rounded-none pr-10 font-mono text-sm"
                     data-testid="input-stripe-secret-key"
                   />

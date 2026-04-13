@@ -626,9 +626,14 @@ export async function registerRoutes(
   app.get("/api/admin/stripe-settings", requireAdmin, async (_req: Request, res: Response) => {
     const publishableKey = await storage.getSetting("stripe_publishable_key");
     const secretKey = await storage.getSetting("stripe_secret_key");
+    const maskSecret = (key: string | null) => {
+      if (!key || key.length < 12) return "";
+      return key.substring(0, 7) + "••••••••" + key.substring(key.length - 4);
+    };
     res.json({
       publishableKey: publishableKey || "",
-      secretKey: secretKey || "",
+      secretKeyMasked: maskSecret(secretKey),
+      hasSecretKey: !!secretKey,
       isConfigured: !!(publishableKey && secretKey),
     });
   });
@@ -654,11 +659,12 @@ export async function registerRoutes(
     }
     try {
       const Stripe = (await import("stripe")).default;
-      const stripe = new Stripe(secretKey, { apiVersion: "2025-08-27.basil" as any });
-      const balance = await stripe.balance.retrieve();
+      const stripe = new Stripe(secretKey);
+      await stripe.balance.retrieve();
       res.json({ success: true, message: "Stripe connection successful" });
-    } catch (err: any) {
-      res.status(400).json({ error: `Stripe connection failed: ${err.message}` });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      res.status(400).json({ error: `Stripe connection failed: ${message}` });
     }
   });
 
