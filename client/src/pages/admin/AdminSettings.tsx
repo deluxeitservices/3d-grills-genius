@@ -168,7 +168,7 @@ export default function AdminSettings() {
             <div className="flex gap-3">
               <Button
                 onClick={() => saveMutation.mutate()}
-                disabled={saveMutation.isPending || !publishableKey || !secretKey}
+                disabled={saveMutation.isPending || !publishableKey || (!secretKey && !stripeSettings?.hasSecretKey)}
                 className="bg-red-600 hover:bg-red-700 text-white rounded-none"
                 data-testid="button-save-stripe"
               >

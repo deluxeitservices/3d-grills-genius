@@ -639,17 +639,19 @@ export async function registerRoutes(
   });
   app.post("/api/admin/stripe-settings", requireAdmin, async (req: Request, res: Response) => {
     const { publishableKey, secretKey } = req.body;
-    if (!publishableKey || !secretKey) {
-      return res.status(400).json({ error: "Both publishable key and secret key are required" });
+    if (!publishableKey) {
+      return res.status(400).json({ error: "Publishable key is required" });
     }
     if (!publishableKey.startsWith("pk_")) {
       return res.status(400).json({ error: "Publishable key must start with 'pk_'" });
     }
-    if (!secretKey.startsWith("sk_")) {
-      return res.status(400).json({ error: "Secret key must start with 'sk_'" });
+    if (secretKey) {
+      if (!secretKey.startsWith("sk_")) {
+        return res.status(400).json({ error: "Secret key must start with 'sk_'" });
+      }
+      await storage.setSetting("stripe_secret_key", secretKey);
     }
     await storage.setSetting("stripe_publishable_key", publishableKey);
-    await storage.setSetting("stripe_secret_key", secretKey);
     res.json({ success: true });
   });
   app.post("/api/admin/stripe-test", requireAdmin, async (req: Request, res: Response) => {
