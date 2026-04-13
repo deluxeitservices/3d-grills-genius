@@ -622,6 +622,46 @@ export async function registerRoutes(
     res.json({ success: true });
   });
 
+  // Admin Stripe Settings
+  app.get("/api/admin/stripe-settings", requireAdmin, async (_req: Request, res: Response) => {
+    const publishableKey = await storage.getSetting("stripe_publishable_key");
+    const secretKey = await storage.getSetting("stripe_secret_key");
+    res.json({
+      publishableKey: publishableKey || "",
+      secretKey: secretKey || "",
+      isConfigured: !!(publishableKey && secretKey),
+    });
+  });
+  app.post("/api/admin/stripe-settings", requireAdmin, async (req: Request, res: Response) => {
+    const { publishableKey, secretKey } = req.body;
+    if (!publishableKey || !secretKey) {
+      return res.status(400).json({ error: "Both publishable key and secret key are required" });
+    }
+    if (!publishableKey.startsWith("pk_")) {
+      return res.status(400).json({ error: "Publishable key must start with 'pk_'" });
+    }
+    if (!secretKey.startsWith("sk_")) {
+      return res.status(400).json({ error: "Secret key must start with 'sk_'" });
+    }
+    await storage.setSetting("stripe_publishable_key", publishableKey);
+    await storage.setSetting("stripe_secret_key", secretKey);
+    res.json({ success: true });
+  });
+  app.post("/api/admin/stripe-test", requireAdmin, async (req: Request, res: Response) => {
+    const { secretKey } = req.body;
+    if (!secretKey || !secretKey.startsWith("sk_")) {
+      return res.status(400).json({ error: "Valid secret key required" });
+    }
+    try {
+      const Stripe = (await import("stripe")).default;
+      const stripe = new Stripe(secretKey, { apiVersion: "2025-08-27.basil" as any });
+      const balance = await stripe.balance.retrieve();
+      res.json({ success: true, message: "Stripe connection successful" });
+    } catch (err: any) {
+      res.status(400).json({ error: `Stripe connection failed: ${err.message}` });
+    }
+  });
+
   // Admin Users
   app.get("/api/admin/users", requireAdmin, async (_req: Request, res: Response) => {
     const userList = await storage.listUsers();

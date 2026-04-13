@@ -1,8 +1,26 @@
 import Stripe from 'stripe';
+import { db } from './db';
+import { adminSettings } from '@shared/schema';
+import { eq } from 'drizzle-orm';
 
 let connectionSettings: any;
 
-async function getCredentials() {
+async function getAdminKeys(): Promise<{ publishableKey: string; secretKey: string } | null> {
+  try {
+    const [pubRow] = await db.select().from(adminSettings).where(eq(adminSettings.key, 'stripe_publishable_key'));
+    const [secRow] = await db.select().from(adminSettings).where(eq(adminSettings.key, 'stripe_secret_key'));
+    const publishableKey = pubRow?.value;
+    const secretKey = secRow?.value;
+    if (publishableKey && secretKey) {
+      return { publishableKey, secretKey };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+async function getConnectorCredentials() {
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
   const xReplitToken = process.env.REPL_IDENTITY
     ? 'repl ' + process.env.REPL_IDENTITY
@@ -41,6 +59,12 @@ async function getCredentials() {
     publishableKey: connectionSettings.settings.publishable,
     secretKey: connectionSettings.settings.secret,
   };
+}
+
+async function getCredentials() {
+  const adminKeys = await getAdminKeys();
+  if (adminKeys) return adminKeys;
+  return getConnectorCredentials();
 }
 
 export async function getUncachableStripeClient() {
