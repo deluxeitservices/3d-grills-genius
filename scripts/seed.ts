@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { db, pool } from "../server/db";
 import { autoSeed } from "../server/auto-seed";
 import { storage } from "../server/storage";
