@@ -98,7 +98,7 @@ app.use((req, res, next) => {
       const { getStripeSync } = await import('./stripeClient');
       const stripeSync = await getStripeSync();
 
-      const webhookBaseUrl = `https://${process.env.REPLIT_DOMAINS?.split(',')[0]}`;
+      const webhookBaseUrl = process.env.APP_URL || `https://${process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5002'}`;
       try {
         const result = await stripeSync.findOrCreateManagedWebhook(
           `${webhookBaseUrl}/api/stripe/webhook`

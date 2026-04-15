@@ -266,7 +266,7 @@ export async function registerRoutes(
             currency,
             product_data: {
               name: product.name,
-              images: product.images.length > 0 ? [product.images[0].startsWith('http') ? product.images[0] : `https://${process.env.REPLIT_DOMAINS?.split(',')[0]}${product.images[0]}`] : [],
+              images: product.images.length > 0 ? [product.images[0].startsWith('http') ? product.images[0] : `${req.headers['x-forwarded-proto'] || req.protocol || 'https'}://${req.get('host')}${product.images[0]}`] : [],
             },
             unit_amount: Math.round(parseFloat(item.price) * 100),
           },
@@ -302,7 +302,8 @@ export async function registerRoutes(
         });
       }
 
-      const host = `https://${process.env.REPLIT_DOMAINS?.split(',')[0]}`;
+      const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+      const host = `${protocol}://${req.get('host')}`;
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: lineItems,
