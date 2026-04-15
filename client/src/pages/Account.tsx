@@ -7,6 +7,7 @@ import { getQueryFn } from "@/lib/api";
 import { useLocation, Link } from "wouter";
 import { Package, User, LogOut, Eye } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { resolveAdminImage } from "@/lib/resolveImage";
 
 interface OrderItem {
   id: number;
@@ -177,7 +178,7 @@ export default function Account() {
                       {order.items.map((item) => (
                         <div key={item.id} className="flex items-center gap-3 bg-zinc-900 px-3 py-2">
                           {item.productImage && (
-                            <img src={item.productImage} alt={item.productName} className="w-10 h-10 object-cover" />
+                            <img src={resolveAdminImage(item.productImage)} alt={item.productName} className="w-10 h-10 object-cover" />
                           )}
                           <div>
                             <span className="text-sm">{item.productName}</span>

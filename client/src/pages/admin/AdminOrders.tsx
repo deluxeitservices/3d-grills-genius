@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/api";
+import { resolveAdminImage } from "@/lib/resolveImage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -141,7 +142,7 @@ export default function AdminOrders() {
                   <p className="text-zinc-500 text-sm mb-2">Items</p>
                   {selectedOrder.items.map((item: any) => (
                     <div key={item.id} className="flex items-center gap-3 py-2 border-b border-zinc-800/50">
-                      {item.productImage && <img src={item.productImage} alt="" className="w-10 h-10 object-cover" />}
+                      {item.productImage && <img src={resolveAdminImage(item.productImage)} alt="" className="w-10 h-10 object-cover" />}
                       <div className="flex-1">
                         <p className="text-white text-sm">{item.productName}</p>
                         <p className="text-zinc-500 text-xs">Qty: {item.quantity} × {parseFloat(item.price).toFixed(2)}</p>
